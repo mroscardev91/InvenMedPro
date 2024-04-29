@@ -5,7 +5,7 @@ export default function ApplicationLogo(props) {
             preserveAspectRatio="xMidYMid meet">
 
             <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)"
-            fill="#000000" stroke="none">
+             stroke="none">
             <path d="M4860 5106 c-81 -32 -1197 -558 -1220 -574 -13 -10 -35 -38 -48 -63
             -44 -82 -41 -91 213 -635 125 -269 241 -517 256 -550 l28 -62 758 354 c417
             195 757 357 756 362 -5 22 -506 1087 -521 1107 -47 62 -148 90 -222 61z"/>

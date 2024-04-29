@@ -17,11 +17,10 @@ export default function ForgotPassword({ status }) {
 
     return (
         <GuestLayout>
-            <Head title="Forgot Password" />
+            <Head title="Contraseña Olvidada" />
 
             <div className="mb-4 text-sm text-gray-600 font-bold">
             ¿Olvidaste tu contraseña? Ningún problema. Simplemente háganos saber su dirección de correo electrónico y le enviaremos una contraseña por correo electrónico.
-                enlace de reinicio que le permitirá elegir uno nuevo.
             </div>
 
             {status && <div className="mb-4 font-medium text-sm text-green-600">{status}</div>}
