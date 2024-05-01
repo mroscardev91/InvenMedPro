@@ -1,52 +1,59 @@
-import React, { useState } from 'react';
-import { FiMenu, FiHome, FiInbox, FiUser, FiCalendar, FiSearch, FiBarChart2, FiFolder, FiSettings, FiChevronDown, FiChevronUp } from 'react-icons/fi';
+import { ChevronFirst, ChevronLast } from "lucide-react"
+import { createContext, useContext, useState } from "react"
+import logo from "../../../public/invenmedpro.svg"
 
-export const Sidebar = () => {
-    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+const SidebarContext = createContext();
 
-    const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);
-
+export default function Sidebar({ children, user }) {
+    const [expanded, setExpanded] = useState(true)
     return (
-        <div className="fixed top-0 left-0 h-screen w-64 bg-blue-500 p-5 pt-8">
-            <div className="flex items-center mb-8">
-                <span className="text-white text-2xl font-bold">InvenMedPro</span>
-            </div>
-            <ul>
-                <li className="flex items-center text-white text-sm cursor-pointer p-2 hover:bg-blue-700 rounded-md">
-                    <FiHome />
-                    <span className="ml-2">Dashboard</span>
-                </li>
-                <li className="flex items-center text-white text-sm cursor-pointer p-2 hover:bg-blue-700 rounded-md">
-                    <FiInbox />
-                    <span className="ml-2">Pacientes</span>
-                </li>
-                <li className="flex items-center text-white text-sm cursor-pointer p-2 hover:bg-blue-700 rounded-md" onClick={toggleDropdown}>
-                    <FiFolder />
-                    <span className="ml-2">Gestión de Productos</span>
-                    {isDropdownOpen ? <FiChevronUp className="ml-2" /> : <FiChevronDown className="ml-2" />}
-                </li>
-                {isDropdownOpen && (
-                    <ul>
-                        <li className="flex items-center text-white text-sm cursor-pointer p-2 hover:bg-blue-700 rounded-md pl-6">
-                            <FiFolder />
-                            <span className="ml-2">Categorías</span>
-                        </li>
-                        <li className="flex items-center text-white text-sm cursor-pointer p-2 hover:bg-blue-700 rounded-md pl-6">
-                            <FiFolder />
-                            <span className="ml-2">Productos</span>
-                        </li>
-                        <li className="flex items-center text-white text-sm cursor-pointer p-2 hover:bg-blue-700 rounded-md pl-6">
-                            <FiFolder />
-                            <span className="ml-2">Proveedores</span>
-                        </li>
-                    </ul>
-                )}
-                <li className="flex items-center text-white text-sm cursor-pointer p-2 hover:bg-blue-700 rounded-md">
-                    <FiUser />
-                    <span className="ml-2">Usuarios</span>
-                </li>
-            </ul>
-        </div>
-    );
-};
+        <>
+            <aside className="h-screen">
+                <nav className="h-full flex flex-col bg-white border-r shadow-sm">
+                    <div className="p-4 pb-2 flex justify-between items-center">
+                        <h1 className={`text-xl font-bold text-blue-600 overflow-hidden transition-all duration-500 ease-in-out ${expanded ? "w-auto" : "w-0 opacity-0"}`}>InvenMedPro</h1>
+                        <button onClick={() => setExpanded((curr) => !curr)} className="p-1.5 rounded-lg bg-gray-50 hover:bg-gray-100">
+                            {expanded ? <ChevronFirst /> : <ChevronLast />}
+                        </button>
+                    </div>
 
+                    <SidebarContext.Provider value={{ expanded }}>
+
+                        <ul className="flex-1 px-3">{children}</ul>
+                    </SidebarContext.Provider>
+
+                    <div className="border-t flex p-3">
+                        {/* <img src={logo} className="w-10 h-10 rounded-md" /> */}
+                        <div className={`flex justify-between items-center overflow-hidden transition-all ${expanded ? "w-52 ml-3" : "w-0"} `}>
+                            <div className="leading-4">
+                                <h4 className="font-semibold">{user.name}</h4>
+                                <span className="text-xs text-gray-600">{user.email}</span>
+                            </div>
+                        </div>
+                    </div>
+                </nav>
+            </aside>
+        </>
+    )
+}
+
+export function SidebarItem({ icon, text, active, alert }) {
+    const { expanded } = useContext(SidebarContext)
+    return (
+        <li className={`relative flex items-center py-2 px-3 my-1 font-medium rounded-md cursor-pointer transition-colors group ${active ? "bg-gradient-to-tr from-blue-200 to-blue-100 text-blue-800" : "hover:bg-indigo-50 text-gray-600"}`}>
+            {icon}
+            <span className={`overflow-hidden transition-all ${expanded ? "w-52 ml-3" : "w-0"}`}>{text}</span>
+            {alert && (
+                <div className={`absolute right-2 w-2 h-2 rounded bg-blue-500 ${expanded ? "" : "top-2"}`}>
+
+                </div>
+            )}
+
+            {!expanded && (
+                <div className={`absolute left-full rounded-md px-2 py-1 ml-6 bg-indigo-100 text-blue-800 text-sm invisible opacity-20 -translate-x-3 transition-all group-hover:visible group-hover:opacity-100 group-hover:translate-x-0`}>
+                    {text}
+                </div>
+            )}
+        </li>
+    )
+}

@@ -17,7 +17,9 @@ Route::get('/', function () {
 
 Route::middleware(['auth', 'verified'])->group(function () {
 
-    Route::resource('user', UserController::class);
+    Route::prefix('dashboard')->group(function (){
+        Route::get('users', [UserController::class, 'index'])->name('user.index');
+    });
 
 });
 
