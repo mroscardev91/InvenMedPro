@@ -9,7 +9,7 @@ const Index = ({ auth, users }) => {
       user={auth.user}
     >
 
-    <Head title="Users" />
+    <Head title="Usuarios" />
       
     <div className="relative overflow-x-auto">
     <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -17,6 +17,10 @@ const Index = ({ auth, users }) => {
             <tr>
                 <th scope="col" className="px-6 py-3">
                     Nombre
+                </th>
+
+                <th scope="col" className="px-6 py-3">
+                    Email
                 </th>
                 
                 <th scope="col" className="px-6 py-3">
@@ -33,7 +37,11 @@ const Index = ({ auth, users }) => {
                 </th>
                 
                 <td className="px-6 py-4">
-                    // añades las acciones
+                    {user.email}
+                </td>
+
+                <td className="px-6 py-4">
+                    // proximamente
                 </td>
             </tr>
             ))
