@@ -1,5 +1,6 @@
 import { ChevronFirst, ChevronLast } from "lucide-react"
 import { createContext, useContext, useState } from "react"
+import { Link } from '@inertiajs/react';
 import logo from "../../../public/invenmedpro.svg"
 
 const SidebarContext = createContext();
@@ -37,12 +38,12 @@ export default function Sidebar({ children, user }) {
     )
 }
 
-export function SidebarItem({ icon, text, active, alert }) {
+export function SidebarItem({ icon, text, active, alert, route }) {
     const { expanded } = useContext(SidebarContext)
     return (
         <li className={`relative flex items-center py-2 px-3 my-1 font-medium rounded-md cursor-pointer transition-colors group ${active ? "bg-gradient-to-tr from-blue-200 to-blue-100 text-blue-800" : "hover:bg-indigo-50 text-gray-600"}`}>
             {icon}
-            <span className={`overflow-hidden transition-all ${expanded ? "w-52 ml-3" : "w-0"}`}>{text}</span>
+            <Link href={route} className={`overflow-hidden transition-all ${expanded ? "w-52 ml-3" : "w-0"}`}>{text}</Link>
             {alert && (
                 <div className={`absolute right-2 w-2 h-2 rounded bg-blue-500 ${expanded ? "" : "top-2"}`}>
 

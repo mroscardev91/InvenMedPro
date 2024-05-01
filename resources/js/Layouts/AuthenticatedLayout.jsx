@@ -13,11 +13,11 @@ export default function AuthenticatedLayout({ user, header, children }) {
     return (
         <div className="min-h-screen bg-gray-100 flex">
             <Sidebar user={user}>
-                <SidebarItem icon={<LayoutDashboard size={20} />} text="Dashboard" active />
-                <SidebarItem icon={<StickyNote size={20} />} text="Pacientes" alert />
-                <SidebarItem icon={<Calendar size={20} />} text="Gestion de productos" />
-                <SidebarItem icon={<Layers size={20} />} text="Usuarios" />
-                <SidebarItem icon={<Flag size={20} />} text="Reportes" />
+                <SidebarItem icon={<LayoutDashboard size={20} />} text="Dashboard" route={"/dashboard"} />
+                <SidebarItem icon={<StickyNote size={20} />} text="Pacientes"  route={"/dashboard"}/>
+                <SidebarItem icon={<Calendar size={20} />} text="Gestion de productos" route={"/dashboard"}/>
+                <SidebarItem icon={<Layers size={20} />} text="Usuarios" route={"/dashboard/users"}/>
+                <SidebarItem icon={<Flag size={20} />} text="Reportes" route={"/dashboard"}/>
                 <hr className="my-3" />
                 <SidebarItem icon={<Settings size={20} />} text="Configuración" />
                 <SidebarItem icon={<LifeBuoy size={20} />} text="Ayuda" />
@@ -29,7 +29,7 @@ export default function AuthenticatedLayout({ user, header, children }) {
                         <div className="flex justify-between h-16">
                             <div className="flex">
                                 <div className="shrink-0 flex items-center">
-                                    <Link href="/">
+                                    <Link href="/dashboard">
                                         <ApplicationLogo className="block h-9 w-auto fill-current text-gray-800" />
                                     </Link>
                                 </div>
