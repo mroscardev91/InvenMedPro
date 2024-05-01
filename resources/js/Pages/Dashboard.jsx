@@ -1,3 +1,4 @@
+import { Sidebar } from '@/Components/Sidebar';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
 
@@ -7,8 +8,8 @@ export default function Dashboard({ auth }) {
             user={auth.user}
         >
             <Head title="Dashboard" />
-
-            
+            <Sidebar />
         </AuthenticatedLayout>
+        
     );
 }
