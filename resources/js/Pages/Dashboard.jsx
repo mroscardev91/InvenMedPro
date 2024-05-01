@@ -8,7 +8,6 @@ export default function Dashboard({ auth }) {
             user={auth.user}
         >
             <Head title="Dashboard" />
-            <Sidebar />
         </AuthenticatedLayout>
         
     );
