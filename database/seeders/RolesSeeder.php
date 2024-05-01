@@ -16,9 +16,9 @@ class RolesSeeder extends Seeder
     public function run(): void
     {
         //roles
-        $system_admin = Role::create(['name' => 'system_admin']);
-        $inventory_manager = Role::create(['name' => 'inventory_manager']);
-        $patient_manager = Role::create(['name' => 'patient_manager']);
+        $system_admin = Role::create(['name' => 'Administrador del Sistema']);
+        $inventory_manager = Role::create(['name' => 'Administrador del Inventario']);
+        $patient_manager = Role::create(['name' => 'Administrador de Pacientes']);
 
         //permissions
         $permissions = [];
