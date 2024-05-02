@@ -2,7 +2,7 @@ import React from 'react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Users } from 'lucide-react';
 import { Head, Link } from '@inertiajs/react';
-
+import Sidebar, { SidebarItem } from '@/Components/Sidebar';
 const Index = ({ auth, users }) => {
     
   return (
@@ -16,6 +16,9 @@ const Index = ({ auth, users }) => {
             </h2>
         </div>
      }
+
+     
+     
       
     >
       <Head title="Usuarios" />
