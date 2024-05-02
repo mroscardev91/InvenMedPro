@@ -3,10 +3,12 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Users, Pencil, Trash } from 'lucide-react';
 import { Head, Link } from '@inertiajs/react';
 import Sidebar, { SidebarItem } from '@/Components/Sidebar';
+import Modal from '@/Components/Modal';
+
+
+
 const Index = ({ auth, users }) => {
 
-
-    
   return (
     <>
     <AuthenticatedLayout
@@ -14,8 +16,14 @@ const Index = ({ auth, users }) => {
       header={
         <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 flex justify-between items-center">
             <h2 className="font-semibold text-xl text-white leading-tight flex items-center">
-                <Users className="mr-2" /> Usuarios
+                <Users className="mr-2" /> Usuario
             </h2>
+            {/* Botón para ir a la ruta de creación de usuarios */}
+            <Link href={route('users.create')}>
+              <button className="bg-blue-700 hover:bg-blue-900 text-white font-bold py-2 px-4 rounded">
+                Crear Usuario
+              </button>
+            </Link>
         </div>
      }
       

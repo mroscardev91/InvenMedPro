@@ -19,6 +19,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::prefix('dashboard')->group(function (){
         Route::get('users', [UserController::class, 'index'])->name('user.index');
+        Route::get('users/create', [UserController::class, 'create'])->name('users.create');
         Route::delete('users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
     });
 
