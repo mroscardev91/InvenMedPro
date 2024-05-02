@@ -5,7 +5,7 @@ import NavLink from '@/Components/NavLink';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { Link } from '@inertiajs/react';
 import  Sidebar, { SidebarItem } from '@/Components/Sidebar';
-import { LayoutDashboard, Home, StickyNote, Layers, Flag, Calendar, LifeBuoy, Settings } from "lucide-react";
+import { LayoutDashboard, Home, StickyNote, Layers, Flag, Calendar, LifeBuoy, Settings, UsersRound } from "lucide-react";
 
 export default function AuthenticatedLayout({ user, header, children }) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
@@ -16,7 +16,7 @@ export default function AuthenticatedLayout({ user, header, children }) {
                 <SidebarItem icon={<LayoutDashboard size={20} />} text="Dashboard" route={"/dashboard"} active={location.pathname === "/dashboard"}/>
                 <SidebarItem icon={<StickyNote size={20} />} text="Pacientes"  route={"/dashboard"} />
                 <SidebarItem icon={<Calendar size={20} />} text="Gestion de productos" route={"/dashboard"} />
-                <SidebarItem icon={<Layers size={20} />} text="Usuarios" route={"/dashboard/users"} active={location.pathname === "/dashboard/users"}/>
+                <SidebarItem icon={<UsersRound size={20} />} text="Usuarios" route={"/dashboard/users"} active={location.pathname === "/dashboard/users"}/>
                 <SidebarItem icon={<Flag size={20} />} text="Reportes" route={"/dashboard"} />
                 <hr className="my-3" />
                 <SidebarItem icon={<Settings size={20} />} text="Configuración" />
@@ -128,7 +128,7 @@ export default function AuthenticatedLayout({ user, header, children }) {
                 </nav>
 
                 {header && (
-                    <header className="bg-white shadow">
+                    <header className="bg-blue-500 shadow">
                         <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">{header}</div>
                     </header>
                 )}
