@@ -1,6 +1,6 @@
 import React from 'react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Users } from 'lucide-react';
+import { Users, Pencil, Trash } from 'lucide-react';
 import { Head, Link } from '@inertiajs/react';
 import Sidebar, { SidebarItem } from '@/Components/Sidebar';
 const Index = ({ auth, users }) => {
@@ -16,9 +16,6 @@ const Index = ({ auth, users }) => {
             </h2>
         </div>
      }
-
-     
-     
       
     >
       <Head title="Usuarios" />
@@ -61,8 +58,9 @@ const Index = ({ auth, users }) => {
                   )}
                 </td>
                 <td className="px-6 py-4">
-                  {/* proximamente */}
-                </td>
+                    <Pencil className="inline-block h-6 w-6 text-blue-500 mr-2 cursor-pointer" /> {/* Icono de editar */}
+                    <Trash className="inline-block h-6 w-6 text-red-500 cursor-pointer" /> {/* Icono de eliminar */}
+                  </td>
               </tr>
             ))}
           </tbody>
