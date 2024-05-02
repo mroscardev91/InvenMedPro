@@ -4,6 +4,8 @@ import { Users, Pencil, Trash } from 'lucide-react';
 import { Head, Link } from '@inertiajs/react';
 import Sidebar, { SidebarItem } from '@/Components/Sidebar';
 const Index = ({ auth, users }) => {
+
+
     
   return (
     <>
@@ -58,8 +60,13 @@ const Index = ({ auth, users }) => {
                   )}
                 </td>
                 <td className="px-6 py-4">
-                    <Pencil className="inline-block h-6 w-6 text-blue-500 mr-2 cursor-pointer" /> {/* Icono de editar */}
-                    <Trash className="inline-block h-6 w-6 text-red-500 cursor-pointer" /> {/* Icono de eliminar */}
+                    <Pencil className="inline-block h-6 w-6 text-blue-500 mr-2 cursor-pointer" /> 
+                    <Link
+                      href={route('users.destroy', [user])}
+                      method="delete"
+                    >
+                        <Trash className="inline-block h-6 w-6 text-red-500 cursor-pointer"/> 
+                    </Link>
                   </td>
               </tr>
             ))}

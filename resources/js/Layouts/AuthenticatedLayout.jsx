@@ -9,20 +9,23 @@ import { LayoutDashboard, Home, StickyNote, Layers, Flag, Calendar, LifeBuoy, Se
 
 export default function AuthenticatedLayout({ user, header, children }) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
+    
 
     return (
         <div className="min-h-screen bg-gray-100">
             <div className="flex">
-                <Sidebar user={user}>
-                    <SidebarItem icon={<LayoutDashboard size={20} />} text="Dashboard" route={"/dashboard"} active={location.pathname === "/dashboard"} />
-                    <SidebarItem icon={<StickyNote size={20} />} text="Pacientes" route={"/dashboard"} />
-                    <SidebarItem icon={<Calendar size={20} />} text="Gestion de productos" route={"/dashboard"} />
-                    <SidebarItem icon={<UsersRound size={20} />} text="Usuarios" route={"/dashboard/users"} active={location.pathname === "/dashboard/users"} />
-                    <SidebarItem icon={<Flag size={20} />} text="Reportes" route={"/dashboard"} />
-                    <hr className="my-3" />
-                    <SidebarItem icon={<Settings size={20} />} text="Configuración" />
-                    <SidebarItem icon={<LifeBuoy size={20} />} text="Ayuda" />
-                </Sidebar>
+                <div className="h-full"> 
+                    <Sidebar user={user}>
+                        <SidebarItem icon={<LayoutDashboard size={20} />} text="Dashboard" route={"/dashboard"} active={location.pathname === "/dashboard"} />
+                        <SidebarItem icon={<StickyNote size={20} />} text="Pacientes" route={"/dashboard"} />
+                        <SidebarItem icon={<Calendar size={20} />} text="Gestion de productos" route={"/dashboard"} />
+                        <SidebarItem icon={<UsersRound size={20} />} text="Usuarios" route={"/dashboard/users"} active={location.pathname === "/dashboard/users"} />
+                        <SidebarItem icon={<Flag size={20} />} text="Reportes" route={"/dashboard"} />
+                        <hr className="my-3" />
+                        <SidebarItem icon={<Settings size={20} />} text="Configuración" />
+                        <SidebarItem icon={<LifeBuoy size={20} />} text="Ayuda" />
+                    </Sidebar>
+                </div>
                 <div className="flex-1 flex flex-col min-w-0">
                     <nav className="bg-white border-b border-gray-100">
                         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -130,4 +133,4 @@ export default function AuthenticatedLayout({ user, header, children }) {
             </div>
         </div>
     );
-}
+}   
