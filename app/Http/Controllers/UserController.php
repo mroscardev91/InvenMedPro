@@ -19,11 +19,20 @@ class UserController extends Controller
     public function index()
     {
         $roles = Role::all();
-
-
         $users = User::with('roles')->get();
+
+        // Para manejar los usuarios sin rol asignado
+        $users->each(function ($user) {
+            if ($user->roles->isEmpty()) {
+                $user->role_name = 'Aún no se le ha asignado un rol';
+            } else {
+                $user->role_name = $user->roles->first()->name;
+            }
+        });
+
         return Inertia::render('User/Index', [
             'users' => $users,
+            'roles' => $roles,
         ]);
     }
 
@@ -44,10 +53,13 @@ class UserController extends Controller
             'name' => 'required',
             'email' => 'required|email',
             'password' => 'required',
+            'role' => 'required',
         ]);
 
-        $user = User::create($request->all());
-        $user->save();
+
+        $user = User::create($request->except('role')); 
+        $role = Role::findOrFail($request->input('role')); 
+        $user->assignRole($role); 
         return redirect()->back()->with('success', 'Usuario creado exitosamente.');
     }
 
@@ -72,8 +84,17 @@ class UserController extends Controller
      */
     public function update(Request $request, string $id)
     {
+
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required|email',
+            'role' => 'required',
+        ]);
+
         $user = User::find($id);
         $user->fill($request->input())->saveOrFail();
+        $role = Role::findOrFail($request->input('role'));
+        $user->syncRoles([$role]);
         return redirect()->back()->with('success', 'Usuario actualizado exitosamente.');
     }
 
