@@ -40,7 +40,15 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request-> validate([
+            'name' => 'required',
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
+
+        $user = User::create($request->all());
+        $user->save();
+        return redirect()->back()->with('success', 'Usuario creado exitosamente.');
     }
 
     /**
@@ -64,14 +72,17 @@ class UserController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $user = User::find($id);
+        $user->fill($request->input())->saveOrFail();
+        return redirect()->back()->with('success', 'Usuario actualizado exitosamente.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(User $user)
+    public function destroy($id)
     {
+        $user = User::find($id);
         $user->delete();
         return redirect()->back()->with('success', 'Usuario eliminado exitosamente.');
     }

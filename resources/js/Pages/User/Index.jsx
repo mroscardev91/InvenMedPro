@@ -1,11 +1,121 @@
 import React from 'react';
+import { useState, useRef } from 'react';
 import { useTable, usePagination, useSortBy, useGlobalFilter } from 'react-table';
 import { Users, Pencil, Trash, ChevronRight, ChevronLeft } from 'lucide-react';
+import InputError from '@/Components/InputError';
+import InputLabel from '@/Components/InputLabel';
+import TextInput from '@/Components/TextInput';
+import PrimaryButton from '@/Components/PrimaryButton';
+import SecondaryButton from '@/Components/SecondaryButton';
 import { Head, Link } from '@inertiajs/react';
+import { useForm } from '@inertiajs/react';
+import Modal from '@/Components/Modal';
+import Swal from 'sweetalert2';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 
+
 const Index = ({ auth, users }) => {
-  const data = React.useMemo(() => users, [users]);
+
+  const [modal, setModal] = useState(false);
+  const [title, setTitle] = useState('');
+  const [operation, setOperation] = useState(1);
+  const NameInput = useRef();
+  const EmailInput = useRef();
+  const PasswordInput = useRef();
+  const { data, setData, delete:destroy, post, put,
+    processing, reset, errors} = useForm({
+        id:'', name:'', email: '', password: ''
+    });
+  
+  const openModal = (op,id,name,email,password) =>{
+    setModal(true);
+    setOperation(op);
+    setData({name:'',email:'',password:''});
+    if(op === 1){
+        setTitle('Crear usuario');
+    }
+    else{
+        setTitle('Editar usuario');
+        setData({id:id,name:name,email:email,password:password});
+    }
+  }
+  
+  const closeModal = () =>{
+    setModal(false);
+  }
+
+  const save = (e) =>{
+    e.preventDefault();
+    if(operation === 1){
+        post(route('users.store'),{
+            onSuccess: () => { ok('Usuario guardado')},
+            onError: () => {
+                if(errors.name){
+                    reset('name');
+                    NameInput.current.focus();
+                }
+                if(errors.email){
+                    reset('email');
+                    EmailInput.current.focus();
+                }
+                if(errors.password){
+                    reset('password');
+                    PasswordInput.current.focus();
+                }
+            }
+        });
+    }
+    else{
+        put(route('users.update',data.id),{
+            onSuccess: () => { ok('Usuario modificado')},
+            onError: () => {
+                if(errors.name){
+                    reset('name');
+                    NameInput.current.focus();
+                }
+                if(errors.email){
+                    reset('email');
+                    EmailInput.current.focus();
+                }
+                if(errors.password){
+                    reset('password');
+                    PasswordInput.current.focus();
+                }
+            }
+        });
+      }
+    }
+
+    const ok = (mensaje) =>{
+      reset();
+      closeModal();
+      Swal.fire({title:mensaje,icon:'success'});
+    }
+
+    const eliminar = (id) =>{
+      const userToDelete = users.find(user => user.id === id);
+      const alerta = Swal.mixin({ buttonsStyling:true});
+      alerta.fire({
+          title:`Seguro que quieres eliminar el usuario ${userToDelete.name}`,
+          text:'Se eliminara el usuario de forma permanente',
+          icon:'question', showCancelButton:true,
+          confirmButtonText: '<i class="fa-solid fa-check"></i> Si, eliminar',
+          cancelButtonText:'<i class="fa-solid fa-ban"></i> Cancelar'
+      }).then((result) => {
+          if(result.isConfirmed){
+              destroy(route('users.destroy',id),
+              {onSuccess: () =>{ok('Usuario eliminado')}});
+          }
+      });
+  }
+
+
+
+
+
+
+  // Tabla
+  const userData = React.useMemo(() => users, [users]);
   
   const columns = React.useMemo(() => [
     {
@@ -36,16 +146,14 @@ const Index = ({ auth, users }) => {
     {
       Header: 'Acciones',
       accessor: 'id',
-      Cell: ({ value }) => (
+      Cell: ({ row, value }) => (
         <>
-          <Pencil className="inline-block h-6 w-6 text-blue-500 mr-2 cursor-pointer" /> 
-          <Link
-            href={route('users.destroy', [value])}
-            method="delete"
-            as='button'
-          >
-            <Trash className="inline-block h-6 w-6 text-red-500 cursor-pointer"/> 
-          </Link>
+          <Pencil className="inline-block h-6 w-6 text-blue-500 mr-2 cursor-pointer" onClick={() =>openModal(2,row.original.id, row.original.name, row.original.email, row.original.password)}/> 
+          
+          <Trash className="inline-block h-6 w-6 text-red-500 cursor-pointer" onClick={() => eliminar(value)}/> 
+          
+
+          
         </>
       ),
     },
@@ -67,7 +175,7 @@ const Index = ({ auth, users }) => {
   } = useTable(
     {
       columns,
-      data,
+      data : userData,
       initialState: { pageIndex: 0, pageSize: 9},
     },
     useGlobalFilter,
@@ -82,20 +190,20 @@ const Index = ({ auth, users }) => {
         header={
           <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 flex justify-between items-center">
               <h2 className="font-semibold text-xl text-white leading-tight flex items-center">
-                  <Users className="mr-2" /> Usuario
+                  <Users className="mr-2" /> Usuarios
               </h2>
-              <Link href={route('users.create')}>
-                <button className="bg-[#2E3447] hover:bg-blue-900 text-white font-bold py-2 px-4 rounded">
-                  Crear Usuario
-                </button>
-              </Link>
+            
+              <button className="bg-[#2E3447] hover:bg-blue-900 text-white font-bold py-2 px-4 rounded" onClick={() =>openModal(1)}>
+                Crear Usuario
+              </button>
+              
           </div>
         }
       >
         <Head title="Usuarios" />
         <div className="overflow-x-auto">
-          <div className="flex justify-between items-center mb-4">
-            <div className="flex items-center">
+          <div className="flex flex-col sm:flex-row justify-between items-center mb-4">
+            <div className="flex items-center mb-2 sm:mb-0">
               <label htmlFor="search" className="text-gray-700 dark:text-gray-300 mr-2">Buscar:</label>
               <input
                 id="search"
@@ -154,6 +262,45 @@ const Index = ({ auth, users }) => {
             </tbody>
           </table>
         </div>
+        <Modal show={modal} onClose={closeModal}>
+                <h2 className="p-3 text-lg font-medium text-gray-900">
+                    {title}
+                </h2>
+                <form onSubmit={save} className="p-6">
+                    <div className='mt-6'>
+                        <InputLabel for="name" value="Nombre"></InputLabel>
+                        <TextInput id="name" name="name" ref={NameInput}
+                        value={data.name} required='required'
+                        onChange={(e) => setData('name',e.target.value)}
+                        className="mt-1 block w-3/4" isFocused></TextInput>
+                        <InputError message={errors.name} classNamemt-2></InputError>
+                    </div>
+                    <div className='mt-6'>
+                        <InputLabel for="email" value="Correo Electronico"></InputLabel>
+                        <TextInput id="email" name="email" ref={EmailInput}
+                        value={data.email} required='required'
+                        onChange={(e) => setData('email',e.target.value)}
+                        className="mt-1 block w-3/4"></TextInput>
+                        <InputError message={errors.email} classNamemt-2></InputError>
+                    </div>
+                    <div className='mt-6'>
+                        <InputLabel for="password" value="Contraseña"></InputLabel>
+                        <TextInput id="passwordpassword" name="password" ref={PasswordInput}
+                        value={data.password} required='required'
+                        onChange={(e) => setData('password',e.target.value)}
+                        className="mt-1 block w-3/4"></TextInput>
+                        <InputError message={errors.password} classNamemt-2></InputError>
+                    </div>
+                    <div className='mt-6'>
+                        <PrimaryButton processing={processing} className='mt-2'>
+                            <i className='fa-solid fa-save'></i>Guardar
+                        </PrimaryButton>
+                    </div>
+                    <div className="mt-6 flex justify-end">
+                        <SecondaryButton onClick={closeModal}>Cancelar</SecondaryButton>
+                    </div>
+                </form>
+            </Modal>
       </AuthenticatedLayout>
     </>
   );
