@@ -5,7 +5,9 @@ import NavLink from '@/Components/NavLink';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { Link } from '@inertiajs/react';
 import Sidebar, { SidebarItem } from '@/Components/Sidebar';
+import Footer from '@/Components/Footer';
 import { LayoutDashboard, Home, StickyNote, Layers, Flag, Calendar, LifeBuoy, Settings, UsersRound } from "lucide-react";
+
 
 export default function AuthenticatedLayout({ user, header, children }) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
@@ -129,6 +131,8 @@ export default function AuthenticatedLayout({ user, header, children }) {
                     <main className="p-4 sm:p-6 md:px-8 lg:px-10 xl:px-12 flex-1 overflow-y-auto">
                         {children}
                     </main>
+
+                    <Footer />
                 </div>
             </div>
         </div>
