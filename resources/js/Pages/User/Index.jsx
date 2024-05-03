@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTable, usePagination, useSortBy, useGlobalFilter } from 'react-table';
-import { Users, Pencil, Trash } from 'lucide-react';
+import { Users, Pencil, Trash, ChevronRight, ChevronLeft } from 'lucide-react';
 import { Head, Link } from '@inertiajs/react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 
@@ -107,8 +107,8 @@ const Index = ({ auth, users }) => {
               />
             </div>
             <div className="pagination">
-              <button onClick={() => previousPage()} disabled={!canPreviousPage} className="px-3 py-1 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-300 mr-2">
-                {'<'}
+              <button onClick={() => previousPage()} disabled={!canPreviousPage} className="px-2 py-1 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-300 mr-2">
+                <ChevronLeft size={16} className="inline-block" />
               </button>
               <span className="text-gray-700 dark:text-gray-300">
                 Página{' '}
@@ -116,8 +116,8 @@ const Index = ({ auth, users }) => {
                   {pageIndex + 1} de {pageOptions.length}
                 </strong>{' '}
               </span>
-              <button onClick={() => nextPage()} disabled={!canNextPage} className="px-3 py-1 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-300 ml-2">
-                {'>'}
+              <button onClick={() => nextPage()} disabled={!canNextPage} className="px-2 py-1 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-300 ml-2">
+                <ChevronRight size={16} className="inline-block" />
               </button>
             </div>
           </div>
