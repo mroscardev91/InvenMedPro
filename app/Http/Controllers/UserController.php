@@ -35,15 +35,7 @@ class UserController extends Controller
             'roles' => $roles,
         ]);
     }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
+    
     /**
      * Store a newly created resource in storage.
      */
@@ -62,23 +54,7 @@ class UserController extends Controller
         $user->assignRole($role); 
         return redirect()->back()->with('success', 'Usuario creado exitosamente.');
     }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
+    
     /**
      * Update the specified resource in storage.
      */
@@ -106,5 +82,17 @@ class UserController extends Controller
         $user = User::find($id);
         $user->delete();
         return redirect()->back()->with('success', 'Usuario eliminado exitosamente.');
+    }
+
+    public function unauthorized()
+    {
+        // Obtener el rol del usuario actual
+        $userRole = auth()->user()->getRole();
+
+
+        // Renderizar la vista y pasar el rol como una variable
+        return Inertia::render('Unauthorized/Index', [
+            'userRole' => $userRole,
+        ]);
     }
 }

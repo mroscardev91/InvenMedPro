@@ -18,8 +18,9 @@ Route::get('/', function () {
 Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::prefix('dashboard')->group(function (){
-        Route::resource('users', App\Http\Controllers\UserController::class);
-
+        Route::middleware(['system_admin'])->group(function () {
+            Route::resource('users', UserController::class);
+        });
     });
 
 });
@@ -35,6 +36,9 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+
+Route::get('/unauthorized', [UserController::class, 'unauthorized'])->name('unauthorized');
 
 
 
