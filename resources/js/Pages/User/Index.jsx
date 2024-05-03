@@ -18,9 +18,8 @@ const Index = ({ auth, users }) => {
             <h2 className="font-semibold text-xl text-white leading-tight flex items-center">
                 <Users className="mr-2" /> Usuario
             </h2>
-            {/* Botón para ir a la ruta de creación de usuarios */}
             <Link href={route('users.create')}>
-              <button className="bg-blue-700 hover:bg-blue-900 text-white font-bold py-2 px-4 rounded">
+              <button className="bg-[#2E3447] hover:bg-blue-900 text-white font-bold py-2 px-4 rounded">
                 Crear Usuario
               </button>
             </Link>
@@ -72,6 +71,7 @@ const Index = ({ auth, users }) => {
                     <Link
                       href={route('users.destroy', [user])}
                       method="delete"
+                      as='button'
                     >
                         <Trash className="inline-block h-6 w-6 text-red-500 cursor-pointer"/> 
                     </Link>
