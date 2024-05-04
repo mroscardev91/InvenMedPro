@@ -1,7 +1,7 @@
 
 import React, { useState, useRef } from 'react';
 import { useTable, usePagination, useSortBy, useGlobalFilter } from 'react-table';
-import { Users, Pencil, Trash, ChevronRight, ChevronLeft, Package } from 'lucide-react';
+import { Users, Pencil, Trash, ChevronRight, ChevronLeft, Package} from 'lucide-react';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import TextInput from '@/Components/TextInput';
@@ -26,19 +26,20 @@ const Index = ({ auth, suppliers }) => {
       name: '',
       email: '',
       phone: '',
-      address: ''
+      address: '',
+      logo: ''
     });
   
     // Función para abrir el modal
     const openModal = (op, id, name, email, phone, address) => {
       setModal(true);
       setOperation(op);
-      setData({ name: '', email: '', phone: '', address: ''}); // Reinicia los datos al abrir el modal
+      setData({ name: '', email: '', phone: '', address: '', logo: ''}); // Reinicia los datos al abrir el modal
       if (op === 1) {
         setTitle('Crear proveedor');
       } else {
         setTitle('Editar proveedor');
-        setData({ id: id, name: name, email: email, phone: phone, address: address});
+        setData({ id: id, name: name, email: email, phone: phone, address: address, logo: ''});
       }
     };
   
@@ -54,7 +55,8 @@ const Index = ({ auth, suppliers }) => {
         name: data.name,
         email: data.email,
         phone: data.phone,
-        address: data.address
+        address: data.address,
+        logo: data.logo
       };
   
       // Lógica para determinar si es una operación de creación o edición
@@ -141,6 +143,13 @@ const Index = ({ auth, suppliers }) => {
             Header: 'Dirección',
             accessor: 'address'
         },
+        {
+            Header: 'Logo',
+            accessor: 'logo',
+            Cell: ({ row }) => (
+              <img src={row.original.logo} alt="Logo" className="h-10 w-10" />
+            )
+          },
 
         {
           Header: 'Acciones',
@@ -149,7 +158,7 @@ const Index = ({ auth, suppliers }) => {
             <>
               <Pencil
                 className="inline-block h-6 w-6 text-blue-500 mr-2 cursor-pointer"
-                onClick={() => openModal(2, row.original.id, row.original.name, row.original.email, row.original.phone, row.original.address)} 
+                onClick={() => openModal(2, row.original.id, row.original.name, row.original.email, row.original.phone, row.original.address, row.original.logo)} 
               />
               <Trash className="inline-block h-6 w-6 text-red-500 cursor-pointer" onClick={() => eliminar(row.original.id, row.original.name)} />
             </>
@@ -331,6 +340,17 @@ const Index = ({ auth, suppliers }) => {
                 ></TextInput>
                 <InputError message={errors.address} className="mt-2"></InputError>
               </div>
+              <div className="mt-6">
+                <InputLabel for="logo" value="Logo"></InputLabel>
+                <input
+                    id="logo"
+                    name="logo"
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => setData('logo', e.target.files[0])}
+                    className="mt-1 block w-3/4"
+                />
+                </div>
             
               <div className="mt-6">
                 <PrimaryButton processing={processing} className="mt-2">
