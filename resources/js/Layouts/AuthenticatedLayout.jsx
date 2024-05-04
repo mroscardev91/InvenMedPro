@@ -6,10 +6,10 @@ import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { Link } from '@inertiajs/react';
 import Sidebar, { SidebarItem } from '@/Components/Sidebar';
 import Footer from '@/Components/Footer';
-import { LayoutDashboard, Home, StickyNote, Layers, Flag, Calendar, LifeBuoy, Settings, UsersRound } from "lucide-react";
+import { LayoutDashboard, StickyNote, Flag, Calendar, LifeBuoy, Settings, UsersRound, ChevronDown, Package, SquareArrowRight  } from "lucide-react";
 
 
-export default function AuthenticatedLayout({ user, header, children }) {
+export default function AuthenticatedLayout({ user, header, children}) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
     
 
@@ -20,7 +20,11 @@ export default function AuthenticatedLayout({ user, header, children }) {
                     <Sidebar user={user}>
                         <SidebarItem icon={<LayoutDashboard size={20} />} text="Dashboard" route={"/dashboard"} active={location.pathname === "/dashboard"} />
                         <SidebarItem icon={<StickyNote size={20} />} text="Pacientes" route={"/dashboard"} />
-                        <SidebarItem icon={<Calendar size={20} />} text="Gestion de productos" route={"/dashboard"} />
+                        <SidebarItem icon={<Package size={20} />} text="Gestión de Productos">
+                            <SidebarItem icon={<SquareArrowRight size={16} />} text="Categorías" route="/dashboard/categories" active={location.pathname === "/dashboard/categories"}/>
+                            <SidebarItem icon={<SquareArrowRight size={16} />} text="Productos" route="/dashboard/products" active={location.pathname === "/dashboard/products"}/>
+                            <SidebarItem icon={<SquareArrowRight size={16} />} text="Proveedores" route="/dashboard/suppliers" active={location.pathname === "/dashboard/suppliers"}/>
+                        </SidebarItem>
                         <SidebarItem icon={<UsersRound size={20} />} text="Usuarios" route={"/dashboard/users"} active={location.pathname === "/dashboard/users"} />
                         <SidebarItem icon={<Flag size={20} />} text="Reportes" route={"/dashboard"} />
                         <hr className="my-3" />
@@ -54,6 +58,7 @@ export default function AuthenticatedLayout({ user, header, children }) {
                                                         className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150"
                                                     >
                                                         {user.name}
+                                                        
                                                         <svg
                                                             className="ms-2 -me-0.5 h-4 w-4"
                                                             xmlns="http://www.w3.org/2000/svg"

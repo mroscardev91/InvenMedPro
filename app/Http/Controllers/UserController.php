@@ -30,6 +30,7 @@ class UserController extends Controller
             }
         });
 
+
         return Inertia::render('User/Index', [
             'users' => $users,
             'roles' => $roles,
@@ -95,4 +96,5 @@ class UserController extends Controller
             'userRole' => $userRole,
         ]);
     }
+
 }

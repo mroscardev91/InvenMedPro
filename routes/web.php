@@ -38,7 +38,11 @@ Route::middleware('auth')->group(function () {
 });
 
 
-Route::get('/unauthorized', [UserController::class, 'unauthorized'])->name('unauthorized');
+Route::middleware(['auth', 'verified'])->group(function () {
+
+    Route::get('/unauthorized', [UserController::class, 'unauthorized'])->name('unauthorized');
+
+});
 
 
 

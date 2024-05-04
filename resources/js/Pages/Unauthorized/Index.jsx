@@ -8,7 +8,7 @@ const Index = ({ userRole }) => {
           <p className="text-gray-600 text-center">
             No tienes permisos para acceder a esta página.
             Tu rol actual es: <span className="font-semibold">{userRole}</span>.
-            Para acceder necesitas el rol de <span className="font-semibold text-orange-500">Administrador del Sistema.</span>.
+            Para acceder necesitas el rol de <span className="font-semibold text-orange-500">Administrador del Sistema</span>.
           </p>
           <div className="flex justify-center"> 
             <button className="bg-[#2E3447] hover:bg-blue-900 text-white font-bold py-2 px-4 rounded">

@@ -1,4 +1,4 @@
-import { ChevronFirst, ChevronLast } from "lucide-react"
+import { ChevronFirst, ChevronLast, CirclePlus, CircleMinus  } from "lucide-react"
 import { createContext, useContext, useState } from "react"
 import { Link } from '@inertiajs/react';
 import logo from "../../../public/invenmedpro.svg"
@@ -38,23 +38,38 @@ export default function Sidebar({ children, user }) {
     )
 }
 
-export function SidebarItem({ icon, text, active, alert, route }) {
-    const { expanded } = useContext(SidebarContext)
+export function SidebarItem({ icon, text, active, alert, route, children }) {
+    const { expanded } = useContext(SidebarContext);
+    const [isSubMenuOpen, setIsSubMenuOpen] = useState(false);
+
+    const handleItemClick = () => {
+        if (!route) {
+            setIsSubMenuOpen(!isSubMenuOpen);
+        }
+    };
+
     return (
-        <li className={`relative flex items-center py-2 px-3 my-1 font-medium rounded-md cursor-pointer transition-colors group ${active ? "bg-gradient-to-tr from-blue-200 to-blue-100 text-blue-800" : "hover:bg-blue-50 text-gray-600"}`}>
-            {icon}
-            <Link href={route} className={`overflow-hidden transition-all ${expanded ? "w-52 ml-3" : "w-0"}`}>{text}</Link>
-            {alert && (
-                <div className={`absolute right-2 w-2 h-2 rounded bg-blue-500 ${expanded ? "" : "top-2"}`}>
+        <>
+            <li className={`relative flex items-center py-2 px-3 my-1 font-medium rounded-md cursor-pointer transition-colors group ${active ? "bg-gradient-to-tr from-blue-200 to-blue-100 text-blue-800" : "hover:bg-blue-50 text-gray-600"}`} onClick={handleItemClick}>
+                {icon}
+                {route ? <Link href={route} className={`overflow-hidden transition-all ${expanded ? "w-52 ml-3" : "w-0"}`}>{text}</Link> : <span className={`overflow-hidden transition-all ${expanded ? "w-52 ml-3" : "w-0"}`}>{text}</span>}
+                {children && (isSubMenuOpen ? <CircleMinus size={16} /> : <CirclePlus size={16} />)}
+                {alert && (
+                    <div className={`absolute right-2 w-2 h-2 rounded bg-blue-500 ${expanded ? "" : "top-2"}`}>
+                    </div>
+                )}
 
+                {!expanded && (
+                    <div className={`absolute left-full rounded-md px-2 py-1 ml-6 bg-blue-100 text-blue-800 text-sm invisible opacity-20 -translate-x-3 transition-all group-hover:visible group-hover:opacity-100 group-hover:translate-x-0`}>
+                        <Link href={route} className={`overflow-hidden transition-all ${expanded ? "w-52 ml-3" : "w-0"}`}>{text}</Link>
+                    </div>
+                )}
+            </li>
+            {isSubMenuOpen && children && (
+                <div className="ml-4">
+                    {children}
                 </div>
             )}
-
-            {!expanded && (
-                <div className={`absolute left-full rounded-md px-2 py-1 ml-6 bg-blue-100 text-blue-800 text-sm invisible opacity-20 -translate-x-3 transition-all group-hover:visible group-hover:opacity-100 group-hover:translate-x-0`}>
-                    <Link href={route} className={`overflow-hidden transition-all ${expanded ? "w-52 ml-3" : "w-0"}`}>{text}</Link>
-                </div>
-            )}
-        </li>
-    )
+        </>
+    );
 }

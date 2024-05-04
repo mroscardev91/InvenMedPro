@@ -25,7 +25,7 @@ const Index = ({ auth, users, roles }) => {
     name: '',
     email: '',
     password: '',
-    role: '' 
+    role: ''
   });
 
   // Función para abrir el modal
@@ -176,6 +176,7 @@ const Index = ({ auth, users, roles }) => {
     closeModal(); // Cierra el modal
     Swal.fire({ title: mensaje, icon: 'success' }); // Muestra la alerta de éxito
   };
+  {console.log(data)}
 
   return (
     <>
@@ -296,13 +297,15 @@ const Index = ({ auth, users, roles }) => {
                 value={data.password}
                 required="required"
                 onChange={(e) => setData('password', e.target.value)}
+
                 className="mt-1 block w-3/4"
-              ></TextInput>
+              />
               <InputError message={errors.password} className="mt-2"></InputError>
             </div>
             
             <div className="mt-6">
               <InputLabel for="role" value="Rol"></InputLabel>
+
               <select
                 id="role"
                 name="role"
@@ -312,7 +315,6 @@ const Index = ({ auth, users, roles }) => {
                 onChange={(e) => setData('role', e.target.value)}
                 className="mt-1 block w-3/4 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-1 focus:outline-none focus:border-blue-500 dark:bg-gray-800 dark:text-gray-300"
               >
-                
                 {roles.map((role) => (
                   <option key={role.id} value={role.id}>
                     {role.name}
