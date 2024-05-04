@@ -131,7 +131,7 @@ const Index = ({ auth, users, roles }) => {
       },
       {
         Header: 'Rol',
-        accessor: 'role_name',
+        accessor: 'role',
         Cell: ({ value }) => <span>{value}</span> 
       },
       {

@@ -13,26 +13,32 @@ import Modal from '@/Components/Modal';
 import Swal from 'sweetalert2';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 
-const Index = ({ auth, categories }) => {
+const Index = ({ auth, suppliers }) => {
     const [modal, setModal] = useState(false);
     const [title, setTitle] = useState('');
     const [operation, setOperation] = useState(1);
     const NameInput = useRef();
+    const EmailInput = useRef();
+    const PhoneInput = useRef();
+    const AddressInput = useRef();
     const { data, setData, delete: destroy, post, put, processing, reset, errors } = useForm({
       id: '',
-      name: ''
+      name: '',
+      email: '',
+      phone: '',
+      address: ''
     });
   
     // Función para abrir el modal
-    const openModal = (op, id, name) => {
+    const openModal = (op, id, name, email, phone, address) => {
       setModal(true);
       setOperation(op);
-      setData({ name: ''}); // Reinicia los datos al abrir el modal
+      setData({ name: '', email: '', phone: '', address: ''}); // Reinicia los datos al abrir el modal
       if (op === 1) {
-        setTitle('Crear categoría');
+        setTitle('Crear proveedor');
       } else {
-        setTitle('Editar categoría');
-        setData({ id: id, name: name});
+        setTitle('Editar proveedor');
+        setData({ id: id, name: name, email: email, phone: phone, address: address});
       }
     };
   
@@ -46,11 +52,14 @@ const Index = ({ auth, categories }) => {
       e.preventDefault();
       const formData = {
         name: data.name,
+        email: data.email,
+        phone: data.phone,
+        address: data.address
       };
   
       // Lógica para determinar si es una operación de creación o edición
-      const endpoint = operation === 1 ? route('categories.store') : route('categories.update', data.id);
-      const onSuccessMessage = operation === 1 ? 'Categoría guardada' : 'Categoría modificada';
+      const endpoint = operation === 1 ? route('suppliers.store') : route('suppliers.update', data.id);
+      const onSuccessMessage = operation === 1 ? 'Proveedor guardado' : 'Proveedor modificado';
   
       // Realiza la petición POST o PUT según la operación
       (operation === 1 ? post : put)(endpoint, {
@@ -64,6 +73,18 @@ const Index = ({ auth, categories }) => {
             reset('name');
             NameInput.current.focus();
           }
+          if (errors.email) {
+            reset('email');
+            EmailInput.current.focus();
+          }
+          if (errors.phone) {
+            reset('phone');
+            PhoneInput.current.focus();
+          }
+          if (errors.adress) {
+            reset('address');
+            AddressInput.current.focus();
+          }
         }
       });
     };
@@ -72,7 +93,7 @@ const Index = ({ auth, categories }) => {
     const eliminar = (id, name) => {
         Swal.fire({
             title: '¿Estás seguro?',
-            text: `¿Deseas eliminar la categoría "${name}"? Esta acción no se puede deshacer.`,
+            text: `¿Deseas eliminar el proveedor "${name}"? Esta acción no se puede deshacer.`,
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
@@ -81,18 +102,18 @@ const Index = ({ auth, categories }) => {
             cancelButtonText: 'Cancelar'
         }).then((result) => {
             if (result.isConfirmed) {
-                destroy(route('categories.destroy', id), {
+                destroy(route('suppliers.destroy', id), {
                     onSuccess: () => {
                         Swal.fire(
-                            'Eliminada!',
-                            `La categoría "${name}" ha sido eliminada.`,
+                            'Eliminado!',
+                            `El proveedor "${name}" ha sido eliminado.`,
                             'success'
                         );
                     },
                     onError: () => {
                         Swal.fire(
                             'Error!',
-                            'Hubo un problema al eliminar la categoría.',
+                            'Hubo un problema al eliminar el proveedor.',
                             'error'
                         );
                     }
@@ -108,7 +129,19 @@ const Index = ({ auth, categories }) => {
           Header: 'Nombre',
           accessor: 'name'
         },
-        
+        {
+            Header: 'Email',
+            accessor: 'email'
+        },
+        {
+            Header: 'Teléfono',
+            accessor: 'phone'
+        },
+        {
+            Header: 'Dirección',
+            accessor: 'address'
+        },
+
         {
           Header: 'Acciones',
           accessor: 'id',
@@ -116,7 +149,7 @@ const Index = ({ auth, categories }) => {
             <>
               <Pencil
                 className="inline-block h-6 w-6 text-blue-500 mr-2 cursor-pointer"
-                onClick={() => openModal(2, row.original.id, row.original.name)} 
+                onClick={() => openModal(2, row.original.id, row.original.name, row.original.email, row.original.phone, row.original.address)} 
               />
               <Trash className="inline-block h-6 w-6 text-red-500 cursor-pointer" onClick={() => eliminar(row.original.id, row.original.name)} />
             </>
@@ -143,7 +176,7 @@ const Index = ({ auth, categories }) => {
     } = useTable(
       {
         columns,
-        data: categories, 
+        data: suppliers, 
         initialState: { pageIndex: 0, pageSize: 9 }
       },
       useGlobalFilter,
@@ -166,15 +199,15 @@ const Index = ({ auth, categories }) => {
           header={
             <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 flex justify-between items-center">
               <h2 className="font-semibold text-xl text-white leading-tight flex items-center">
-                <Package className="mr-2" /> Categorías
+                <Package className="mr-2" /> Proveedores
               </h2>
               <button className="bg-[#2E3447] hover:bg-blue-900 text-white font-bold py-2 px-4 rounded" onClick={() => openModal(1)}>
-                Crear Categoría
+                Crear Proveedor
               </button>
             </div>
           }
         >
-          <Head title="Categorías" />
+          <Head title="Proveedores" />
           <div className="overflow-x-auto">
             <div className="flex flex-col sm:flex-row justify-between items-center mb-4">
               <div className="flex items-center mb-2 sm:mb-0">
@@ -187,7 +220,7 @@ const Index = ({ auth, categories }) => {
                   value={globalFilter || ''}
                   onChange={(e) => setGlobalFilter(e.target.value)}
                   className="border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-1 focus:outline-none focus:border-blue-500 dark:bg-gray-800 dark:text-gray-300"
-                  placeholder="Buscar categoría..."
+                  placeholder="Buscar proveedor..."
                 />
               </div>
               <div className="pagination">
@@ -255,6 +288,48 @@ const Index = ({ auth, categories }) => {
                   isFocused
                 ></TextInput>
                 <InputError message={errors.name} className="mt-2"></InputError>
+              </div>
+              <div className="mt-6">
+                <InputLabel for="email" value="Correo Electrónico"></InputLabel>
+                <TextInput
+                  id="email"
+                  name="email"
+                  ref={EmailInput}
+                  value={data.email}
+                  required="required"
+                  onChange={(e) => setData('email', e.target.value)}
+                  className="mt-1 block w-3/4"
+                  isFocused
+                ></TextInput>
+                <InputError message={errors.email} className="mt-2"></InputError>
+              </div>
+              <div className="mt-6">
+                <InputLabel for="phone" value="Teléfono"></InputLabel>
+                <TextInput
+                  id="phone"
+                  name="phone"
+                  ref={PhoneInput}
+                  value={data.phone}
+                  required="required"
+                  onChange={(e) => setData('phone', e.target.value)}
+                  className="mt-1 block w-3/4"
+                  isFocused
+                ></TextInput>
+                <InputError message={errors.phone} className="mt-2"></InputError>
+              </div>
+              <div className="mt-6">
+                <InputLabel for="address" value="Dirección"></InputLabel>
+                <TextInput
+                  id="address"
+                  name="address"
+                  ref={AddressInput}
+                  value={data.address}
+                  required="required"
+                  onChange={(e) => setData('address', e.target.value)}
+                  className="mt-1 block w-3/4"
+                  isFocused
+                ></TextInput>
+                <InputError message={errors.address} className="mt-2"></InputError>
               </div>
             
               <div className="mt-6">

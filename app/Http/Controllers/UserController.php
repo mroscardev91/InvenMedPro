@@ -24,9 +24,9 @@ class UserController extends Controller
         // Para manejar los usuarios sin rol asignado
         $users->each(function ($user) {
             if ($user->roles->isEmpty()) {
-                $user->role_name = 'Aún no se le ha asignado un rol';
+                $user->role = 'Aún no se le ha asignado un rol';
             } else {
-                $user->role_name = $user->roles->first()->name;
+                $user->role = $user->roles->first()->name;
             }
         });
 
