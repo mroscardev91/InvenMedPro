@@ -85,32 +85,38 @@ const Index = ({ auth, users, roles }) => {
   };
 
   // Función para eliminar usuario
-  const eliminar = (id) => {
-    const userToDelete = users.find((user) => user.id === id);
-    if (!userToDelete) {
-      console.error('No se encontró el usuario');
-      return;
-    }
-    const alerta = Swal.mixin({ buttonsStyling: true });
-    alerta
-      .fire({
-        title: `Seguro que quieres eliminar el usuario ${userToDelete.name}`,
-        text: 'Se eliminara el usuario de forma permanente',
-        icon: 'question',
+  const eliminar = (id, name) => {
+    Swal.fire({
+        title: '¿Estás seguro?',
+        text: `¿Deseas eliminar al usuario ${name}? Esta acción no se puede deshacer.`,
+        icon: 'warning',
         showCancelButton: true,
-        confirmButtonText: '<i class="fa-solid fa-check"></i> Si, eliminar',
-        cancelButtonText: '<i class="fa-solid fa-ban"></i> Cancelar'
-      })
-      .then((result) => {
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí, eliminar',
+        cancelButtonText: 'No, cancelar'
+    }).then((result) => {
         if (result.isConfirmed) {
-          destroy(route('users.destroy', id), {
-            onSuccess: () => {
-              ok('Usuario eliminado');
-            }
-          });
+            destroy(route('users.destroy', id), {
+                onSuccess: () => {
+                    Swal.fire(
+                        'Eliminado',
+                        'El usuario ha sido eliminado correctamente.',
+                        'success'
+                    );
+                    
+                },
+                onError: () => {
+                    Swal.fire(
+                        'Error',
+                        'No se pudo eliminar el usuario.',
+                        'error'
+                    );
+                }
+            });
         }
-      });
-  };
+    });
+};
 
   // Define las columnas de la tabla
   const columns = React.useMemo(
@@ -131,13 +137,13 @@ const Index = ({ auth, users, roles }) => {
       {
         Header: 'Acciones',
         accessor: 'id',
-        Cell: ({ row, value }) => (
+        Cell: ({ row }) => (
           <>
             <Pencil
               className="inline-block h-6 w-6 text-blue-500 mr-2 cursor-pointer"
               onClick={() => openModal(2, row.original.id, row.original.name, row.original.email, row.original.password, row.original.role)} 
             />
-            <Trash className="inline-block h-6 w-6 text-red-500 cursor-pointer" onClick={() => eliminar(value)} />
+            <Trash className="inline-block h-6 w-6 text-red-500 cursor-pointer" onClick={() => eliminar(row.original.id, row.original.name)} />
           </>
         )
       }

@@ -5,6 +5,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\CategoryController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -20,6 +21,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::prefix('dashboard')->group(function (){
         Route::middleware(['system_admin'])->group(function () {
             Route::resource('users', UserController::class);
+            Route::resource('categories', CategoryController::class);
         });
     });
 
@@ -43,10 +45,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/unauthorized', [UserController::class, 'unauthorized'])->name('unauthorized');
 
 });
-
-
-
-
 
 
 
