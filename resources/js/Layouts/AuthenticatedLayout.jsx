@@ -20,7 +20,7 @@ export default function AuthenticatedLayout({ user, header, children}) {
                     <Sidebar user={user}>
                         <SidebarItem icon={<LayoutDashboard size={20} />} text="Dashboard" route={"/dashboard"} active={location.pathname === "/dashboard"} />
                         <SidebarItem icon={<StickyNote size={20} />} text="Pacientes" route={"/dashboard"} />
-                        <SidebarItem icon={<Package size={20} />} text="Gestión de Productos">
+                        <SidebarItem icon={<Package size={20} />} text="Gestión de Productos" active={location.pathname === "/dashboard/categories"}>
                             <SidebarItem icon={<SquareArrowRight size={16} />} text="Categorías" route="/dashboard/categories" active={location.pathname === "/dashboard/categories"}/>
                             <SidebarItem icon={<SquareArrowRight size={16} />} text="Productos" route="/dashboard/products" active={location.pathname === "/dashboard/products"}/>
                             <SidebarItem icon={<SquareArrowRight size={16} />} text="Proveedores" route="/dashboard/suppliers" active={location.pathname === "/dashboard/suppliers"}/>

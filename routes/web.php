@@ -17,14 +17,14 @@ Route::get('/', function () {
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {
-
-    Route::prefix('dashboard')->group(function (){
-        Route::middleware(['system_admin'])->group(function () {
-            Route::resource('users', UserController::class);
+    Route::prefix('dashboard')->group(function () {
+        Route::middleware(['role:Administrador del Sistema,Administrador del Inventario'])->group(function () {
             Route::resource('categories', CategoryController::class);
         });
+        Route::middleware(['role:Administrador del Sistema'])->group(function () {
+            Route::resource('users', UserController::class);
+        });
     });
-
 });
 
 Route::get('/dashboard', function () {

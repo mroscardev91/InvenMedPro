@@ -1,7 +1,7 @@
 
 import React, { useState, useRef } from 'react';
 import { useTable, usePagination, useSortBy, useGlobalFilter } from 'react-table';
-import { Users, Pencil, Trash, ChevronRight, ChevronLeft } from 'lucide-react';
+import { Users, Pencil, Trash, ChevronRight, ChevronLeft, Package } from 'lucide-react';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import TextInput from '@/Components/TextInput';
@@ -169,7 +169,7 @@ const Index = ({ auth, categories }) => {
           header={
             <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 flex justify-between items-center">
               <h2 className="font-semibold text-xl text-white leading-tight flex items-center">
-                <Users className="mr-2" /> Categorías
+                <Package className="mr-2" /> Categorías
               </h2>
               <button className="bg-[#2E3447] hover:bg-blue-900 text-white font-bold py-2 px-4 rounded" onClick={() => openModal(1)}>
                 Crear Categoría

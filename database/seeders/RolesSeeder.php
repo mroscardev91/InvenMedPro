@@ -21,7 +21,7 @@ class RolesSeeder extends Seeder
         $patient_manager = Role::create(['name' => 'Administrador de Pacientes']);
 
         //permissions
-        $permissions = ['users.index'];
+        $permissions = ['users.index', 'categories.index'];
 
         //Crea el permiso en la base de datos mediante la lista anterior
         foreach ($permissions as $permission) {
@@ -31,6 +31,7 @@ class RolesSeeder extends Seeder
         //Asigna los permisos a un rol
         $system_admin->givePermissionTo($permissions);
 
+        $inventory_manager->givePermissionTo('categories.index');
 
 
         $user_admin = User::create([
@@ -39,7 +40,14 @@ class RolesSeeder extends Seeder
             'password' => bcrypt('12345678'),
         ]);
 
+        $user_inventory = User::create([
+            'name' => 'inventory', 
+            'email' => 'inventory@gmail.com',
+            'password' => bcrypt('12345678'),
+        ]);
+
         //Le asigna el rol administrador
         $user_admin->assignRole([$system_admin->id]);
+        $user_inventory->assignRole([$inventory_manager->id]);
     }
 }
