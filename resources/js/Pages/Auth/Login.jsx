@@ -27,6 +27,7 @@ export default function Login({ status, canResetPassword }) {
     };
 
     return (
+        <>
         <GuestLayout>
             <Head title="Iniciar Sesion" />
 
@@ -96,5 +97,6 @@ export default function Login({ status, canResetPassword }) {
                 </div>
             </form>
         </GuestLayout>
+        </>
     );
 }

@@ -206,13 +206,20 @@ const Index = ({ auth, suppliers }) => {
         <AuthenticatedLayout
           user={auth.user}
           header={
-            <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 flex justify-between items-center">
-              <h2 className="font-semibold text-xl text-white leading-tight flex items-center">
-                <Package className="mr-2" /> Proveedores
-              </h2>
-              <button className="bg-[#2E3447] hover:bg-blue-900 text-white font-bold py-2 px-4 rounded" onClick={() => openModal(1)}>
-                Crear Proveedor
-              </button>
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="py-4 flex justify-between items-center">
+                <h2 className="font-semibold text-lg sm:text-xl text-white leading-tight flex items-center">
+                  <Package className="mr-2 text-sm sm:text-lg" /> Proveedores
+                </h2>
+                {/* Este botón se mostrará en pantallas grandes y medianas */}
+                <button className="hidden sm:inline-block bg-[#2E3447] hover:bg-blue-900 text-white font-bold py-2 px-3 sm:px-4 rounded text-xs sm:text-base" onClick={() => openModal(1)}>
+                  Crear Proveedor
+                </button>
+                {/* Este botón se mostrará en pantallas pequeñas */}
+                <button className="sm:hidden bg-[#2E3447] hover:bg-blue-900 text-white font-bold py-2 px-3 rounded text-xs" onClick={() => openModal(1)}>
+                  +
+                </button>
+              </div>
             </div>
           }
         >

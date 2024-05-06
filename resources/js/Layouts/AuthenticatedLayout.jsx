@@ -42,8 +42,8 @@ export default function AuthenticatedLayout({ user, header, children}) {
                                             <ApplicationLogo className="block h-9 w-auto fill-current text-gray-800" />
                                         </Link>
                                     </div>
-                                    <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                                        <Link href={route('dashboard')} active={route().current('dashboard')}>
+                                    <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex justify-center items-center">
+                                        <Link href={route('dashboard')} active={route().current('dashboard')} className={`text-xl font-bold text-blue-600 overflow-hidden transition-all duration-500 ease-in-out`}>
                                             Sistema de inventario de medicamentos
                                         </Link>
                                     </div>
