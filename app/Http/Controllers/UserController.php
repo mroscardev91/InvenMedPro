@@ -46,12 +46,10 @@ class UserController extends Controller
             'name' => 'required',
             'email' => 'required|email',
             'password' => 'required',
-            'role' => 'required',
         ]);
-
-
+ 
         $user = User::create($request->except('role')); 
-        $role = Role::findOrFail($request->input('role')); 
+        $role = Role::where('name', $request->input('role'))->firstOrFail(); 
         $user->assignRole($role); 
         return redirect()->back()->with('success', 'Usuario creado exitosamente.');
     }
@@ -70,7 +68,7 @@ class UserController extends Controller
 
         $user = User::find($id);
         $user->fill($request->input())->saveOrFail();
-        $role = Role::findOrFail($request->input('role'));
+        $role = Role::where('name', $request->input('role'))->firstOrFail();
         $user->syncRoles([$role]);
         return redirect()->back()->with('success', 'Usuario actualizado exitosamente.');
     }

@@ -32,12 +32,16 @@ const Index = ({ auth, users, roles }) => {
   const openModal = (op, id, name, email, password, role) => {
     setModal(true);
     setOperation(op);
-    setData({ name: '', email: '', password: '', role: '' }); // Reinicia los datos al abrir el modal
+    
+    // Reinicia los datos al abrir el modal
+    setData({ name: '', email: '', password: '', role: '' });
+    
     if (op === 1) {
       setTitle('Crear usuario');
     } else {
       setTitle('Editar usuario');
-      setData({ id: id, name: name, email: email, password: password, role: role });
+      
+      setData({ id: id, name: name, email: email, role: role });
     }
   };
 
@@ -49,17 +53,29 @@ const Index = ({ auth, users, roles }) => {
   // Función para guardar cambios
   const save = (e) => {
     e.preventDefault();
+    
+    // Verificar si es una operación de edición
+    const isEditOperation = operation === 2;
+    
+    // Eliminar la contraseña del objeto formData si es una operación de edición
     const formData = {
       name: data.name,
       email: data.email,
-      password: data.password,
-      role: data.role 
+      role: data.role
     };
-
+    
+    // Si es una operación de edición, incluir el ID en los datos a enviar
+    if (isEditOperation) {
+      formData.id = data.id; // Agrega el ID al objeto formData
+    } else {
+      // Si es una operación de creación, incluir la contraseña en los datos a enviar
+      formData.password = data.password;
+    }
+  
     // Lógica para determinar si es una operación de creación o edición
     const endpoint = operation === 1 ? route('users.store') : route('users.update', data.id);
     const onSuccessMessage = operation === 1 ? 'Usuario guardado' : 'Usuario modificado';
-
+  
     // Realiza la petición POST o PUT según la operación
     (operation === 1 ? post : put)(endpoint, {
       data: formData,
@@ -168,7 +184,7 @@ const Index = ({ auth, users, roles }) => {
   } = useTable(
     {
       columns,
-      data: users, 
+      data: users, roles,
       initialState: { pageIndex: 0, pageSize: 9 }
     },
     useGlobalFilter,
@@ -295,34 +311,40 @@ const Index = ({ auth, users, roles }) => {
               <InputError message={errors.email} className="mt-2"></InputError>
             </div>
             <div className="mt-6">
-              <InputLabel for="password" value="Contraseña"></InputLabel>
-              <TextInput
-                id="password"
-                name="password"
-                ref={PasswordInput}
-                value={data.password}
-                required="required"
-                onChange={(e) => setData('password', e.target.value)}
-
-                className="mt-1 block w-3/4"
-              />
-              <InputError message={errors.password} className="mt-2"></InputError>
+              {/* Condición para renderizar el campo de contraseña solo en la creación */}
+              {operation === 1 && (
+                <>
+                  <InputLabel for="password" value="Contraseña"></InputLabel>
+                  <TextInput
+                    id="password"
+                    name="password"
+                    ref={PasswordInput}
+                    value={data.password}
+                    required="required"
+                    onChange={(e) => setData('password', e.target.value)}
+                    className="mt-1 block w-3/4"
+                  />
+                  <InputError message={errors.password} className="mt-2"></InputError>
+                </>
+              )}
             </div>
             
             <div className="mt-6">
               <InputLabel for="role" value="Rol"></InputLabel>
+              {console.log("Valor de data.role", data.role)}
 
               <select
                 id="role"
                 name="role"
                 ref={RoleSelect}
                 value={data.role}
+                
                 required="required"
                 onChange={(e) => setData('role', e.target.value)}
                 className="mt-1 block w-3/4 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-1 focus:outline-none focus:border-blue-500 dark:bg-gray-800 dark:text-gray-300"
               >
                 {roles.map((role) => (
-                  <option key={role.id} value={role.id}>
+                  <option key={role.id} value={role.name}>
                     {role.name}
                   </option>
                 ))}
