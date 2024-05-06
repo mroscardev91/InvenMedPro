@@ -6,7 +6,7 @@ import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { Link } from '@inertiajs/react';
 import Sidebar, { SidebarItem } from '@/Components/Sidebar';
 import Footer from '@/Components/Footer';
-import { LayoutDashboard, StickyNote, Flag, Calendar, LifeBuoy, Settings, UsersRound, ChevronDown, Package, SquareArrowRight  } from "lucide-react";
+import { LayoutDashboard, StickyNote, Flag, Calendar, LifeBuoy, Settings, UsersRound, Package, SquareArrowRight, Pill  } from "lucide-react";
 
 
 export default function AuthenticatedLayout({ user, header, children}) {
@@ -20,9 +20,9 @@ export default function AuthenticatedLayout({ user, header, children}) {
                     <Sidebar user={user}>
                         <SidebarItem icon={<LayoutDashboard size={20} />} text="Dashboard" route={"/dashboard"} active={location.pathname === "/dashboard"} />
                         <SidebarItem icon={<StickyNote size={20} />} text="Pacientes" route={"/dashboard"} />
-                        <SidebarItem icon={<Package size={20} />} text="Gestión de Productos" active={(location.pathname === "/dashboard/categories") || (location.pathname === "/dashboard/suppliers") } >
+                        <SidebarItem icon={<Pill size={20} />} text="Gestión de Medicamentos" active={(location.pathname === "/dashboard/categories") || (location.pathname === "/dashboard/suppliers") || (location.pathname === "/dashboard/medicines") } >
                             <SidebarItem icon={<SquareArrowRight size={16} />} text="Categorías" route="/dashboard/categories" active={location.pathname === "/dashboard/categories"}/>
-                            <SidebarItem icon={<SquareArrowRight size={16} />} text="Productos" route="/dashboard/products" active={location.pathname === "/dashboard/products"}/>
+                            <SidebarItem icon={<SquareArrowRight size={16} />} text="Medicamentos" route="/dashboard/medicines" active={location.pathname === "/dashboard/medicines"}/>
                             <SidebarItem icon={<SquareArrowRight size={16} />} text="Proveedores" route="/dashboard/suppliers" active={location.pathname === "/dashboard/suppliers"}/>
                         </SidebarItem>
                         <SidebarItem icon={<UsersRound size={20} />} text="Usuarios" route={"/dashboard/users"} active={location.pathname === "/dashboard/users"} />

@@ -7,6 +7,7 @@ use Inertia\Inertia;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\MedicineController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -22,6 +23,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::middleware(['role:Administrador del Sistema,Administrador del Inventario'])->group(function () {
             Route::resource('categories', CategoryController::class);
             Route::resource('suppliers', SupplierController::class);
+            Route::resource('medicines', MedicineController::class);
+
         });
         Route::middleware(['role:Administrador del Sistema'])->group(function () {
             Route::resource('users', UserController::class);

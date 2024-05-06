@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Product extends Model
+class Medicine extends Model
 {
     use HasFactory;
 
@@ -18,9 +18,4 @@ class Product extends Model
          return $this->belongsTo(Category::class);
      }
  
-     // Relación con el proveedor del producto
-     public function supplier()
-     {
-         return $this->belongsTo(Supplier::class);
-     }
 }
