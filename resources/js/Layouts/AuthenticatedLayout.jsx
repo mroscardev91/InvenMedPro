@@ -43,9 +43,9 @@ export default function AuthenticatedLayout({ user, header, children}) {
                                         </Link>
                                     </div>
                                     <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                                        <NavLink href={route('dashboard')} active={route().current('dashboard')}>
-                                            InvenMedPro
-                                        </NavLink>
+                                        <Link href={route('dashboard')} active={route().current('dashboard')}>
+                                            Sistema de inventario de medicamentos
+                                        </Link>
                                     </div>
                                 </div>
                                 <div className="hidden sm:flex sm:items-center sm:ms-6">

@@ -35,10 +35,11 @@ class MedicineController extends Controller
             'category' => 'required',
         ]);
 
-        $medicine = Medicine::create($request->except('category'));
-        $category = Category::where('name', $request->input('category'))->firstOrFail();
-        $medicine->category()->associate($category);
-        $medicine->save();
+        $medicine = Medicine::create([
+            'name' => $request->name,
+            'details' => $request->details,
+            'category_id' => $request->category,
+        ]);
 
         return redirect()->back()->with('success', 'Medicamento creado exitosamente.');
 
@@ -49,7 +50,20 @@ class MedicineController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'name' => 'required',
+            'details' => 'required',
+            'category' => 'required',
+        ]);
+
+        $medicine = Medicine::findOrFail($id);
+        $medicine->update([
+            'name' => $request->name,
+            'details' => $request->details,
+            'category_id' => $request->category,
+        ]);
+
+        return redirect()->back()->with('success', 'Medicamento actualizado exitosamente.');
     }
 
     /**
@@ -57,7 +71,7 @@ class MedicineController extends Controller
      */
     public function destroy(string $id)
     {
-        $medicine = Product::find($id);
+        $medicine = Medicine::find($id);
         $medicine->delete();
         return redirect()->back()->with('success', 'Medicamento eliminado exitosamente.');
     }

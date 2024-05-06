@@ -36,7 +36,7 @@ const Index = ({ auth, medicines, categories }) => {
         setTitle('Crear medicamento');
       } else {
         setTitle('Editar medicamento');
-        setData({ id: id, name: name, details: details, category: category});
+        setData({ id: id, name: name, details: details, category: category.id});
       }
     };
   
@@ -76,7 +76,7 @@ const Index = ({ auth, medicines, categories }) => {
           }
           if (errors.category) {
             reset('category');
-            CategoryInput.current.focus();
+            CategorySelect.current.focus();
           }
           
         }
@@ -132,7 +132,7 @@ const Index = ({ auth, medicines, categories }) => {
         {
           Header: 'Categoría',
           accessor: 'category',
-          Cell: ({ value }) => <span>{value}</span> 
+          Cell: ({ value }) => <span>{value.name}</span> 
         },
 
         {
@@ -300,7 +300,7 @@ const Index = ({ auth, medicines, categories }) => {
 
               <div className="mt-6">
               <InputLabel for="category" value="Categoria"></InputLabel>
-              {console.log("Valor de data.role", data.role)}
+              {console.log("Valor de data.role", data.category)}
 
               <select
                 id="category"
@@ -309,11 +309,11 @@ const Index = ({ auth, medicines, categories }) => {
                 value={data.category}
                 
                 required="required"
-                onChange={(e) => setData('role', e.target.value)}
+                onChange={(e) => setData('category', e.target.value)}
                 className="mt-1 block w-3/4 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-1 focus:outline-none focus:border-blue-500 dark:bg-gray-800 dark:text-gray-300"
               >
                 {categories.map((category) => (
-                  <option key={category.id} value={category.name}>
+                  <option key={category.id} value={category.id}>
                     {category.name}
                   </option>
                 ))}
