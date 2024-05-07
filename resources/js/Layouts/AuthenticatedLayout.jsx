@@ -6,7 +6,7 @@ import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { Link } from '@inertiajs/react';
 import Sidebar, { SidebarItem } from '@/Components/Sidebar';
 import Footer from '@/Components/Footer';
-import { LayoutDashboard, StickyNote, Flag, Calendar, LifeBuoy, Settings, UsersRound, Package, SquareArrowRight, Pill  } from "lucide-react";
+import { LayoutDashboard, StickyNote, Flag, LifeBuoy, Settings, UsersRound, SquareArrowRight, Pill, Factory, FolderHeart, ClipboardPlus, FolderKanban, ReceiptEuro, ShoppingCart, ClipboardPenLine } from "lucide-react";
 
 
 export default function AuthenticatedLayout({ user, header, children}) {
@@ -20,13 +20,19 @@ export default function AuthenticatedLayout({ user, header, children}) {
                     <Sidebar user={user}>
                         <SidebarItem icon={<LayoutDashboard size={20} />} text="Dashboard" route={"/dashboard"} active={location.pathname === "/dashboard"} />
                         <SidebarItem icon={<StickyNote size={20} />} text="Pacientes" route={"/dashboard"} />
-                        <SidebarItem icon={<Pill size={20} />} text="Gestión de Medicamentos" active={(location.pathname === "/dashboard/categories") || (location.pathname === "/dashboard/suppliers") || (location.pathname === "/dashboard/medicines") } >
-                            <SidebarItem icon={<SquareArrowRight size={16} />} text="Categorías" route="/dashboard/categories" active={location.pathname === "/dashboard/categories"}/>
-                            <SidebarItem icon={<SquareArrowRight size={16} />} text="Medicamentos" route="/dashboard/medicines" active={location.pathname === "/dashboard/medicines"}/>
-                            <SidebarItem icon={<SquareArrowRight size={16} />} text="Proveedores" route="/dashboard/suppliers" active={location.pathname === "/dashboard/suppliers"}/>
+                        <SidebarItem icon={<FolderHeart  size={20} />} text="Gestión de Medicamentos" active={(location.pathname === "/dashboard/categories") || (location.pathname === "/dashboard/suppliers") || (location.pathname === "/dashboard/medicines") } >
+                            <SidebarItem icon={<ClipboardPlus size={16} />} text="Categorías" route="/dashboard/categories" active={location.pathname === "/dashboard/categories"}/>
+                            <SidebarItem icon={<Pill size={16} />} text="Medicamentos" route="/dashboard/medicines" active={location.pathname === "/dashboard/medicines"}/>
+                            <SidebarItem icon={<Factory size={16} />} text="Proveedores" route="/dashboard/suppliers" active={location.pathname === "/dashboard/suppliers"}/>
                         </SidebarItem>
+
+                        <SidebarItem icon={<FolderKanban size={20} />} text="Gestión de Existencias" active={(location.pathname === "/dashboard/") || (location.pathname === "/dashboard/") || (location.pathname === "/dashboard/") } >
+                            <SidebarItem icon={<ShoppingCart  size={16} />} text="Entradas" route="/dashboard/" active={location.pathname === "/dashboard/"}/>
+                            <SidebarItem icon={<ReceiptEuro size={16} />} text="Salidas / Facturación" route="/dashboard/" active={location.pathname === "/dashboard/"}/>
+                        </SidebarItem>
+
                         <SidebarItem icon={<UsersRound size={20} />} text="Usuarios" route={"/dashboard/users"} active={location.pathname === "/dashboard/users"} />
-                        <SidebarItem icon={<Flag size={20} />} text="Reportes" route={"/dashboard"} />
+                        <SidebarItem icon={<ClipboardPenLine size={20} />} text="Reportes" route={"/dashboard"} />
                         <hr className="my-3" />
                         <SidebarItem icon={<Settings size={20} />} text="Configuración" />
                         <SidebarItem icon={<LifeBuoy size={20} />} text="Ayuda" />

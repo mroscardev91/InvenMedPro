@@ -220,7 +220,7 @@ const Index = ({ auth, medicines, categories }) => {
                   value={globalFilter || ''}
                   onChange={(e) => setGlobalFilter(e.target.value)}
                   className="border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-1 focus:outline-none focus:border-blue-500 dark:bg-gray-800 dark:text-gray-300"
-                  placeholder="Buscar categoría..."
+                  placeholder="Buscar medicamento..."
                 />
               </div>
               <div className="pagination">
