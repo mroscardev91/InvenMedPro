@@ -1,7 +1,6 @@
-
 import React, { useState, useRef } from 'react';
 import { useTable, usePagination, useSortBy, useGlobalFilter } from 'react-table';
-import { Users, Pencil, Trash, ChevronRight, ChevronLeft, Package} from 'lucide-react';
+import { Users, Pencil, Trash, ChevronRight, ChevronLeft, Package, MapPin, X} from 'lucide-react';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import TextInput from '@/Components/TextInput';
@@ -11,10 +10,12 @@ import { Head, Link } from '@inertiajs/react';
 import { useForm } from '@inertiajs/react';
 import Modal from '@/Components/Modal';
 import Swal from 'sweetalert2';
+import MapPage from '@/Components/MapPage';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 
 const Index = ({ auth, suppliers }) => {
     const [modal, setModal] = useState(false);
+    const [mapModal, setMapModal] = useState(false); // Nuevo estado para el modal del mapa
     const [title, setTitle] = useState('');
     const [operation, setOperation] = useState(1);
     const NameInput = useRef();
@@ -29,6 +30,13 @@ const Index = ({ auth, suppliers }) => {
       address: '',
       logo: ''
     });
+
+    const [selectedAddress, setSelectedAddress] = useState('');
+
+    const openMapPage = (address) => {
+      setSelectedAddress(address); 
+      setMapModal(true); // Abre el modal del mapa
+    };
   
     // Función para abrir el modal
     const openModal = (op, id, name, email, phone, address) => {
@@ -42,10 +50,16 @@ const Index = ({ auth, suppliers }) => {
         setData({ id: id, name: name, email: email, phone: phone, address: address, logo: ''});
       }
     };
+
+    // Función para abrir el modal del mapa
+    const openMapModal = () => {
+      setMapModal(true);
+    };
   
     // Función para cerrar el modal
     const closeModal = () => {
       setModal(false);
+      setMapModal(false); // Cierra el modal del mapa
     };
   
     // Función para guardar cambios
@@ -161,6 +175,10 @@ const Index = ({ auth, suppliers }) => {
                 onClick={() => openModal(2, row.original.id, row.original.name, row.original.email, row.original.phone, row.original.address, row.original.logo)} 
               />
               <Trash className="inline-block h-6 w-6 text-red-500 cursor-pointer" onClick={() => eliminar(row.original.id, row.original.name)} />
+              <MapPin className="inline-block h-6 w-6 text-green-500 ml-2 cursor-pointer" 
+                        onClick={() => openMapPage(row.original.address)} 
+                      />
+              
             </>
           )
         }
@@ -369,9 +387,19 @@ const Index = ({ auth, suppliers }) => {
               </div>
             </form>
           </Modal>
+          {/* Modal para mostrar el mapa */}
+          <Modal show={mapModal} onClose={() => setMapModal(false)}>
+            <div className="bg-white rounded-lg shadow-lg overflow-hidden relative P-6" style={{ width: '90vw', height: '80vh', maxWidth: '670px', maxHeight: '450px' }}>
+                <MapPage address={selectedAddress} />
+                <button onClick={() => setMapModal(false)} className="absolute top-2 right-2 text-lg p-2 text-gray-600 hover:text-gray-800">
+                    <X/>
+                </button>
+            </div>
+        </Modal>
         </AuthenticatedLayout>
       </>
     );
   };
+
   
   export default Index;
