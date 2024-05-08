@@ -34,6 +34,12 @@ const Index = ({ auth, medicines, categories }) => {
       setData({ name: ''}); // Reinicia los datos al abrir el modal
       if (op === 1) {
         setTitle('Crear medicamento');
+        setData({
+          id: '',
+          name: '',
+          details: '',
+          category: categories.length > 0 ? categories[0].id : '' // Asegura que categories tiene al menos un elemento
+        });
       } else {
         setTitle('Editar medicamento');
         setData({ id: id, name: name, details: details, category: category.id});
