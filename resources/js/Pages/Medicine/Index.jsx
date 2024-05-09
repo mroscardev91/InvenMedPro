@@ -1,10 +1,10 @@
 
 import React, { useState, useRef } from 'react';
 import { useTable, usePagination, useSortBy, useGlobalFilter } from 'react-table';
-import { Users, Pencil, Trash, ChevronRight, ChevronLeft, Package, Pill, FileDown } from 'lucide-react';
+import { Users, Pencil, Trash, ChevronRight, ChevronLeft, Pill, FileDown, ClipboardPen, Search } from 'lucide-react';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
-import TextInput from '@/Components/TextInput';
+import { TextInput, Select, SelectItem, Textarea } from '@tremor/react';
 import PrimaryButton from '@/Components/PrimaryButton';
 import SecondaryButton from '@/Components/SecondaryButton';
 import { Head, Link } from '@inertiajs/react';
@@ -255,14 +255,16 @@ const Index = ({ auth, medicines, categories }) => {
                 <label htmlFor="search" className="text-gray-700 dark:text-gray-300 mr-2">
                   Buscar:
                 </label>
-                <input
+                <TextInput
                   id="search"
                   type="text"
+                  icon={Search}
                   value={globalFilter || ''}
                   onChange={(e) => setGlobalFilter(e.target.value)}
-                  className="border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-1 focus:outline-none focus:border-blue-500 dark:bg-gray-800 dark:text-gray-300"
+                  className="border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-1 mt-1 focus:outline-none focus:border-blue-500 dark:bg-gray-800 dark:text-gray-300"
                   placeholder="Buscar medicamento..."
-                />
+                  >
+                </TextInput>
               </div>
               <div className="pagination">
                 <button onClick={() => previousPage()} disabled={!canPreviousPage} className="px-2 py-1 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-300 mr-2">
@@ -323,9 +325,28 @@ const Index = ({ auth, medicines, categories }) => {
                   name="name"
                   ref={NameInput}
                   value={data.name}
+                  placeholder="Nombre del medicamento"
+                  icon={Pill}
                   required="required"
                   onChange={(e) => setData('name', e.target.value)}
-                  className="mt-1 block w-3/4"
+                  className="mt-1 flex w-3/4 justify-center"
+                  isFocused
+                ></TextInput>
+                <InputError message={errors.name} className="mt-2"></InputError>
+              </div>
+
+              <div className="mt-6">
+                <InputLabel for="details" value="Detalles"></InputLabel>
+                <TextInput
+                  id="details"
+                  name="details"
+                  ref={DetailsInput}
+                  value={data.details}
+                  placeholder="Detalles del medicamento"
+                  icon={ClipboardPen}
+                  required="required"
+                  onChange={(e) => setData('details', e.target.value)}
+                  className="mt-1 flex w-3/4 justify-center"
                   isFocused
                 ></TextInput>
                 <InputError message={errors.name} className="mt-2"></InputError>
@@ -340,7 +361,6 @@ const Index = ({ auth, medicines, categories }) => {
                 name="category"
                 ref={CategorySelect}
                 value={data.category}
-                
                 required="required"
                 onChange={(e) => setData('category', e.target.value)}
                 className="mt-1 block w-3/4 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-1 focus:outline-none focus:border-blue-500 dark:bg-gray-800 dark:text-gray-300"

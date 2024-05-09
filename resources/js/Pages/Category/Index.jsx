@@ -1,10 +1,9 @@
 
 import React, { useState, useRef } from 'react';
 import { useTable, usePagination, useSortBy, useGlobalFilter } from 'react-table';
-import { Users, Pencil, Trash, ChevronRight, ChevronLeft, Package, FileDown } from 'lucide-react';
+import { Users, Pencil, Trash, ChevronRight, ChevronLeft, Package, FileDown, Search, ClipboardPen, ClipboardPlus } from 'lucide-react';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
-import TextInput from '@/Components/TextInput';
 import PrimaryButton from '@/Components/PrimaryButton';
 import SecondaryButton from '@/Components/SecondaryButton';
 import { Head, Link } from '@inertiajs/react';
@@ -12,6 +11,7 @@ import { useForm } from '@inertiajs/react';
 import Modal from '@/Components/Modal';
 import Swal from 'sweetalert2';
 import { mkConfig, generateCsv, download } from 'export-to-csv'
+import { TextInput } from '@tremor/react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 
 const Index = ({ auth, categories }) => {
@@ -228,18 +228,19 @@ const Index = ({ auth, categories }) => {
             <div className="flex flex-col sm:flex-row justify-between items-center mb-4">
               
               <div className="flex items-center mb-2 sm:mb-0">
-
-                <label htmlFor="search" className="text-gray-700 dark:text-gray-300 mr-2">
+                <label htmlFor="search" className="text-gray-700  dark:text-gray-300 mr-2">
                   Buscar:
                 </label>
-                <input
+                <TextInput
                   id="search"
                   type="text"
                   value={globalFilter || ''}
+                  icon={Search}
                   onChange={(e) => setGlobalFilter(e.target.value)}
-                  className="border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-1 focus:outline-none focus:border-blue-500 dark:bg-gray-800 dark:text-gray-300"
+                  className="border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-1 mt-1 focus:outline-none focus:border-blue-500 dark:bg-gray-800 dark:text-gray-300"
                   placeholder="Buscar categoría..."
-                />
+                >
+                </TextInput>
               </div>
               <div className="pagination">
                 <button onClick={() => previousPage()} disabled={!canPreviousPage} className="px-2 py-1 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-300 mr-2">
@@ -300,9 +301,11 @@ const Index = ({ auth, categories }) => {
                   name="name"
                   ref={NameInput}
                   value={data.name}
+                  icon={ClipboardPlus}
+                  placeholder={'Nombre de la categoría'}
                   required="required"
                   onChange={(e) => setData('name', e.target.value)}
-                  className="mt-1 block w-3/4"
+                  className="mt-1 flex w-3/4 justify-center"
                   isFocused
                 ></TextInput>
                 <InputError message={errors.name} className="mt-2"></InputError>
@@ -315,9 +318,11 @@ const Index = ({ auth, categories }) => {
                   name="details"
                   ref={DetailsInput}
                   value={data.details}
+                  icon={ClipboardPen}
+                  placeholder={'Detalles de la categoría'}
                   required="required"
                   onChange={(e) => setData('details', e.target.value)}
-                  className="mt-1 block w-3/4"
+                  className="mt-1 flex w-3/4 justify-center"
                   isFocused
                 ></TextInput>
                 <InputError message={errors.name} className="mt-2"></InputError>
