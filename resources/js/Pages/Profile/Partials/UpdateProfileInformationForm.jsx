@@ -1,9 +1,10 @@
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
+import { TextInput } from '@tremor/react';
 import { Link, useForm, usePage } from '@inertiajs/react';
 import { Transition } from '@headlessui/react';
+import { Mail, LockKeyhole, SquareUserRound } from 'lucide-react';
 
 export default function UpdateProfileInformation({ mustVerifyEmail, status, className = '' }) {
     const user = usePage().props.auth.user;
@@ -35,8 +36,10 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
 
                     <TextInput
                         id="name"
-                        className="mt-1 block w-full"
+                        className="mt-1 flex w-full justify-center"
+                        icon={SquareUserRound}
                         value={data.name}
+                        placeholder='Escribe tu nombre'
                         onChange={(e) => setData('name', e.target.value)}
                         required
                         isFocused
@@ -52,7 +55,9 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
                     <TextInput
                         id="email"
                         type="email"
-                        className="mt-1 block w-full"
+                        className="mt-1 flex w-full justify-center"
+                        icon={Mail}
+                        placeholder='Escribe tu correo electrónico'
                         value={data.email}
                         onChange={(e) => setData('email', e.target.value)}
                         required
