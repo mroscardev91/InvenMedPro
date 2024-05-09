@@ -4,8 +4,9 @@ import GuestLayout from '@/Layouts/GuestLayout';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
+import { TextInput } from '@tremor/react';
 import { Head, Link, useForm } from '@inertiajs/react';
+import { Mail, LockKeyhole } from 'lucide-react';
 
 export default function Login({ status, canResetPassword }) {
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -42,7 +43,8 @@ export default function Login({ status, canResetPassword }) {
                         type="email"
                         name="email"
                         value={data.email}
-                        className="mt-1 block w-full"
+                        icon={Mail}
+                        className="mt-1 flex w-full justify-center"
                         autoComplete="username"
                         isFocused={true}
                         placeholder="Correo Electrónico"
@@ -60,7 +62,8 @@ export default function Login({ status, canResetPassword }) {
                         type="password"
                         name="password"
                         value={data.password}
-                        className="mt-1 block w-full"
+                        icon={LockKeyhole}
+                        className="mt-1 flex w-full justify-center"
                         autoComplete="current-password"
                         placeholder="Contraseña"
                         onChange={(e) => setData('password', e.target.value)}

@@ -3,8 +3,9 @@ import GuestLayout from '@/Layouts/GuestLayout';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
+import { TextInput } from '@tremor/react';
 import { Head, Link, useForm } from '@inertiajs/react';
+import { Mail, LockKeyhole, SquareUserRound } from 'lucide-react';
 
 export default function Register() {
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -38,7 +39,8 @@ export default function Register() {
                         id="name"
                         name="name"
                         value={data.name}
-                        className="mt-1 block w-full"
+                        className="mt-1 flex w-full justify-center"
+                        icon={SquareUserRound}
                         autoComplete="name"
                         isFocused={true}
                         placeholder="Nombre"  
@@ -57,8 +59,9 @@ export default function Register() {
                         type="email"
                         name="email"
                         value={data.email}
-                        className="mt-1 block w-full"
+                        className="mt-1 flex w-full justify-center"
                         autoComplete="username"
+                        icon={Mail}
                         placeholder="Correo Electrónico"
                         onChange={(e) => setData('email', e.target.value)}
                         required
@@ -75,7 +78,8 @@ export default function Register() {
                         type="password"
                         name="password"
                         value={data.password}
-                        className="mt-1 block w-full"
+                        icon={LockKeyhole}
+                        className="mt-1 flex w-full justify-center"
                         autoComplete="new-password"
                         placeholder="Contraseña"
                         onChange={(e) => setData('password', e.target.value)}
@@ -93,7 +97,8 @@ export default function Register() {
                         type="password"
                         name="password_confirmation"
                         value={data.password_confirmation}
-                        className="mt-1 block w-full"
+                        icon={LockKeyhole}
+                        className="mt-1 flex w-full justify-center"
                         autoComplete="new-password"
                         placeholder="Confirmar Contraseña"
                         onChange={(e) => setData('password_confirmation', e.target.value)}
