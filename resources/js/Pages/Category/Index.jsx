@@ -1,7 +1,7 @@
 
 import React, { useState, useRef } from 'react';
 import { useTable, usePagination, useSortBy, useGlobalFilter } from 'react-table';
-import { Users, Pencil, Trash, ChevronRight, ChevronLeft, Package } from 'lucide-react';
+import { Users, Pencil, Trash, ChevronRight, ChevronLeft, Package, FileDown } from 'lucide-react';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import TextInput from '@/Components/TextInput';
@@ -11,6 +11,7 @@ import { Head, Link } from '@inertiajs/react';
 import { useForm } from '@inertiajs/react';
 import Modal from '@/Components/Modal';
 import Swal from 'sweetalert2';
+import { mkConfig, generateCsv, download } from 'export-to-csv'
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 
 const Index = ({ auth, categories }) => {
@@ -159,6 +160,20 @@ const Index = ({ auth, categories }) => {
     };
     {console.log(data)}
   
+    // Función para exportar la tabla como CSV
+    const exportExcel = () => {
+      const csvConfig = mkConfig({
+          fieldSeparator: ',',
+          filename: 'categorias', 
+          decimalSeparator: '.',
+          useKeysAsHeaders: true,
+      });
+
+      const csvData = generateCsv(csvConfig)(categories);
+      download(csvConfig)(csvData);
+    };
+
+
     return (
       <>
         <AuthenticatedLayout
@@ -169,14 +184,28 @@ const Index = ({ auth, categories }) => {
                 <h2 className="font-semibold text-lg sm:text-xl text-white leading-tight flex items-center">
                   <Package className="mr-2 text-sm sm:text-lg" /> Categorías
                 </h2>
-                {/* Este botón se mostrará en pantallas grandes y medianas */}
-                <button className="hidden sm:inline-block bg-[#2E3447] hover:bg-blue-900 text-white font-bold py-2 px-3 sm:px-4 rounded text-xs sm:text-base" onClick={() => openModal(1)}>
-                  Crear Categoría
-                </button>
-                {/* Este botón se mostrará en pantallas pequeñas */}
-                <button className="sm:hidden bg-[#2E3447] hover:bg-blue-900 text-white font-bold py-2 px-3 rounded text-xs" onClick={() => openModal(1)}>
-                  +
-                </button>
+                {/* Botones para crear categoría y descargar */}
+                <div className="flex">
+                  {/* Botón para crear categoría */}
+                  <button className="hidden sm:inline-block bg-[#2E3447] hover:bg-blue-900 text-white font-bold py-2 px-3 sm:px-4 rounded text-xs sm:text-base mr-2" onClick={() => openModal(1)}>
+                    Crear Categoría
+                  </button>
+                  {/* Botón para descargar */}
+                  <button type="button" onClick={exportExcel} className="hidden sm:inline-block bg-[#2E3447] hover:bg-blue-900 text-white font-bold py-2 px-3 sm:px-4 rounded text-xs sm:text-base">
+                    <FileDown/>
+                  </button>
+                </div>
+                {/* Botones para crear categoría y descargar en pantallas pequeñas */}
+                <div className="sm:hidden">
+                  {/* Botón para crear categoría en pantallas pequeñas */}
+                  <button className="bg-[#2E3447] hover:bg-blue-900 text-white font-bold py-2 px-3 rounded text-xs mr-2" onClick={() => openModal(1)}>
+                    +
+                  </button>
+                  {/* Botón para descargar en pantallas pequeñas */}
+                  <button type="button" onClick={exportExcel} className="bg-[#2E3447] hover:bg-blue-900 text-white font-bold py-[9.3px] px-3 rounded text-xs mt-2">
+                    <FileDown size={13}/>
+                  </button>
+                </div>
               </div>
             </div>
           }
@@ -184,7 +213,9 @@ const Index = ({ auth, categories }) => {
           <Head title="Categorías" />
           <div className="overflow-x-auto">
             <div className="flex flex-col sm:flex-row justify-between items-center mb-4">
+              
               <div className="flex items-center mb-2 sm:mb-0">
+
                 <label htmlFor="search" className="text-gray-700 dark:text-gray-300 mr-2">
                   Buscar:
                 </label>
@@ -231,7 +262,7 @@ const Index = ({ auth, categories }) => {
                 {page.map((row) => {
                   prepareRow(row);
                   return (
-                    <tr key={row.id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700" {...row.getRowProps()}>
+                    <tr key={row.id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"  {...row.getRowProps()}>
                       {row.cells.map((cell) => {
                         return (
                           <td {...cell.getCellProps()} className="px-6 py-4 sm:py-2 lg:py-4 font-medium text-gray-900 dark:text-white">

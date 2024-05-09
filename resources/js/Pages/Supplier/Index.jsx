@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { useTable, usePagination, useSortBy, useGlobalFilter } from 'react-table';
-import { Users, Pencil, Trash, ChevronRight, ChevronLeft, Package, MapPin, X} from 'lucide-react';
+import { Users, Pencil, Trash, ChevronRight, ChevronLeft, Package, MapPin, X, FileDown} from 'lucide-react';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import TextInput from '@/Components/TextInput';
@@ -11,6 +11,7 @@ import { useForm } from '@inertiajs/react';
 import Modal from '@/Components/Modal';
 import Swal from 'sweetalert2';
 import MapPage from '@/Components/MapPage';
+import { mkConfig, generateCsv, download } from 'export-to-csv'
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 
 const Index = ({ auth, suppliers }) => {
@@ -218,7 +219,20 @@ const Index = ({ auth, suppliers }) => {
       Swal.fire({ title: mensaje, icon: 'success' }); // Muestra la alerta de éxito
     };
     {console.log(data)}
-  
+    
+    // Función para exportar la tabla como CSV
+    const exportExcel = () => {
+      const csvConfig = mkConfig({
+          fieldSeparator: ',',
+          filename: 'proveedores', 
+          decimalSeparator: '.',
+          useKeysAsHeaders: true,
+      });
+
+      const csvData = generateCsv(csvConfig)(suppliers);
+      download(csvConfig)(csvData);
+    };
+
     return (
       <>
         <AuthenticatedLayout
@@ -229,14 +243,28 @@ const Index = ({ auth, suppliers }) => {
                 <h2 className="font-semibold text-lg sm:text-xl text-white leading-tight flex items-center">
                   <Package className="mr-2 text-sm sm:text-lg" /> Proveedores
                 </h2>
-                {/* Este botón se mostrará en pantallas grandes y medianas */}
-                <button className="hidden sm:inline-block bg-[#2E3447] hover:bg-blue-900 text-white font-bold py-2 px-3 sm:px-4 rounded text-xs sm:text-base" onClick={() => openModal(1)}>
-                  Crear Proveedor
-                </button>
-                {/* Este botón se mostrará en pantallas pequeñas */}
-                <button className="sm:hidden bg-[#2E3447] hover:bg-blue-900 text-white font-bold py-2 px-3 rounded text-xs" onClick={() => openModal(1)}>
-                  +
-                </button>
+                {/* Botones para crear proveedor y descargar */}
+                <div className="flex">
+                  {/* Botón para crear proveedor */}
+                  <button className="hidden sm:inline-block bg-[#2E3447] hover:bg-blue-900 text-white font-bold py-2 px-3 sm:px-4 rounded text-xs sm:text-base mr-2" onClick={() => openModal(1)}>
+                    Crear Proveedor
+                  </button>
+                  {/* Botón para descargar */}
+                  <button type="button" onClick={exportExcel} className="hidden sm:inline-block bg-[#2E3447] hover:bg-blue-900 text-white font-bold py-2 px-3 sm:px-4 rounded text-xs sm:text-base">
+                    <FileDown/>
+                  </button>
+                </div>
+                {/* Botones para crear proveedor y descargar en pantallas pequeñas */}
+                <div className="sm:hidden">
+                  {/* Botón para crear proveedor en pantallas pequeñas */}
+                  <button className="bg-[#2E3447] hover:bg-blue-900 text-white font-bold py-2 px-3 rounded text-xs mr-2" onClick={() => openModal(1)}>
+                    +
+                  </button>
+                  {/* Botón para descargar en pantallas pequeñas */}
+                  <button type="button" onClick={exportExcel} className="bg-[#2E3447] hover:bg-blue-900 text-white font-bold py-[9.3px] px-3 rounded text-xs mt-2">
+                    <FileDown size={13}/>
+                  </button>
+                </div>
               </div>
             </div>
           }

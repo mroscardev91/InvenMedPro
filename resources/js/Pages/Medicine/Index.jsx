@@ -1,7 +1,7 @@
 
 import React, { useState, useRef } from 'react';
 import { useTable, usePagination, useSortBy, useGlobalFilter } from 'react-table';
-import { Users, Pencil, Trash, ChevronRight, ChevronLeft, Package, Pill } from 'lucide-react';
+import { Users, Pencil, Trash, ChevronRight, ChevronLeft, Package, Pill, FileDown } from 'lucide-react';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import TextInput from '@/Components/TextInput';
@@ -11,6 +11,7 @@ import { Head, Link } from '@inertiajs/react';
 import { useForm } from '@inertiajs/react';
 import Modal from '@/Components/Modal';
 import Swal from 'sweetalert2';
+import { mkConfig, generateCsv, download } from 'export-to-csv'
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 
 const Index = ({ auth, medicines, categories }) => {
@@ -190,6 +191,26 @@ const Index = ({ auth, medicines, categories }) => {
       Swal.fire({ title: mensaje, icon: 'success' }); // Muestra la alerta de éxito
     };
     {console.log(data)}
+
+    // Extraer la información de las medicinas para que no sea un objeto
+    const processedMedicines = medicines.map(medicine => ({
+      name: medicine.name,
+      details: medicine.details,
+      category: medicine.category.name 
+    }));
+
+    // Función para exportar la tabla como CSV
+    const exportExcel = () => {
+      const csvConfig = mkConfig({
+          fieldSeparator: ',',
+          filename: 'medicamentos', 
+          decimalSeparator: '.',
+          useKeysAsHeaders: true,
+      });
+
+      const csvData = generateCsv(csvConfig)(processedMedicines);
+      download(csvConfig)(csvData);
+    };
   
     return (
       <>
@@ -201,14 +222,28 @@ const Index = ({ auth, medicines, categories }) => {
                 <h2 className="font-semibold text-lg sm:text-xl text-white leading-tight flex items-center">
                   <Pill className="mr-2 text-sm sm:text-lg" /> Medicamentos
                 </h2>
-                {/* Este botón se mostrará en pantallas grandes y medianas */}
-                <button className="hidden sm:inline-block bg-[#2E3447] hover:bg-blue-900 text-white font-bold py-2 px-3 sm:px-4 rounded text-xs sm:text-base" onClick={() => openModal(1)}>
-                  Crear Medicamento
-                </button>
-                {/* Este botón se mostrará en pantallas pequeñas */}
-                <button className="sm:hidden bg-[#2E3447] hover:bg-blue-900 text-white font-bold py-2 px-3 rounded text-xs" onClick={() => openModal(1)}>
-                  +
-                </button>
+                {/* Botones para crear categoría y descargar */}
+                <div className="flex">
+                  {/* Botón para crear categoría */}
+                  <button className="hidden sm:inline-block bg-[#2E3447] hover:bg-blue-900 text-white font-bold py-2 px-3 sm:px-4 rounded text-xs sm:text-base mr-2" onClick={() => openModal(1)}>
+                    Crear Medicamento
+                  </button>
+                  {/* Botón para descargar */}
+                  <button type="button" onClick={exportExcel} className="hidden sm:inline-block bg-[#2E3447] hover:bg-blue-900 text-white font-bold py-2 px-3 sm:px-4 rounded text-xs sm:text-base">
+                    <FileDown/>
+                  </button>
+                </div>
+                {/* Botones para crear categoría y descargar en pantallas pequeñas */}
+                <div className="sm:hidden">
+                  {/* Botón para crear categoría en pantallas pequeñas */}
+                  <button className="bg-[#2E3447] hover:bg-blue-900 text-white font-bold py-2 px-3 rounded text-xs mr-2" onClick={() => openModal(1)}>
+                    +
+                  </button>
+                  {/* Botón para descargar en pantallas pequeñas */}
+                  <button type="button" onClick={exportExcel} className="bg-[#2E3447] hover:bg-blue-900 text-white font-bold py-[9.3px] px-3 rounded text-xs mt-2">
+                    <FileDown size={13}/>
+                  </button>
+                </div>
               </div>
             </div>
           }
