@@ -332,21 +332,6 @@ const Index = ({ auth, medicines, categories }) => {
               </div>
 
               <div className="mt-6">
-                <InputLabel for="details" value="Detalles"></InputLabel>
-                <TextInput
-                  id="details"
-                  name="details"
-                  ref={DetailsInput}
-                  value={data.details}
-                  required="required"
-                  onChange={(e) => setData('details', e.target.value)}
-                  className="mt-1 block w-3/4"
-                  isFocused
-                ></TextInput>
-                <InputError message={errors.name} className="mt-2"></InputError>
-              </div>
-
-              <div className="mt-6">
               <InputLabel for="category" value="Categoria"></InputLabel>
               {console.log("Valor de data.role", data.category)}
 

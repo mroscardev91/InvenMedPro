@@ -19,21 +19,23 @@ const Index = ({ auth, categories }) => {
     const [title, setTitle] = useState('');
     const [operation, setOperation] = useState(1);
     const NameInput = useRef();
+    const DetailsInput = useRef();
     const { data, setData, delete: destroy, post, put, processing, reset, errors } = useForm({
       id: '',
-      name: ''
+      name: '',
+      details: '',
     });
   
     // Función para abrir el modal
     const openModal = (op, id, name) => {
       setModal(true);
       setOperation(op);
-      setData({ name: ''}); // Reinicia los datos al abrir el modal
+      setData({ name: '', details: ''}); // Reinicia los datos al abrir el modal
       if (op === 1) {
         setTitle('Crear categoría');
       } else {
         setTitle('Editar categoría');
-        setData({ id: id, name: name});
+        setData({ id: id, name: name, details: details});
       }
     };
   
@@ -47,6 +49,7 @@ const Index = ({ auth, categories }) => {
       e.preventDefault();
       const formData = {
         name: data.name,
+        details: data.details
       };
   
       // Lógica para determinar si es una operación de creación o edición
@@ -65,6 +68,11 @@ const Index = ({ auth, categories }) => {
             reset('name');
             NameInput.current.focus();
           }
+          if (errors.details) {
+            reset('details');
+            DetailsInput.current.focus();
+          }
+          
         }
       });
     };
@@ -109,6 +117,11 @@ const Index = ({ auth, categories }) => {
           Header: 'Nombre',
           accessor: 'name'
         },
+
+        {
+          Header: 'Detalles',
+          accessor: 'details'
+        },
         
         {
           Header: 'Acciones',
@@ -117,7 +130,7 @@ const Index = ({ auth, categories }) => {
             <>
               <Pencil
                 className="inline-block h-6 w-6 text-blue-500 mr-2 cursor-pointer"
-                onClick={() => openModal(2, row.original.id, row.original.name)} 
+                onClick={() => openModal(2, row.original.id, row.original.name, row.original.details)} 
               />
               <Trash className="inline-block h-6 w-6 text-red-500 cursor-pointer" onClick={() => eliminar(row.original.id, row.original.name)} />
             </>
@@ -289,6 +302,21 @@ const Index = ({ auth, categories }) => {
                   value={data.name}
                   required="required"
                   onChange={(e) => setData('name', e.target.value)}
+                  className="mt-1 block w-3/4"
+                  isFocused
+                ></TextInput>
+                <InputError message={errors.name} className="mt-2"></InputError>
+              </div>
+
+              <div className="mt-6">
+                <InputLabel for="details" value="Detalles"></InputLabel>
+                <TextInput
+                  id="details"
+                  name="details"
+                  ref={DetailsInput}
+                  value={data.details}
+                  required="required"
+                  onChange={(e) => setData('details', e.target.value)}
                   className="mt-1 block w-3/4"
                   isFocused
                 ></TextInput>
