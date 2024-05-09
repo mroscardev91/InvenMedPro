@@ -38,9 +38,5 @@ class CategorySeeder extends Seeder
             'details' => 'Para tratar inflamaciones',
         ]);
 
-        Category::create([
-            'name' => 'Antipiréticos',
-            'details' => 'Para tratar fiebre',
-        ]);
     }
 }

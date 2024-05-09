@@ -18,7 +18,7 @@ class SupplierSeeder extends Seeder
             'address' => 'avenida juan de austria 142, Guadalajara',
             'phone' => '949 21 39 53',
             'email' => 'ubiopharma@gmail.com',
-            'logo' => 'https://i.imgur.com/emc5Nk0.png',
+            'logo' => 'https://ubiopharma.com/img/laboratiorios-alcor-logo-1554889552.jpg',
         ]);
 
         Supplier::create([
@@ -26,7 +26,7 @@ class SupplierSeeder extends Seeder
             'address' => 'Avinguda de la Generalitat, 171, 173, 08174',
             'phone' => '935 83 40 00',
             'email' => 'roche@gmail.com',
-            'logo' => 'https://i.imgur.com/U5zGllC.png',
+            'logo' => 'https://www.consalud.es/salud35/uploads/s1/74/73/70/fachada-edificio-de-roche.jpeg',
         ]);
 
         Supplier::create([
