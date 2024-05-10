@@ -241,7 +241,7 @@ const Index = ({ auth, suppliers }) => {
           user={auth.user}
           header={
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="py-4 flex justify-between items-center">
+              <div className="py-1 flex justify-between items-center">
                 <h2 className="font-semibold text-lg sm:text-xl text-white leading-tight flex items-center">
                   <Package className="mr-2 text-sm sm:text-lg" /> Proveedores
                 </h2>

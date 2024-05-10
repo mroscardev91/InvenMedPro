@@ -6,7 +6,7 @@ import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { Link } from '@inertiajs/react';
 import Sidebar, { SidebarItem } from '@/Components/Sidebar';
 import Footer from '@/Components/Footer';
-import { LayoutDashboard, StickyNote, Flag, LifeBuoy, Settings, UsersRound, SquareArrowRight, Pill, Factory, FolderHeart, ClipboardPlus, FolderKanban, ReceiptEuro, ShoppingCart, ClipboardPenLine } from "lucide-react";
+import { LayoutDashboard, StickyNote, Flag, LifeBuoy, Settings, UsersRound, SquareArrowRight, Pill, Factory, FolderHeart, ClipboardPlus, FolderKanban, ReceiptEuro, ShoppingCart, ClipboardPenLine, CircleUser } from "lucide-react";
 
 
 export default function AuthenticatedLayout({ user, header, children}) {
@@ -15,9 +15,9 @@ export default function AuthenticatedLayout({ user, header, children}) {
 
     return (
         <div className="min-h-screen bg-gray-100">
-            <div className="flex">
-                <div className="h-full"> 
-                    <Sidebar user={user}>
+            <div className="flex h-screen flex-shrink-0">
+                <div className=""> 
+                    <Sidebar user={user} >
                         <SidebarItem icon={<LayoutDashboard size={20} />} text="Dashboard" route={"/dashboard"} active={location.pathname === "/dashboard"} />
                         <SidebarItem icon={<StickyNote size={20} />} text="Pacientes" route={"/dashboard"} />
                         <SidebarItem icon={<FolderHeart  size={20} />} text="Gestión de Medicamentos" active={(location.pathname === "/dashboard/categories") || (location.pathname === "/dashboard/suppliers") || (location.pathname === "/dashboard/medicines") } >
@@ -63,6 +63,7 @@ export default function AuthenticatedLayout({ user, header, children}) {
                                                         type="button"
                                                         className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150"
                                                     >
+                                                        <CircleUser className="w-7 h-7 me-2 rounded-md text-blue-700" /> 
                                                         {user.name}
                                                         
                                                         <svg

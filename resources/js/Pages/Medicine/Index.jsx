@@ -1,10 +1,10 @@
 
 import React, { useState, useRef } from 'react';
 import { useTable, usePagination, useSortBy, useGlobalFilter } from 'react-table';
-import { Users, Pencil, Trash, ChevronRight, ChevronLeft, Pill, FileDown, ClipboardPen, Search } from 'lucide-react';
+import { Users, Pencil, Trash, ChevronRight, ChevronLeft, Pill, FileDown, ClipboardPen, Search, ClipboardPlus } from 'lucide-react';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
-import { TextInput, Select, SelectItem, Textarea } from '@tremor/react';
+import { TextInput, Badge, BadgeDelta } from '@tremor/react';
 import PrimaryButton from '@/Components/PrimaryButton';
 import SecondaryButton from '@/Components/SecondaryButton';
 import { Head, Link } from '@inertiajs/react';
@@ -139,7 +139,7 @@ const Index = ({ auth, medicines, categories }) => {
         {
           Header: 'Categoría',
           accessor: 'category',
-          Cell: ({ value }) => <span>{value.name}</span> 
+          Cell: ({ value }) => <Badge icon={ClipboardPlus}>{value.name}</Badge> 
         },
 
         {
@@ -218,7 +218,7 @@ const Index = ({ auth, medicines, categories }) => {
           user={auth.user}
           header={
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="py-4 flex justify-between items-center">
+              <div className="py-1 flex justify-between items-center">
                 <h2 className="font-semibold text-lg sm:text-xl text-white leading-tight flex items-center">
                   <Pill className="mr-2 text-sm sm:text-lg" /> Medicamentos
                 </h2>

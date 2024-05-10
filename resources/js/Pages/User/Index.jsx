@@ -1,9 +1,9 @@
 import React, { useState, useRef } from 'react';
 import { useTable, usePagination, useSortBy, useGlobalFilter } from 'react-table';
-import { Users, Pencil, Trash, ChevronRight, ChevronLeft, Search } from 'lucide-react';
+import { Users, Pencil, Trash, ChevronRight, ChevronLeft, Search, Info } from 'lucide-react';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
-import { TextInput } from '@tremor/react';
+import { TextInput, Badge, BadgeDelta } from '@tremor/react';
 import PrimaryButton from '@/Components/PrimaryButton';
 import SecondaryButton from '@/Components/SecondaryButton';
 import { Head, Link } from '@inertiajs/react';
@@ -150,7 +150,7 @@ const Index = ({ auth, users, roles }) => {
       {
         Header: 'Rol',
         accessor: 'role',
-        Cell: ({ value }) => <span>{value}</span> 
+        Cell: ({ value }) => <Badge icon={Info}>{value}</Badge> 
       },
       {
         Header: 'Acciones',
@@ -230,7 +230,7 @@ const Index = ({ auth, users, roles }) => {
         user={auth.user}
         header={
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="py-4 flex justify-between items-center">
+            <div className="py-1 flex justify-between items-center">
               <h2 className="font-semibold text-lg sm:text-xl text-white leading-tight flex items-center">
                 <Users className="mr-2 text-sm sm:text-lg" /> Usuarios
               </h2>

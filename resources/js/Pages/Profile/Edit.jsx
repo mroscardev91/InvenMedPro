@@ -10,7 +10,7 @@ export default function Edit({ auth, mustVerifyEmail, status }) {
         <AuthenticatedLayout
             user={auth.user}
             header={
-                <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 flex justify-between items-center">
+                <div className="max-w-7xl mx-auto py-1 px-4 sm:px-6 lg:px-8 flex justify-between items-center">
                 <h2 className="font-semibold text-xl text-white leading-tight flex items-center">
                     <UserCog className="mr-2" /> Perfil
                 </h2>
