@@ -1,15 +1,17 @@
 import React, { useState, useRef } from 'react';
 import { useTable, usePagination, useSortBy, useGlobalFilter } from 'react-table';
-import { Users, Pencil, Trash, ChevronRight, ChevronLeft } from 'lucide-react';
+import { Users, Pencil, Trash, ChevronRight, ChevronLeft, Search } from 'lucide-react';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
-import TextInput from '@/Components/TextInput';
+import { TextInput } from '@tremor/react';
 import PrimaryButton from '@/Components/PrimaryButton';
 import SecondaryButton from '@/Components/SecondaryButton';
 import { Head, Link } from '@inertiajs/react';
 import { useForm } from '@inertiajs/react';
 import Modal from '@/Components/Modal';
 import Swal from 'sweetalert2';
+import { mkConfig, generateCsv, download } from 'export-to-csv'
+import { Mail, LockKeyhole, SquareUserRound, FileDown } from 'lucide-react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 
 const Index = ({ auth, users, roles }) => {
@@ -200,6 +202,28 @@ const Index = ({ auth, users, roles }) => {
   };
   {console.log(data)}
 
+
+  // Extraer la información de las medicinas para que no sea un objeto
+  const processedUsers = users.map(user => ({
+    name: user.name,
+    email: user.email,
+    role: user.role
+  }));
+
+  // Función para exportar la tabla como CSV
+  const exportExcel = () => {
+    const csvConfig = mkConfig({
+        fieldSeparator: ',',
+        filename: 'usuarios', 
+        decimalSeparator: '.',
+        useKeysAsHeaders: true,
+    });
+
+    const csvData = generateCsv(csvConfig)(processedUsers);
+    download(csvConfig)(csvData);
+  };
+
+
   return (
     <>
       <AuthenticatedLayout
@@ -210,14 +234,28 @@ const Index = ({ auth, users, roles }) => {
               <h2 className="font-semibold text-lg sm:text-xl text-white leading-tight flex items-center">
                 <Users className="mr-2 text-sm sm:text-lg" /> Usuarios
               </h2>
-              {/* Este botón se mostrará en pantallas grandes y medianas */}
-              <button className="hidden sm:inline-block bg-[#2E3447] hover:bg-blue-900 text-white font-bold py-2 px-3 sm:px-4 rounded text-xs sm:text-base" onClick={() => openModal(1)}>
-                Crear Usuario
-              </button>
-              {/* Este botón se mostrará en pantallas pequeñas */}
-              <button className="sm:hidden bg-[#2E3447] hover:bg-blue-900 text-white font-bold py-2 px-3 rounded text-xs" onClick={() => openModal(1)}>
-                +
-              </button>
+              {/* Botones para crear categoría y descargar */}
+              <div className="flex">
+                  {/* Botón para crear categoría */}
+                  <button className="hidden sm:inline-block bg-[#2E3447] hover:bg-blue-900 text-white font-bold py-2 px-3 sm:px-4 rounded text-xs sm:text-base mr-2" onClick={() => openModal(1)}>
+                    Crear usuario
+                  </button>
+                  {/* Botón para descargar */}
+                  <button type="button" onClick={exportExcel} className="hidden sm:inline-block bg-[#2E3447] hover:bg-blue-900 text-white font-bold py-2 px-3 sm:px-4 rounded text-xs sm:text-base">
+                    <FileDown/>
+                  </button>
+                </div>
+                {/* Botones para crear categoría y descargar en pantallas pequeñas */}
+                <div className="sm:hidden">
+                  {/* Botón para crear categoría en pantallas pequeñas */}
+                  <button className="bg-[#2E3447] hover:bg-blue-900 text-white font-bold py-2 px-3 rounded text-xs mr-2" onClick={() => openModal(1)}>
+                    +
+                  </button>
+                  {/* Botón para descargar en pantallas pequeñas */}
+                  <button type="button" onClick={exportExcel} className="bg-[#2E3447] hover:bg-blue-900 text-white font-bold py-[9.3px] px-3 rounded text-xs mt-2">
+                    <FileDown size={13}/>
+                  </button>
+                </div>
             </div>
           </div>
         }
@@ -229,14 +267,15 @@ const Index = ({ auth, users, roles }) => {
               <label htmlFor="search" className="text-gray-700 dark:text-gray-300 mr-2">
                 Buscar:
               </label>
-              <input
+              <TextInput
                 id="search"
                 type="text"
+                icon={Search}
                 value={globalFilter || ''}
                 onChange={(e) => setGlobalFilter(e.target.value)}
-                className="border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-1 focus:outline-none focus:border-blue-500 dark:bg-gray-800 dark:text-gray-300"
+                className="border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-1 mt-1 focus:outline-none focus:border-blue-500 dark:bg-gray-800 dark:text-gray-300"
                 placeholder="Buscar usuario..."
-              />
+                ></TextInput>
             </div>
             <div className="pagination">
               <button onClick={() => previousPage()} disabled={!canPreviousPage} className="px-2 py-1 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-300 mr-2">
@@ -296,10 +335,12 @@ const Index = ({ auth, users, roles }) => {
                 id="name"
                 name="name"
                 ref={NameInput}
+                placeholder={'Escribe el nombre de tu usuario'}
+                icon={SquareUserRound}
                 value={data.name}
                 required="required"
                 onChange={(e) => setData('name', e.target.value)}
-                className="mt-1 block w-3/4"
+                className="mt-1 flex w-3/4 justify-center"
                 isFocused
               ></TextInput>
               <InputError message={errors.name} className="mt-2"></InputError>
@@ -310,10 +351,12 @@ const Index = ({ auth, users, roles }) => {
                 id="email"
                 name="email"
                 ref={EmailInput}
+                placeholder='Escribe el correo electrónico de tu usuario'
+                icon={Mail}
                 value={data.email}
                 required="required"
                 onChange={(e) => setData('email', e.target.value)}
-                className="mt-1 block w-3/4"
+                className="mt-1 flex w-3/4 justify-center"
               ></TextInput>
               <InputError message={errors.email} className="mt-2"></InputError>
             </div>
@@ -326,10 +369,13 @@ const Index = ({ auth, users, roles }) => {
                     id="password"
                     name="password"
                     ref={PasswordInput}
+                    placeholder='Escribe la contraseña de tu usuario'
+                    icon={LockKeyhole}
                     value={data.password}
                     required="required"
+                    type='password'
                     onChange={(e) => setData('password', e.target.value)}
-                    className="mt-1 block w-3/4"
+                    className="mt-1 flex w-3/4 justify-center"
                   />
                   <InputError message={errors.password} className="mt-2"></InputError>
                 </>
