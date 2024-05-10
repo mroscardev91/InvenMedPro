@@ -187,7 +187,7 @@ const Index = ({ auth, users, roles }) => {
     {
       columns,
       data: users, roles,
-      initialState: { pageIndex: 0, pageSize: 9 }
+      initialState: { pageIndex: 0, pageSize: 5 }
     },
     useGlobalFilter,
     useSortBy,

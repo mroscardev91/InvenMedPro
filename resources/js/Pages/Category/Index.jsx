@@ -158,7 +158,7 @@ const Index = ({ auth, categories }) => {
       {
         columns,
         data: categories, 
-        initialState: { pageIndex: 0, pageSize: 9 }
+        initialState: { pageIndex: 0, pageSize: 5 }
       },
       useGlobalFilter,
       useSortBy,
