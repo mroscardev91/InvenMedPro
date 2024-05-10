@@ -1,9 +1,9 @@
 import React, { useState, useRef } from 'react';
 import { useTable, usePagination, useSortBy, useGlobalFilter } from 'react-table';
-import { Users, Pencil, Trash, ChevronRight, ChevronLeft, Package, MapPin, X, FileDown} from 'lucide-react';
+import { Pencil, Trash, ChevronRight, ChevronLeft, Package, MapPin, X, FileDown, Mail, SquareUserRound, Phone, Mailbox, Search } from 'lucide-react';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
-import TextInput from '@/Components/TextInput';
+import { TextInput } from '@tremor/react';
 import PrimaryButton from '@/Components/PrimaryButton';
 import SecondaryButton from '@/Components/SecondaryButton';
 import { Head, Link } from '@inertiajs/react';
@@ -171,6 +171,7 @@ const Index = ({ auth, suppliers }) => {
           accessor: 'id',
           Cell: ({ row }) => (
             <>
+            <div className="flex">
               <Pencil
                 className="inline-block h-6 w-6 text-blue-500 mr-2 cursor-pointer"
                 onClick={() => openModal(2, row.original.id, row.original.name, row.original.email, row.original.phone, row.original.address, row.original.logo)} 
@@ -179,6 +180,7 @@ const Index = ({ auth, suppliers }) => {
               <MapPin className="inline-block h-6 w-6 text-green-500 ml-2 cursor-pointer" 
                         onClick={() => openMapPage(row.original.address)} 
                       />
+            </div>
               
             </>
           )
@@ -276,14 +278,15 @@ const Index = ({ auth, suppliers }) => {
                 <label htmlFor="search" className="text-gray-700 dark:text-gray-300 mr-2">
                   Buscar:
                 </label>
-                <input
+                <TextInput
                   id="search"
                   type="text"
+                  icon={Search}
                   value={globalFilter || ''}
                   onChange={(e) => setGlobalFilter(e.target.value)}
-                  className="border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-1 focus:outline-none focus:border-blue-500 dark:bg-gray-800 dark:text-gray-300"
+                  className="border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-1 mt-1 focus:outline-none focus:border-blue-500 dark:bg-gray-800 dark:text-gray-300"
                   placeholder="Buscar proveedor..."
-                />
+                  ></TextInput>
               </div>
               <div className="pagination">
                 <button onClick={() => previousPage()} disabled={!canPreviousPage} className="px-2 py-1 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-300 mr-2">
@@ -342,11 +345,13 @@ const Index = ({ auth, suppliers }) => {
                 <TextInput
                   id="name"
                   name="name"
+                  placeholder="Escribe el nombre del proveedor"
+                  icon={SquareUserRound}
                   ref={NameInput}
                   value={data.name}
                   required="required"
                   onChange={(e) => setData('name', e.target.value)}
-                  className="mt-1 block w-3/4"
+                  className="mt-1 flex w-3/4 justify-center"
                   isFocused
                 ></TextInput>
                 <InputError message={errors.name} className="mt-2"></InputError>
@@ -356,11 +361,13 @@ const Index = ({ auth, suppliers }) => {
                 <TextInput
                   id="email"
                   name="email"
+                  placeholder='Escribe el correo electrónico del proveedor'
+                  icon={Mail}
                   ref={EmailInput}
                   value={data.email}
                   required="required"
                   onChange={(e) => setData('email', e.target.value)}
-                  className="mt-1 block w-3/4"
+                  className="mt-1 flex w-3/4 justify-center"
                   isFocused
                 ></TextInput>
                 <InputError message={errors.email} className="mt-2"></InputError>
@@ -370,11 +377,13 @@ const Index = ({ auth, suppliers }) => {
                 <TextInput
                   id="phone"
                   name="phone"
+                  placeholder='Escribe el teléfono del proveedor'
+                  icon={Phone}
                   ref={PhoneInput}
                   value={data.phone}
                   required="required"
                   onChange={(e) => setData('phone', e.target.value)}
-                  className="mt-1 block w-3/4"
+                  className="mt-1 flex w-3/4 justify-center"
                   isFocused
                 ></TextInput>
                 <InputError message={errors.phone} className="mt-2"></InputError>
@@ -384,11 +393,13 @@ const Index = ({ auth, suppliers }) => {
                 <TextInput
                   id="address"
                   name="address"
+                  placeholder='Escribe la dirección del proveedor'
+                  icon={Mailbox}
                   ref={AddressInput}
                   value={data.address}
                   required="required"
                   onChange={(e) => setData('address', e.target.value)}
-                  className="mt-1 block w-3/4"
+                  className="mt-1 flex w-3/4 justify-center"
                   isFocused
                 ></TextInput>
                 <InputError message={errors.address} className="mt-2"></InputError>
