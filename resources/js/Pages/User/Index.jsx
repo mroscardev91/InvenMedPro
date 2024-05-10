@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { useTable, usePagination, useSortBy, useGlobalFilter } from 'react-table';
-import { Users, Pencil, Trash, ChevronRight, ChevronLeft, Search, Info } from 'lucide-react';
+import { Users, Pencil, Trash, ChevronRight, ChevronLeft, Search, Info, UserCog, UserRoundPlus } from 'lucide-react';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import { TextInput, Badge, BadgeDelta } from '@tremor/react';
@@ -150,7 +150,21 @@ const Index = ({ auth, users, roles }) => {
       {
         Header: 'Rol',
         accessor: 'role',
-        Cell: ({ value }) => <Badge icon={Info}>{value}</Badge> 
+        Cell: ({ value }) => {
+          let badgeColor = ''; 
+    
+          // Condición para asignar el color del badge según el rol
+          if (value === 'Administrador del Sistema') {
+            badgeColor = 'orange'; 
+            return <Badge color={badgeColor} icon={UserCog}>{value}</Badge>;
+          } else if (value === 'Administrador del Inventario') {
+            badgeColor = 'green'; 
+            return <Badge color={badgeColor} icon={UserRoundPlus}>{value}</Badge>;
+          } else {
+            badgeColor = 'gray'; 
+          }
+
+        }
       },
       {
         Header: 'Acciones',
