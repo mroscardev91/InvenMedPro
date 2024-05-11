@@ -1,10 +1,10 @@
 
 import React, { useState, useRef } from 'react';
 import { useTable, usePagination, useSortBy, useGlobalFilter } from 'react-table';
-import { Users, Pencil, Trash, ChevronRight, ChevronLeft, Pill, FileDown, ClipboardPen, Search, ClipboardPlus } from 'lucide-react';
+import { Users, Pencil, Trash, ChevronRight, ChevronLeft, Pill, FileDown, ClipboardPen, Search, ClipboardPlus, Euro } from 'lucide-react';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
-import { TextInput, Badge, BadgeDelta } from '@tremor/react';
+import { TextInput, Badge, BadgeDelta, NumberInput } from '@tremor/react';
 import PrimaryButton from '@/Components/PrimaryButton';
 import SecondaryButton from '@/Components/SecondaryButton';
 import { Head, Link } from '@inertiajs/react';
@@ -20,16 +20,20 @@ const Index = ({ auth, medicines, categories }) => {
     const [operation, setOperation] = useState(1);
     const NameInput = useRef();
     const DetailsInput = useRef();
+    const PurchasePriceInput = useRef();
+    const SellingPriceInput = useRef();
     const CategorySelect = useRef();
     const { data, setData, delete: destroy, post, put, processing, reset, errors } = useForm({
       id: '',
       name: '',
       details: '',
+      purchase_price: '',
+      selling_price: '',
       category: '',
     });
   
     // Función para abrir el modal
-    const openModal = (op, id, name, details, category) => {
+    const openModal = (op, id, name, details, purchase_price,  selling_price, category) => {
       setModal(true);
       setOperation(op);
       setData({ name: ''}); // Reinicia los datos al abrir el modal
@@ -39,11 +43,13 @@ const Index = ({ auth, medicines, categories }) => {
           id: '',
           name: '',
           details: '',
+          purchase_price: '',
+          selling_price: '',
           category: categories.length > 0 ? categories[0].id : '' // Asegura que categories tiene al menos un elemento
         });
       } else {
         setTitle('Editar medicamento');
-        setData({ id: id, name: name, details: details, category: category.id});
+        setData({ id: id, name: name, details: details, purchase_price: purchase_price, selling_price: selling_price, category: category.id});
       }
     };
   
@@ -58,6 +64,8 @@ const Index = ({ auth, medicines, categories }) => {
       const formData = {
         name: data.name,
         details: data.details,
+        purchase_price: data.purchase_price,
+        selling_price: data.selling_price,
         category: data.category,
       };
   
@@ -81,6 +89,15 @@ const Index = ({ auth, medicines, categories }) => {
             reset('details');
             DetailsInput.current.focus();
           }
+          if (errors.purchase_price) {
+            reset('purchase_price');
+            PurchasePriceInput.current.focus();
+          }
+          if (errors.selling_price) {
+            reset('selling_price');
+            SellingPriceInput.current.focus();
+          }
+
           if (errors.category) {
             reset('category');
             CategorySelect.current.focus();
@@ -137,6 +154,16 @@ const Index = ({ auth, medicines, categories }) => {
         },
 
         {
+          Header: 'Precio de compra',
+          accessor: 'purchase_price'
+        },
+
+        {
+          Header: 'Precio de venta',
+          accessor: 'selling_price'
+        },
+
+        {
           Header: 'Categoría',
           accessor: 'category',
           Cell: ({ value }) => <Badge icon={ClipboardPlus}>{value.name}</Badge> 
@@ -149,7 +176,7 @@ const Index = ({ auth, medicines, categories }) => {
             <>
               <Pencil
                 className="inline-block h-6 w-6 text-blue-500 mr-2 cursor-pointer"
-                onClick={() => openModal(2, row.original.id, row.original.name, row.original.details, row.original.category)} 
+                onClick={() => openModal(2, row.original.id, row.original.name, row.original.details, row.original.purchase_price, row.original.selling_price, row.original.category)} 
               />
               <Trash className="inline-block h-6 w-6 text-red-500 cursor-pointer" onClick={() => eliminar(row.original.id, row.original.name)} />
             </>
@@ -196,6 +223,8 @@ const Index = ({ auth, medicines, categories }) => {
     const processedMedicines = medicines.map(medicine => ({
       name: medicine.name,
       details: medicine.details,
+      purchase_price: medicine.purchase_price,
+      selling_price: medicine.selling_price,
       category: medicine.category.name 
     }));
 
@@ -349,6 +378,40 @@ const Index = ({ auth, medicines, categories }) => {
                   className="mt-1 flex w-3/4 justify-center"
                   isFocused
                 ></TextInput>
+                <InputError message={errors.name} className="mt-2"></InputError>
+              </div>
+
+              <div className="mt-6">
+                <InputLabel for="purchase_price" value="Precio de compra del medicamento"></InputLabel>
+                <NumberInput
+                  id="purchase_price"
+                  name="purchase_price"
+                  ref={PurchasePriceInput}
+                  value={data.purchase_price}
+                  placeholder="Precio de compra del medicamento"
+                  icon={Euro}
+                  required="required"
+                  onChange={(e) => setData('purchase_price', e.target.value)}
+                  className="mt-1 flex w-3/4 justify-center"
+                  isFocused
+                ></NumberInput>
+                <InputError message={errors.name} className="mt-2"></InputError>
+              </div>
+
+              <div className="mt-6">
+                <InputLabel for="selling_price" value="Precio de venta del medicamento"></InputLabel>
+                <NumberInput
+                  id="selling_price"
+                  name="selling_price"
+                  ref={SellingPriceInput}
+                  value={data.selling_price}
+                  placeholder="Precio de venta del medicamento"
+                  icon={Euro}
+                  required="required"
+                  onChange={(e) => setData('selling_price', e.target.value)}
+                  className="mt-1 flex w-3/4 justify-center"
+                  isFocused
+                ></NumberInput>
                 <InputError message={errors.name} className="mt-2"></InputError>
               </div>
 

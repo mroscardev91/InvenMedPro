@@ -9,7 +9,7 @@ class Medicine extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'details','category_id'];
+    protected $fillable = ['name', 'details', 'purchase_price', 'selling_price', 'category_id'];
 
 
     // Relación con la categoría del producto

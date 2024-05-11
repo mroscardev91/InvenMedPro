@@ -32,12 +32,16 @@ class MedicineController extends Controller
         $request-> validate([
             'name' => 'required',
             'details' => 'required',
+            'purchase_price' => 'required',
+            'selling_price' => 'required',
             'category' => 'required',
         ]);
 
         $medicine = Medicine::create([
             'name' => $request->name,
             'details' => $request->details,
+            'purchase_price' => $request->purchase_price,
+            'selling_price' => $request->selling_price,
             'category_id' => $request->category,
         ]);
 
@@ -53,6 +57,8 @@ class MedicineController extends Controller
         $request->validate([
             'name' => 'required',
             'details' => 'required',
+            'purchase_price' => 'required',
+            'selling_price' => 'required',
             'category' => 'required',
         ]);
 
@@ -60,6 +66,8 @@ class MedicineController extends Controller
         $medicine->update([
             'name' => $request->name,
             'details' => $request->details,
+            'purchase_price' => $request->purchase_price,
+            'selling_price' => $request->selling_price,
             'category_id' => $request->category,
         ]);
 
