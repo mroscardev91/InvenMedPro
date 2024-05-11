@@ -18,6 +18,7 @@ return new class extends Migration
             $table->text('details');
             $table->decimal('purchase_price', 10, 2); 
             $table->decimal('selling_price', 10, 2);
+            $table->integer('stock')->default(0);
             $table->foreign('category_id')->references('id')->on('categories')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });
