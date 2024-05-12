@@ -27,7 +27,7 @@ const Index = ({ auth, categories }) => {
     });
   
     // Función para abrir el modal
-    const openModal = (op, id, name) => {
+    const openModal = (op, id, name, details) => {
       setModal(true);
       setOperation(op);
       setData({ name: '', details: ''}); // Reinicia los datos al abrir el modal
