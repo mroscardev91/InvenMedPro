@@ -45,15 +45,7 @@ const Index = ({ auth, entries, medicines, suppliers }) => {
     setData({ transaction_code: transaction_code, medicine: '', category: '', supplier: '', quantity: '', date: new Date().toLocaleDateString(), user: '' }); // Reinicia los datos al abrir el modal
     if (op === 1) {
       setTitle('Crear entrada');
-      setData({
-        transaction_code: '',
-        medicine: medicines.length > 0 ? medicines[0].id : '',
-        category: '',
-        supplier: suppliers.length > 0 ? suppliers[0].id : '',
-        quantity: '',
-        date: new Date().toLocaleDateString(),
-        user: ''
-      })
+
     } else {
       setTitle('Editar entrada');
       setData({ id: id, transaction_code: transaction_code, medicine: medicine.id, category: category, supplier: supplier.id, quantity: quantity, date: date, user: user });
