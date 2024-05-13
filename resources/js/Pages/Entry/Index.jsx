@@ -219,6 +219,18 @@ const Index = ({ auth, entries, medicines, suppliers }) => {
   };
   { console.log(data) }
 
+  // Extraer la información de las medicinas para que no sea un objeto
+  const processedEntries = entries.map((entry) => ({
+    medicine: entry.medicine.name,
+    category: entry.medicine.category.name,
+    supplier: entry.supplier.name,
+    quantity: entry.quantity,
+    date: entry.date,
+    user: entry.user.name
+
+  }));
+
+
   // Función para exportar la tabla como CSV
   const exportExcel = () => {
     const csvConfig = mkConfig({
@@ -228,7 +240,7 @@ const Index = ({ auth, entries, medicines, suppliers }) => {
       useKeysAsHeaders: true,
     });
 
-    const csvData = generateCsv(csvConfig)(entradas);
+    const csvData = generateCsv(csvConfig)(processedEntries);
     download(csvConfig)(csvData);
   };
 
