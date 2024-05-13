@@ -16,6 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('medicine_id');
             $table->unsignedBigInteger('supplier_id');
             $table->unsignedBigInteger('user_id');
+            $table->string('transaction_code')->nullable();
             $table->integer('quantity');
             $table->date('date')->default(now());
 

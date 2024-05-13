@@ -19,7 +19,7 @@ class EntryController extends Controller
     {
         $medicines = Medicine::all();
         $suppliers = Supplier::all();
-        $entries = Entry::with('medicine', 'medicine.category', 'supplier', 'user')->get();
+        $entries = Entry::with('medicine', 'medicine.category', 'supplier', 'user',)->get();
         return Inertia::render('Entry/Index', [
             'entries' => $entries,
             'medicines' => $medicines,
@@ -42,10 +42,24 @@ class EntryController extends Controller
         // Obtener el ID del usuario autenticado
         $userId = Auth::id();
 
+        // Generar el prefijo alfanumérico aleatorio
+        $prefix = substr(str_shuffle('ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'), 0, 5);
+
+        // Obtener el ID de la nueva entrada
+        $latestEntry = Entry::latest()->first();
+        $latestEntryId = $latestEntry ? $latestEntry->id + 1 : 1;
+
+        // Generar el sufijo con la fecha y hora actual
+        $suffix = date('YmdHis');
+
+        $transactionCode = $prefix . '-' . $latestEntryId . '-' . $suffix;
+
+
         $entry = Entry::create([
             'medicine_id' => $request->medicine,
             'supplier_id' => $request->supplier,
             'user_id' => $userId,
+            'transaction_code' => $transactionCode,
             'quantity' => $request->quantity,
             'date' => $request->date,
         ]);

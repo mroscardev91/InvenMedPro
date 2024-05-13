@@ -27,20 +27,27 @@ const Index = ({ auth, entries, medicines, suppliers }) => {
   const UserInput = useRef();
   const { data, setData, delete: destroy, post, put, processing, reset, errors } = useForm({
     id: '',
-    name: '',
-    details: '',
+    transaction_code: '',
+    medicine: '',
+    category: '',
+    supplier: '',
+    quantity: '',
+    date: new Date().toLocaleDateString(),
+    user: ''
+
   });
 
+  
   // Función para abrir el modal
-  const openModal = (op, id, medicine, category, supplier, quantity, date, user) => {
+  const openModal = (op, id, transaction_code, medicine, category, supplier, quantity, date, user) => {
     setModal(true);
     setOperation(op);
-    setData({ medicine: '', category: '', supplier: '', quantity: '', date: new Date().toLocaleDateString(), user: '' }); // Reinicia los datos al abrir el modal
+    setData({ transaction_code: transaction_code, medicine: '', category: '', supplier: '', quantity: '', date: new Date().toLocaleDateString(), user: '' }); // Reinicia los datos al abrir el modal
     if (op === 1) {
       setTitle('Crear entrada');
     } else {
       setTitle('Editar entrada');
-      setData({ id: id, medicine: medicine.id, category: category, supplier: supplier.id, quantity: quantity, date: date, user: user });
+      setData({ id: id, transaction_code: transaction_code, medicine: medicine.id, category: category, supplier: supplier.id, quantity: quantity, date: date, user: user });
     }
   };
 
@@ -53,6 +60,7 @@ const Index = ({ auth, entries, medicines, suppliers }) => {
   const save = (e) => {
     e.preventDefault();
     const formData = {
+      transaction_code: data.transaction_code,
       medicine: data.medicine,
       category: data.category,
       supplier: data.supplier,
@@ -103,10 +111,11 @@ const Index = ({ auth, entries, medicines, suppliers }) => {
   };
 
   // Función para eliminar usuario
-  const eliminar = (id, medicine) => {
+  const eliminar = (id, transaction_code) => {
+    console.log(transaction_code);
     Swal.fire({
       title: '¿Estás seguro?',
-      text: `¿Deseas eliminar la entrada de  "${medicine.name}"? Esta acción no se puede deshacer.`,
+      text: `¿Deseas eliminar la entrada "${transaction_code}"? Esta acción no se puede deshacer.`,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
@@ -119,7 +128,7 @@ const Index = ({ auth, entries, medicines, suppliers }) => {
           onSuccess: () => {
             Swal.fire(
               'Eliminada!',
-              `La entrada de "${medicine.name}" ha sido eliminada.`,
+              `La entrada "${transaction_code}" ha sido eliminada.`,
               'success'
             );
           },
@@ -138,6 +147,10 @@ const Index = ({ auth, entries, medicines, suppliers }) => {
   // Define las columnas de la tabla
   const columns = React.useMemo(
     () => [
+      {
+        Header: 'Código de Transacción',
+        accessor: 'transaction_code' 
+      },
       {
         Header: 'Medicamento',
         accessor: 'medicine.name'
@@ -178,7 +191,7 @@ const Index = ({ auth, entries, medicines, suppliers }) => {
               className="inline-block h-6 w-6 text-blue-500 mr-2 cursor-pointer"
               onClick={() => openModal(2, row.original.id, row.original.medicine, row.original.category, row.original.supplier, row.original.quantity, row.original.date, row.original.user)}
             />
-            <Trash className="inline-block h-6 w-6 text-red-500 cursor-pointer" onClick={() => eliminar(row.original.id, row.original.medicine)} />
+            <Trash className="inline-block h-6 w-6 text-red-500 cursor-pointer" onClick={() => eliminar(row.original.id, row.original.transaction_code)} />
           </>
         )
       }
@@ -418,7 +431,7 @@ const Index = ({ auth, entries, medicines, suppliers }) => {
                 id="date"
                 name="date"
                 ref={DateInput}
-                value={data.date}
+                value={format(new Date(), 'yyyy-MM-dd')}
                 icon={CalendarDays }
                 disabled={true}
                 placeholder="Fecha de entrada"

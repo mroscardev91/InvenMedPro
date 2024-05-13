@@ -13,6 +13,7 @@ class Entry extends Model
         'medicine_id',
         'supplier_id',
         'user_id',
+        'transaction_code',
         'quantity',
         'transaction_date',
     ];
