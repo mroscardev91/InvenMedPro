@@ -3,7 +3,7 @@ import { useTable, usePagination, useSortBy, useGlobalFilter } from 'react-table
 import { Users, Pencil, Trash, ChevronRight, ChevronLeft, Search, Info, UserCog, UserRoundPlus } from 'lucide-react';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
-import { TextInput, Badge, BadgeDelta } from '@tremor/react';
+import { TextInput, Badge } from '@tremor/react';
 import PrimaryButton from '@/Components/PrimaryButton';
 import SecondaryButton from '@/Components/SecondaryButton';
 import { Head, Link } from '@inertiajs/react';

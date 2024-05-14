@@ -1,7 +1,7 @@
 
 import React, { useState, useRef } from 'react';
 import { useTable, usePagination, useSortBy, useGlobalFilter } from 'react-table';
-import { Users, Pencil, Trash, ChevronRight, ChevronLeft, Package, FileDown, Search, SquarePlus, CalendarDays } from 'lucide-react';
+import { Users, Pencil, Trash, ChevronRight, ChevronLeft, Package, FileDown, Search, SquarePlus, CalendarDays, Plus,  } from 'lucide-react';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
@@ -11,7 +11,7 @@ import { useForm } from '@inertiajs/react';
 import Modal from '@/Components/Modal';
 import Swal from 'sweetalert2';
 import { mkConfig, generateCsv, download } from 'export-to-csv'
-import { TextInput, NumberInput, DatePicker } from '@tremor/react';
+import { TextInput, NumberInput, Badge } from '@tremor/react';
 import { format } from 'date-fns';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 
@@ -178,7 +178,8 @@ const Index = ({ auth, entries, medicines, suppliers }) => {
 
       {
         Header: 'Cantidad',
-        accessor: 'quantity'
+        accessor: 'quantity', 
+        Cell: ({ value }) =><Badge color={'green'} icon={Plus}> {value}</Badge>
       },
 
       {
