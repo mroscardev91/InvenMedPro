@@ -12,6 +12,7 @@ class Sale extends Model
     protected $fillable = [
         'medicine_id',
         'user_id',
+        'transaction_code',
         'quantity',
         'transaction_date',
     ];

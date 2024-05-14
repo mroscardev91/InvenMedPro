@@ -9,6 +9,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\MedicineController;
 use App\Http\Controllers\EntryController;
+use App\Http\Controllers\SaleController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [

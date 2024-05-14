@@ -26,9 +26,9 @@ export default function AuthenticatedLayout({ user, header, children}) {
                             <SidebarItem icon={<Factory size={16} />} text="Proveedores" route="/dashboard/suppliers" active={location.pathname === "/dashboard/suppliers"}/>
                         </SidebarItem>
 
-                        <SidebarItem icon={<FolderKanban size={20} />} text="Gestión de Existencias" active={(location.pathname === "/dashboard/entries") || (location.pathname === "/dashboard/sales") || (location.pathname === "/dashboard/") } >
+                        <SidebarItem icon={<FolderKanban size={20} />} text="Gestión de Existencias" active={(location.pathname === "/dashboard/entries") || (location.pathname === "/dashboard/sales")} >
                             <SidebarItem icon={<ShoppingCart  size={16} />} text="Entradas" route="/dashboard/entries" active={location.pathname === "/dashboard/entries"}/>
-                            <SidebarItem icon={<ShoppingCart size={16} />} text="Salidas" route="/dashboard/" active={location.pathname === "/dashboard/"}/>
+                            <SidebarItem icon={<ShoppingCart size={16} />} text="Salidas" route="/dashboard/sales" active={location.pathname === "/dashboard/sales"}/>
                         </SidebarItem>
 
                         <SidebarItem icon={<UsersRound size={20} />} text="Usuarios" route={"/dashboard/users"} active={location.pathname === "/dashboard/users"} />

@@ -15,9 +15,10 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('medicine_id');
             $table->unsignedBigInteger('user_id');
+            $table->string('transaction_code')->nullable();
             $table->integer('quantity');
-            $table->date('transaction_date'); 
-            
+            $table->date('date')->default(now());
+
             $table->foreign('medicine_id')->references('id')->on('medicines')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
