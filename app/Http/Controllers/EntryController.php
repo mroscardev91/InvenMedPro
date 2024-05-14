@@ -64,6 +64,11 @@ class EntryController extends Controller
             'date' => $request->date,
         ]);
 
+        // Actualizar el stock del medicamento correspondient
+        $medicine = Medicine::find($request->medicine);
+        $medicine->stock += $request->quantity;
+        $medicine->save();
+
         return redirect()->back()->with('success', 'Entrada creada exitosamente.');
     }
 
