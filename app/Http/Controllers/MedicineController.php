@@ -37,12 +37,16 @@ class MedicineController extends Controller
             'category' => 'required',
         ]);
 
+        // Generar código de lote único
+        $batchNumber = 'L' . date('Ymd') . Str::random(5);
+
         $medicine = Medicine::create([
             'name' => $request->name,
             'details' => $request->details,
             'purchase_price' => $request->purchase_price,
             'selling_price' => $request->selling_price,
             'category_id' => $request->category,
+            'batch_number' => $batchNumber, // Asignar el código de lote
         ]);
 
         return redirect()->back()->with('success', 'Medicamento creado exitosamente.');
