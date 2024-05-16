@@ -28,6 +28,7 @@ const Index = ({ auth, entries, medicines, suppliers }) => {
   const { data, setData, delete: destroy, post, put, processing, reset, errors } = useForm({
     id: '',
     transaction_code: '',
+    batch_number: '',
     medicine: '',
     category: '',
     supplier: '',
@@ -39,14 +40,15 @@ const Index = ({ auth, entries, medicines, suppliers }) => {
 
   
   // Función para abrir el modal
-  const openModal = (op, id, transaction_code, medicine, category, supplier, quantity, date, user) => {
+  const openModal = (op, id, transaction_code, batch_number, medicine, category, supplier, quantity, date, user) => {
     setModal(true);
     setOperation(op);
-    setData({ transaction_code: transaction_code, medicine: '', category: '', supplier: '', quantity: '', date: new Date().toLocaleDateString(), user: '' }); // Reinicia los datos al abrir el modal
+    setData({ transaction_code: transaction_code, batch_number: '', medicine: '', category: '', supplier: '', quantity: '', date: new Date().toLocaleDateString(), user: '' }); // Reinicia los datos al abrir el modal
     if (op === 1) {
       setTitle('Crear entrada');
       setData({
         transaction_code: '',
+        batch_number: '',
         medicine: medicines.length > 0 ? medicines[0].id : '',
         category: '',
         supplier: suppliers.length > 0 ? suppliers[0].id : '',
@@ -56,7 +58,7 @@ const Index = ({ auth, entries, medicines, suppliers }) => {
       })
     } else {
       setTitle('Editar entrada');
-      setData({ id: id, transaction_code: transaction_code, medicine: medicine.id, category: category, supplier: supplier.id, quantity: quantity, date: date, user: user });
+      setData({ id: id, transaction_code: transaction_code, batch_number: batch_number, medicine: medicine.id, category: category, supplier: supplier.id, quantity: quantity, date: date, user: user });
     }
   };
 
@@ -70,6 +72,7 @@ const Index = ({ auth, entries, medicines, suppliers }) => {
     e.preventDefault();
     const formData = {
       transaction_code: data.transaction_code,
+      batch_number: data.batch_number,
       medicine: data.medicine,
       category: data.category,
       supplier: data.supplier,
@@ -161,6 +164,12 @@ const Index = ({ auth, entries, medicines, suppliers }) => {
         accessor: 'transaction_code',
         Cell: ({ value }) => <span className="font-bold">{value}</span>
       },
+
+      {
+        Header: 'Código de Lote',
+        accessor: 'medicine.batch_number'
+      },
+
       {
         Header: 'Medicamento',
         accessor: 'medicine.name'

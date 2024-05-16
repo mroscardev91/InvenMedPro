@@ -27,6 +27,7 @@ const Index = ({ auth, sales, medicines }) => {
   const { data, setData, delete: destroy, post, put, processing, reset, errors } = useForm({
     id: '',
     transaction_code: '',
+    batch_number: '',
     medicine: '',
     category: '',
     quantity: '',
@@ -37,7 +38,7 @@ const Index = ({ auth, sales, medicines }) => {
 
   
   // Función para abrir el modal
-  const openModal = (op, id, transaction_code, medicine, category, quantity, date, user) => {
+  const openModal = (op, id, transaction_code, batch_number, medicine, category, quantity, date, user) => {
     setModal(true);
     setOperation(op);
     setData({ transaction_code: transaction_code, medicine: '', category: '', quantity: '', date: new Date().toLocaleDateString(), user: '' }); // Reinicia los datos al abrir el modal
@@ -45,6 +46,7 @@ const Index = ({ auth, sales, medicines }) => {
       setTitle('Crear salida');
       setData({
         transaction_code: '',
+        batch_number: '',
         medicine: medicines.length > 0 ? medicines[0].id : '',
         category: '',
         quantity: '',
@@ -53,7 +55,7 @@ const Index = ({ auth, sales, medicines }) => {
       })
     } else {
       setTitle('Editar salida');
-      setData({ id: id, transaction_code: transaction_code, medicine: medicine.id, category: category, quantity: quantity, date: date, user: user });
+      setData({ id: id, transaction_code: transaction_code, batch_number: batch_number, medicine: medicine.id, category: category, quantity: quantity, date: date, user: user });
     }
   };
 
@@ -67,6 +69,7 @@ const Index = ({ auth, sales, medicines }) => {
     e.preventDefault();
     const formData = {
       transaction_code: data.transaction_code,
+      batch_number: data.batch_number,
       medicine: data.medicine,
       category: data.category,
       quantity: data.quantity,
@@ -153,6 +156,12 @@ const Index = ({ auth, sales, medicines }) => {
         accessor: 'transaction_code',
         Cell: ({ value }) => <span className="font-bold">{value}</span>
       },
+
+      {
+        Header: 'Código de Lote',
+        accessor: 'medicine.batch_number'
+      },
+      
       {
         Header: 'Medicamento',
         accessor: 'medicine.name'
