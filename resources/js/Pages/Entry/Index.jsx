@@ -1,7 +1,7 @@
 
 import React, { useState, useRef } from 'react';
 import { useTable, usePagination, useSortBy, useGlobalFilter } from 'react-table';
-import { Users, Pencil, Trash, ChevronRight, ChevronLeft, Package, FileDown, Search, SquarePlus, CalendarDays, Plus,  } from 'lucide-react';
+import { Users, Pencil, Trash, ChevronRight, ChevronLeft, Package, FileDown, Search, SquarePlus, CalendarDays, Plus, PackagePlus  } from 'lucide-react';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
@@ -278,7 +278,7 @@ const Index = ({ auth, entries, medicines, suppliers }) => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="py-1 flex justify-between items-center">
               <h2 className="font-semibold text-lg sm:text-xl text-white leading-tight flex items-center">
-                <Package className="mr-2 text-sm sm:text-lg" /> Entradas
+                <PackagePlus className="mr-2 text-sm sm:text-lg" /> Entradas
               </h2>
               {/* Botones para crear categoría y descargar */}
               <div className="flex">

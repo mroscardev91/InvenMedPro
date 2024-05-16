@@ -1,7 +1,7 @@
 
 import React, { useState, useRef } from 'react';
 import { useTable, usePagination, useSortBy, useGlobalFilter } from 'react-table';
-import { Users, Pencil, Trash, ChevronRight, ChevronLeft, Package, FileDown, Search, SquarePlus, CalendarDays, Minus } from 'lucide-react';
+import { Users, Pencil, Trash, ChevronRight, ChevronLeft, FileDown, Search, SquarePlus, CalendarDays, Minus, PackageMinus } from 'lucide-react';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
@@ -42,7 +42,7 @@ const Index = ({ auth, sales, medicines }) => {
     setOperation(op);
     setData({ transaction_code: transaction_code, medicine: '', category: '', quantity: '', date: new Date().toLocaleDateString(), user: '' }); // Reinicia los datos al abrir el modal
     if (op === 1) {
-      setTitle('Crear venta');
+      setTitle('Crear salida');
       setData({
         transaction_code: '',
         medicine: medicines.length > 0 ? medicines[0].id : '',
@@ -52,7 +52,7 @@ const Index = ({ auth, sales, medicines }) => {
         user: ''
       })
     } else {
-      setTitle('Editar venta');
+      setTitle('Editar salida');
       setData({ id: id, transaction_code: transaction_code, medicine: medicine.id, category: category, quantity: quantity, date: date, user: user });
     }
   };
@@ -76,7 +76,7 @@ const Index = ({ auth, sales, medicines }) => {
 
     // Lógica para determinar si es una operación de creación o edición
     const endpoint = operation === 1 ? route('sales.store') : route('sales.update', data.id);
-    const onSuccessMessage = operation === 1 ? 'Venta guardada' : 'Venta modificada';
+    const onSuccessMessage = operation === 1 ? 'Salida guardada' : 'Salida modificada';
 
     // Realiza la petición POST o PUT según la operación
     (operation === 1 ? post : put)(endpoint, {
@@ -116,7 +116,7 @@ const Index = ({ auth, sales, medicines }) => {
     console.log(transaction_code);
     Swal.fire({
       title: '¿Estás seguro?',
-      text: `¿Deseas eliminar la venta "${transaction_code}"? Esta acción no se puede deshacer.`,
+      text: `¿Deseas eliminar la salida "${transaction_code}"? Esta acción no se puede deshacer.`,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
@@ -129,14 +129,14 @@ const Index = ({ auth, sales, medicines }) => {
           onSuccess: () => {
             Swal.fire(
               'Eliminada!',
-              `La venta "${transaction_code}" ha sido eliminada.`,
+              `La salida "${transaction_code}" ha sido eliminada.`,
               'success'
             );
           },
           onError: () => {
             Swal.fire(
               'Error!',
-              'Hubo un problema al eliminar la venta.',
+              'Hubo un problema al eliminar la salida.',
               'error'
             );
           }
@@ -175,7 +175,7 @@ const Index = ({ auth, sales, medicines }) => {
       },
 
       {
-        Header: 'Venta por ',
+        Header: 'Salida por ',
         accessor: 'user.name'
       },
 
@@ -246,7 +246,7 @@ const Index = ({ auth, sales, medicines }) => {
   const exportExcel = () => {
     const csvConfig = mkConfig({
       fieldSeparator: ',',
-      filename: 'ventas',
+      filename: 'salidas',
       decimalSeparator: '.',
       useKeysAsHeaders: true,
     });
@@ -264,13 +264,13 @@ const Index = ({ auth, sales, medicines }) => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="py-1 flex justify-between items-center">
               <h2 className="font-semibold text-lg sm:text-xl text-white leading-tight flex items-center">
-                <Package className="mr-2 text-sm sm:text-lg" /> Ventas
+                <PackageMinus className="mr-2 text-sm sm:text-lg" /> Salidas
               </h2>
               {/* Botones para crear categoría y descargar */}
               <div className="flex">
                 {/* Botón para crear categoría */}
                 <button className="hidden sm:inline-block bg-[#2E3447] hover:bg-blue-900 text-white font-bold py-2 px-3 sm:px-4 rounded text-xs sm:text-base mr-2" onClick={() => openModal(1)}>
-                  Crear Venta
+                  Crear Salida
                 </button>
                 {/* Botón para descargar */}
                 <button type="button" onClick={exportExcel} className="hidden sm:inline-block bg-[#2E3447] hover:bg-blue-900 text-white font-bold py-2 px-3 sm:px-4 rounded text-xs sm:text-base">
@@ -292,7 +292,7 @@ const Index = ({ auth, sales, medicines }) => {
           </div>
         }
       >
-        <Head title="Entradas" />
+        <Head title="Salidas" />
         <div className="overflow-x-auto">
           <div className="flex flex-col sm:flex-row justify-between items-center mb-4">
 
@@ -307,7 +307,7 @@ const Index = ({ auth, sales, medicines }) => {
                 icon={Search}
                 onChange={(e) => setGlobalFilter(e.target.value)}
                 className="border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-1 mt-1 focus:outline-none focus:border-blue-500 dark:bg-gray-800 dark:text-gray-300"
-                placeholder="Buscar entrada..."
+                placeholder="Buscar salida..."
               >
               </TextInput>
             </div>
@@ -359,7 +359,7 @@ const Index = ({ auth, sales, medicines }) => {
             </tbody>
           </table>
         </div>
-        {/* Modal para crear/editar entrada */}
+        {/* Modal para crear/editar salida */}
         <Modal show={modal} onClose={closeModal}>
           <h2 className="p-3 text-lg font-medium text-gray-900">{title}</h2>
           <form onSubmit={save} className="p-6">
@@ -411,7 +411,7 @@ const Index = ({ auth, sales, medicines }) => {
                 value={format(new Date(), 'yyyy-MM-dd')}
                 icon={CalendarDays }
                 disabled={true}
-                placeholder="Fecha de venta"
+                placeholder="Fecha de salida"
                 required="required"
                 onChange={(e) => setData('date', e.target.value)}
                 className="mt-1 flex w-3/4 justify-center"

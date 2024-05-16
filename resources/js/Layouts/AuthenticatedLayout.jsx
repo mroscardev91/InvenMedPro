@@ -6,7 +6,7 @@ import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { Link } from '@inertiajs/react';
 import Sidebar, { SidebarItem } from '@/Components/Sidebar';
 import Footer from '@/Components/Footer';
-import { LayoutDashboard, StickyNote, Flag, LifeBuoy, Settings, UsersRound, SquareArrowRight, Pill, Factory, FolderHeart, ClipboardPlus, FolderKanban, ReceiptEuro, ShoppingCart, ClipboardPenLine, CircleUser } from "lucide-react";
+import { LayoutDashboard, StickyNote, Flag, LifeBuoy, Settings, UsersRound, Pill, Factory, FolderHeart, ClipboardPlus, FolderKanban, ClipboardPenLine, CircleUser, PackagePlus, PackageMinus } from "lucide-react";
 
 
 export default function AuthenticatedLayout({ user, header, children}) {
@@ -27,8 +27,8 @@ export default function AuthenticatedLayout({ user, header, children}) {
                         </SidebarItem>
 
                         <SidebarItem icon={<FolderKanban size={20} />} text="Gestión de Existencias" active={(location.pathname === "/dashboard/entries") || (location.pathname === "/dashboard/sales")} >
-                            <SidebarItem icon={<ShoppingCart  size={16} />} text="Entradas" route="/dashboard/entries" active={location.pathname === "/dashboard/entries"}/>
-                            <SidebarItem icon={<ShoppingCart size={16} />} text="Salidas" route="/dashboard/sales" active={location.pathname === "/dashboard/sales"}/>
+                            <SidebarItem icon={<PackagePlus  size={16} />} text="Entradas" route="/dashboard/entries" active={location.pathname === "/dashboard/entries"}/>
+                            <SidebarItem icon={<PackageMinus size={16} />} text="Salidas" route="/dashboard/sales" active={location.pathname === "/dashboard/sales"}/>
                         </SidebarItem>
 
                         <SidebarItem icon={<UsersRound size={20} />} text="Usuarios" route={"/dashboard/users"} active={location.pathname === "/dashboard/users"} />
