@@ -7,6 +7,7 @@ use Inertia\Inertia;
 use Inertia\Response;
 use App\Models\Medicine;
 use App\Models\Category;
+use Illuminate\Support\Str;
 
 
 class MedicineController extends Controller
@@ -38,7 +39,7 @@ class MedicineController extends Controller
         ]);
 
         // Generar código de lote único
-        $batchNumber = 'L' . date('Ymd') . Str::random(5);
+        $batchNumber = 'L' . '-' . date('Ymd') . Str::random(5);
 
         $medicine = Medicine::create([
             'name' => $request->name,
