@@ -161,7 +161,7 @@ const Index = ({ auth, sales, medicines }) => {
         Header: 'Código de Lote',
         accessor: 'medicine.batch_number'
       },
-      
+
       {
         Header: 'Medicamento',
         accessor: 'medicine.name'
@@ -196,7 +196,7 @@ const Index = ({ auth, sales, medicines }) => {
           <>
             <Pencil
               className="inline-block h-6 w-6 text-blue-500 mr-2 cursor-pointer"
-              onClick={() => openModal(2, row.original.id, row.original.code_transaction, row.original.medicine, row.original.category, row.original.quantity, row.original.date, row.original.user)}
+              onClick={() => openModal(2, row.original.id, row.original.code_transaction, row.original.batch_number, row.original.medicine, row.original.category, row.original.quantity, row.original.date, row.original.user)}
             />
             <Trash className="inline-block h-6 w-6 text-red-500 cursor-pointer" onClick={() => eliminar(row.original.id, row.original.transaction_code)} />
           </>
@@ -242,6 +242,7 @@ const Index = ({ auth, sales, medicines }) => {
   // Extraer la información de las medicinas para que no sea un objeto
   const processedSales = sales.map((sale) => ({
     code_transaction: sale.transaction_code,
+    batch_number: sale.medicine.batch_number,
     medicine: sale.medicine.name,
     category: sale.medicine.category.name,
     quantity: sale.quantity,

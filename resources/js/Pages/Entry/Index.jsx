@@ -209,7 +209,7 @@ const Index = ({ auth, entries, medicines, suppliers }) => {
           <>
             <Pencil
               className="inline-block h-6 w-6 text-blue-500 mr-2 cursor-pointer"
-              onClick={() => openModal(2, row.original.id, row.original.code_transaction, row.original.medicine, row.original.category, row.original.supplier, row.original.quantity, row.original.date, row.original.user)}
+              onClick={() => openModal(2, row.original.id, row.original.code_transaction, row.original.batch_number, row.original.medicine, row.original.category, row.original.supplier, row.original.quantity, row.original.date, row.original.user)}
             />
             <Trash className="inline-block h-6 w-6 text-red-500 cursor-pointer" onClick={() => eliminar(row.original.id, row.original.transaction_code)} />
           </>
@@ -255,6 +255,7 @@ const Index = ({ auth, entries, medicines, suppliers }) => {
   // Extraer la información de las medicinas para que no sea un objeto
   const processedEntries = entries.map((entry) => ({
     code_transaction: entry.transaction_code,
+    batch_number: entry.medicine.batch_number,
     medicine: entry.medicine.name,
     category: entry.medicine.category.name,
     supplier: entry.supplier.name,

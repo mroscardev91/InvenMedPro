@@ -6,7 +6,7 @@ import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { Link } from '@inertiajs/react';
 import Sidebar, { SidebarItem } from '@/Components/Sidebar';
 import Footer from '@/Components/Footer';
-import { LayoutDashboard, StickyNote, Flag, LifeBuoy, Settings, UsersRound, Pill, Factory, FolderHeart, ClipboardPlus, FolderKanban, ClipboardPenLine, CircleUser, PackagePlus, PackageMinus } from "lucide-react";
+import { LayoutDashboard, StickyNote, LifeBuoy, Settings, UsersRound, Pill, Factory, FolderHeart, ClipboardPlus, FolderKanban, ClipboardPenLine, CircleUser, PackagePlus, PackageMinus, Package } from "lucide-react";
 
 
 export default function AuthenticatedLayout({ user, header, children}) {
@@ -26,9 +26,10 @@ export default function AuthenticatedLayout({ user, header, children}) {
                             <SidebarItem icon={<Factory size={16} />} text="Proveedores" route="/dashboard/suppliers" active={location.pathname === "/dashboard/suppliers"}/>
                         </SidebarItem>
 
-                        <SidebarItem icon={<FolderKanban size={20} />} text="Gestión de Existencias" active={(location.pathname === "/dashboard/entries") || (location.pathname === "/dashboard/sales")} >
+                        <SidebarItem icon={<FolderKanban size={20} />} text="Gestión de Existencias" active={(location.pathname === "/dashboard/entries") || (location.pathname === "/dashboard/sales") || (location.pathname === "/dashboard/stock")} >
                             <SidebarItem icon={<PackagePlus  size={16} />} text="Entradas" route="/dashboard/entries" active={location.pathname === "/dashboard/entries"}/>
                             <SidebarItem icon={<PackageMinus size={16} />} text="Salidas" route="/dashboard/sales" active={location.pathname === "/dashboard/sales"}/>
+                            <SidebarItem icon={<Package size={16} />} text="Stock" route="/dashboard/stock" active={location.pathname === "/dashboard/stock"}/>
                         </SidebarItem>
 
                         <SidebarItem icon={<UsersRound size={20} />} text="Usuarios" route={"/dashboard/users"} active={location.pathname === "/dashboard/users"} />
