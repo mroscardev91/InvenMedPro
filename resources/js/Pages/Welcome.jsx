@@ -212,31 +212,31 @@ export default function Welcome({ auth}) {
                                 <ul class="mb-6 flex justify-center">
                                 <li>
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 96 960 960" class="w-5 text-warning">
-                                    <path fill="currentColor"
+                                    <path fill="blue"
                                         d="m233 976 65-281L80 506l288-25 112-265 112 265 288 25-218 189 65 281-247-149-247 149Z" />
                                     </svg>
                                 </li>
                                 <li>
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 96 960 960" class="w-5 text-warning">
-                                    <path fill="currentColor"
+                                    <path fill="blue"
                                         d="m233 976 65-281L80 506l288-25 112-265 112 265 288 25-218 189 65 281-247-149-247 149Z" />
                                     </svg>
                                 </li>
                                 <li>
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 96 960 960" class="w-5 text-warning">
-                                    <path fill="currentColor"
+                                    <path fill="blue"
                                         d="m233 976 65-281L80 506l288-25 112-265 112 265 288 25-218 189 65 281-247-149-247 149Z" />
                                     </svg>
                                 </li>
                                 <li>
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 96 960 960" class="w-5 text-warning">
-                                    <path fill="currentColor"
+                                    <path fill="blue"
                                         d="m233 976 65-281L80 506l288-25 112-265 112 265 288 25-218 189 65 281-247-149-247 149Z" />
                                     </svg>
                                 </li>
                                 <li>
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 96 960 960" class="w-5 text-warning">
-                                    <path fill="currentColor"
+                                    <path fill="blue"
                                         d="m480 757 157 95-42-178 138-120-182-16-71-168v387ZM233 976l65-281L80 506l288-25 112-265 112 265 288 25-218 189 65 281-247-149-247 149Z" />
                                     </svg>
                                 </li>
@@ -271,31 +271,31 @@ export default function Welcome({ auth}) {
                                 <ul class="mb-6 flex justify-center">
                                 <li>
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 96 960 960" class="w-5 text-warning">
-                                    <path fill="currentColor"
+                                    <path fill="blue"
                                         d="m233 976 65-281L80 506l288-25 112-265 112 265 288 25-218 189 65 281-247-149-247 149Z" />
                                     </svg>
                                 </li>
                                 <li>
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 96 960 960" class="w-5 text-warning">
-                                    <path fill="currentColor"
+                                    <path fill="blue"
                                         d="m233 976 65-281L80 506l288-25 112-265 112 265 288 25-218 189 65 281-247-149-247 149Z" />
                                     </svg>
                                 </li>
                                 <li>
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 96 960 960" class="w-5 text-warning">
-                                    <path fill="currentColor"
+                                    <path fill="blue"
                                         d="m233 976 65-281L80 506l288-25 112-265 112 265 288 25-218 189 65 281-247-149-247 149Z" />
                                     </svg>
                                 </li>
                                 <li>
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 96 960 960" class="w-5 text-warning">
-                                    <path fill="currentColor"
+                                    <path fill="blue"
                                         d="m233 976 65-281L80 506l288-25 112-265 112 265 288 25-218 189 65 281-247-149-247 149Z" />
                                     </svg>
                                 </li>
                                 <li>
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 96 960 960" class="w-5 text-warning">
-                                    <path fill="currentColor"
+                                    <path fill="blue"
                                         d="m233 976 65-281L80 506l288-25 112-265 112 265 288 25-218 189 65 281-247-149-247 149Z" />
                                     </svg>
                                 </li>
@@ -330,31 +330,31 @@ export default function Welcome({ auth}) {
                                 <ul class="mb-6 flex justify-center">
                                 <li>
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 96 960 960" class="w-5 text-warning">
-                                    <path fill="currentColor"
+                                    <path fill="blue"
                                         d="m233 976 65-281L80 506l288-25 112-265 112 265 288 25-218 189 65 281-247-149-247 149Z" />
                                     </svg>
                                 </li>
                                 <li>
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 96 960 960" class="w-5 text-warning">
-                                    <path fill="currentColor"
+                                    <path fill="blue"
                                         d="m233 976 65-281L80 506l288-25 112-265 112 265 288 25-218 189 65 281-247-149-247 149Z" />
                                     </svg>
                                 </li>
                                 <li>
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 96 960 960" class="w-5 text-warning">
-                                    <path fill="currentColor"
+                                    <path fill="blue"
                                         d="m233 976 65-281L80 506l288-25 112-265 112 265 288 25-218 189 65 281-247-149-247 149Z" />
                                     </svg>
                                 </li>
                                 <li>
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 96 960 960" class="w-5 text-warning">
-                                    <path fill="currentColor"
+                                    <path fill="blue"
                                         d="m233 976 65-281L80 506l288-25 112-265 112 265 288 25-218 189 65 281-247-149-247 149Z" />
                                     </svg>
                                 </li>
                                 <li>
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 96 960 960" class="w-5 text-warning">
-                                    <path fill="currentColor"
+                                    <path fill="blue"
                                         d="m323 851 157-94 157 95-42-178 138-120-182-16-71-168-71 167-182 16 138 120-42 178Zm-90 125 65-281L80 506l288-25 112-265 112 265 288 25-218 189 65 281-247-149-247 149Zm247-355Z" />
                                     </svg>
                                 </li>
