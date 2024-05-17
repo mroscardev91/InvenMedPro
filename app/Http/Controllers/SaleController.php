@@ -22,6 +22,7 @@ class SaleController extends Controller
             'sales' => $sales,
             'medicines' => $medicines,
         ]);
+
     }
 
 
@@ -51,6 +52,14 @@ class SaleController extends Controller
 
         $transactionCode = $prefix . '-' . $latestSaleId . '-' . $suffix;
 
+        // Actualizar el stock del medicamento correspondiente
+        $medicine = Medicine::find($request->medicine);
+        if ($medicine->stock < $request->quantity) {
+            
+            return redirect()->back()->with('error', 'Stock insuficiente para realizar la venta.');
+        }
+
+
         $sale = Sale::create([
             'medicine_id' => $request->medicine,
             'user_id' => $userId,
@@ -58,12 +67,7 @@ class SaleController extends Controller
             'quantity' => $request->quantity,
             'date' => $request->date,
         ]);
-
-        // Actualizar el stock del medicamento correspondiente
-        $medicine = Medicine::find($request->medicine);
-        if ($medicine->stock < $request->quantity) {
-            return redirect()->back()->with('error', 'Stock insuficiente para realizar la venta.');
-        }
+  
         $medicine->stock -= $request->quantity;
         $medicine->save();
 

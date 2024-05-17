@@ -1,24 +1,26 @@
-
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useTable, usePagination, useSortBy, useGlobalFilter } from 'react-table';
 import { Users, Pencil, Trash, ChevronRight, ChevronLeft, FileDown, Search, SquarePlus, CalendarDays, Minus, PackageMinus } from 'lucide-react';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
 import SecondaryButton from '@/Components/SecondaryButton';
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, usePage } from '@inertiajs/react';
 import { useForm } from '@inertiajs/react';
 import Modal from '@/Components/Modal';
 import Swal from 'sweetalert2';
-import { mkConfig, generateCsv, download } from 'export-to-csv'
+import { mkConfig, generateCsv, download } from 'export-to-csv';
 import { TextInput, NumberInput, Badge } from '@tremor/react';
 import { format } from 'date-fns';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 
+
 const Index = ({ auth, sales, medicines }) => {
+  const { flash } = usePage().props; // Obtener los mensajes flash de Inertia
+
   const [modal, setModal] = useState(false);
   const [title, setTitle] = useState('');
-  const [operation, setOperation] = useState(1);
+  const [operation, setOperation] = useState(1);  
   const MedicineSelect = useRef();
   const CategoryInput = useRef();
   const QuantityInput = useRef();
@@ -33,15 +35,21 @@ const Index = ({ auth, sales, medicines }) => {
     quantity: '',
     date: new Date().toLocaleDateString(),
     user: ''
-
   });
 
-  
-  // Función para abrir el modal
+  useEffect(() => {
+    if (flash?.success) {
+      Swal.fire({ title: flash.success, icon: 'success' });
+    }
+    if (flash?.error) {
+      Swal.fire({ title: flash.error, icon: 'error' });
+    }
+  }, [flash]);
+
   const openModal = (op, id, transaction_code, batch_number, medicine, category, quantity, date, user) => {
     setModal(true);
     setOperation(op);
-    setData({ transaction_code: transaction_code, medicine: '', category: '', quantity: '', date: new Date().toLocaleDateString(), user: '' }); // Reinicia los datos al abrir el modal
+    setData({ transaction_code: transaction_code, medicine: '', category: '', quantity: '', date: new Date().toLocaleDateString(), user: '' }); 
     if (op === 1) {
       setTitle('Crear salida');
       setData({
@@ -52,19 +60,17 @@ const Index = ({ auth, sales, medicines }) => {
         quantity: '',
         date: new Date().toLocaleDateString(),
         user: ''
-      })
+      });
     } else {
       setTitle('Editar salida');
       setData({ id: id, transaction_code: transaction_code, batch_number: batch_number, medicine: medicine.id, category: category, quantity: quantity, date: date, user: user });
     }
   };
 
-  // Función para cerrar el modal
   const closeModal = () => {
     setModal(false);
   };
 
-  // Función para guardar cambios
   const save = (e) => {
     e.preventDefault();
     const formData = {
@@ -73,22 +79,19 @@ const Index = ({ auth, sales, medicines }) => {
       medicine: data.medicine,
       category: data.category,
       quantity: data.quantity,
-      date: date,
+      date: data.date,
       user: data.user
     };
 
-    // Lógica para determinar si es una operación de creación o edición
     const endpoint = operation === 1 ? route('sales.store') : route('sales.update', data.id);
     const onSuccessMessage = operation === 1 ? 'Salida guardada' : 'Salida modificada';
 
-    // Realiza la petición POST o PUT según la operación
     (operation === 1 ? post : put)(endpoint, {
       data: formData,
       onSuccess: () => {
         ok(onSuccessMessage);
       },
       onError: () => {
-        // Lógica para manejar errores
         if (errors.medicine) {
           reset('medicine');
           MedicineSelect.current.focus();
@@ -109,14 +112,11 @@ const Index = ({ auth, sales, medicines }) => {
           reset('user');
           UserInput.current.focus();
         }
-
       }
     });
   };
 
-  // Función para eliminar usuario
   const eliminar = (id, transaction_code) => {
-    console.log(transaction_code);
     Swal.fire({
       title: '¿Estás seguro?',
       text: `¿Deseas eliminar la salida "${transaction_code}"? Esta acción no se puede deshacer.`,
@@ -148,7 +148,6 @@ const Index = ({ auth, sales, medicines }) => {
     });
   };
 
-  // Define las columnas de la tabla
   const columns = React.useMemo(
     () => [
       {
@@ -156,39 +155,31 @@ const Index = ({ auth, sales, medicines }) => {
         accessor: 'transaction_code',
         Cell: ({ value }) => <span className="font-bold">{value}</span>
       },
-
       {
         Header: 'Código de Lote',
         accessor: 'medicine.batch_number'
       },
-
       {
         Header: 'Medicamento',
         accessor: 'medicine.name'
       },
-
       {
         Header: 'Categoría',
         accessor: 'medicine.category.name'
       },
-
       {
         Header: 'Cantidad',
         accessor: 'quantity',
         Cell: ({ value }) => <Badge color={'red'} icon={Minus}> {value}</Badge>
       },
-
       {
         Header: 'Fecha',
         accessor: 'date'
       },
-
       {
         Header: 'Salida por ',
         accessor: 'user.name'
       },
-
-
       {
         Header: 'Acciones',
         accessor: 'id',
@@ -206,7 +197,6 @@ const Index = ({ auth, sales, medicines }) => {
     []
   );
 
-  // Configuración de la tabla
   const {
     getTableProps,
     getTableBodyProps,
@@ -231,15 +221,14 @@ const Index = ({ auth, sales, medicines }) => {
     usePagination
   );
 
-  // Función para mostrar mensaje de éxito
   const ok = (mensaje) => {
-    reset(); // Reinicia los datos del formulario
-    closeModal(); // Cierra el modal
-    Swal.fire({ title: mensaje, icon: 'success' }); // Muestra la alerta de éxito
-  };
-  { console.log(data) }
+    reset(); 
+    closeModal(); 
+    Swal.fire({ title: mensaje, icon: 'success' }); 
 
-  // Extraer la información de las medicinas para que no sea un objeto
+    
+  };
+
   const processedSales = sales.map((sale) => ({
     code_transaction: sale.transaction_code,
     batch_number: sale.medicine.batch_number,
@@ -248,11 +237,8 @@ const Index = ({ auth, sales, medicines }) => {
     quantity: sale.quantity,
     date: sale.date,
     user: sale.user.name
-
   }));
 
-
-  // Función para exportar la tabla como CSV
   const exportExcel = () => {
     const csvConfig = mkConfig({
       fieldSeparator: ',',
@@ -265,7 +251,6 @@ const Index = ({ auth, sales, medicines }) => {
     download(csvConfig)(csvData);
   };
 
-
   return (
     <>
       <AuthenticatedLayout
@@ -276,24 +261,18 @@ const Index = ({ auth, sales, medicines }) => {
               <h2 className="font-semibold text-lg sm:text-xl text-white leading-tight flex items-center">
                 <PackageMinus className="mr-2 text-sm sm:text-lg" /> Salidas
               </h2>
-              {/* Botones para crear categoría y descargar */}
               <div className="flex">
-                {/* Botón para crear categoría */}
                 <button className="hidden sm:inline-block bg-[#2E3447] hover:bg-blue-900 text-white font-bold py-2 px-3 sm:px-4 rounded text-xs sm:text-base mr-2" onClick={() => openModal(1)}>
                   Crear Salida
                 </button>
-                {/* Botón para descargar */}
                 <button type="button" onClick={exportExcel} className="hidden sm:inline-block bg-[#2E3447] hover:bg-blue-900 text-white font-bold py-2 px-3 sm:px-4 rounded text-xs sm:text-base">
                   <FileDown />
                 </button>
               </div>
-              {/* Botones para crear categoría y descargar en pantallas pequeñas */}
               <div className="sm:hidden">
-                {/* Botón para crear categoría en pantallas pequeñas */}
                 <button className="bg-[#2E3447] hover:bg-blue-900 text-white font-bold py-2 px-3 rounded text-xs mr-2" onClick={() => openModal(1)}>
                   +
                 </button>
-                {/* Botón para descargar en pantallas pequeñas */}
                 <button type="button" onClick={exportExcel} className="bg-[#2E3447] hover:bg-blue-900 text-white font-bold py-[9.3px] px-3 rounded text-xs mt-2">
                   <FileDown size={13} />
                 </button>
@@ -305,7 +284,6 @@ const Index = ({ auth, sales, medicines }) => {
         <Head title="Salidas" />
         <div className="overflow-x-auto">
           <div className="flex flex-col sm:flex-row justify-between items-center mb-4">
-
             <div className="flex items-center mb-2 sm:mb-0">
               <label htmlFor="search" className="text-gray-700  dark:text-gray-300 mr-2">
                 Buscar:
@@ -318,8 +296,7 @@ const Index = ({ auth, sales, medicines }) => {
                 onChange={(e) => setGlobalFilter(e.target.value)}
                 className="border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-1 mt-1 focus:outline-none focus:border-blue-500 dark:bg-gray-800 dark:text-gray-300"
                 placeholder="Buscar salida..."
-              >
-              </TextInput>
+              />
             </div>
             <div className="pagination">
               <button onClick={() => previousPage()} disabled={!canPreviousPage} className="px-2 py-1 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-300 mr-2">
@@ -355,28 +332,23 @@ const Index = ({ auth, sales, medicines }) => {
               {page.map((row) => {
                 prepareRow(row);
                 return (
-                  <tr key={row.id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"  {...row.getRowProps()}>
-                    {row.cells.map((cell) => {
-                      return (
-                        <td {...cell.getCellProps()} className="px-6 py-4 sm:py-2 lg:py-4 font-medium text-gray-900 dark:text-white">
-                          {cell.render('Cell')}
-                        </td>
-                      );
-                    })}
+                  <tr key={row.id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700" {...row.getRowProps()}>
+                    {row.cells.map((cell) => (
+                      <td {...cell.getCellProps()} className="px-6 py-4 sm:py-2 lg:py-4 font-medium text-gray-900 dark:text-white">
+                        {cell.render('Cell')}
+                      </td>
+                    ))}
                   </tr>
                 );
               })}
             </tbody>
           </table>
         </div>
-        {/* Modal para crear/editar salida */}
         <Modal show={modal} onClose={closeModal}>
           <h2 className="p-3 text-lg font-medium text-gray-900">{title}</h2>
           <form onSubmit={save} className="p-6">
-
             <div className="mt-6">
               <InputLabel for="medicine" value="Medicamento"></InputLabel>
-
               <select
                 id="medicine"
                 name="medicine"
@@ -394,7 +366,6 @@ const Index = ({ auth, sales, medicines }) => {
               </select>
               <InputError message={errors.medicines} className="mt-2"></InputError>
             </div>
-
             <div className="mt-6">
               <InputLabel for="quantity" value="Cantidad"></InputLabel>
               <NumberInput
@@ -408,10 +379,9 @@ const Index = ({ auth, sales, medicines }) => {
                 onChange={(e) => setData('quantity', e.target.value)}
                 className="mt-1 flex w-3/4 justify-center"
                 isFocused
-              ></NumberInput>
+              />
               <InputError message={errors.quantity} className="mt-2"></InputError>
             </div>
-
             <div className="mt-6">
               <InputLabel for="date" value="Fecha"></InputLabel>
               <TextInput
@@ -419,19 +389,16 @@ const Index = ({ auth, sales, medicines }) => {
                 name="date"
                 ref={DateInput}
                 value={format(new Date(), 'yyyy-MM-dd')}
-                icon={CalendarDays }
+                icon={CalendarDays}
                 disabled={true}
                 placeholder="Fecha de salida"
                 required="required"
                 onChange={(e) => setData('date', e.target.value)}
                 className="mt-1 flex w-3/4 justify-center"
                 isFocused
-              ></TextInput>
+              />
               <InputError message={errors.date} className="mt-2"></InputError>
             </div>
-
-
-
             <div className="mt-6">
               <PrimaryButton processing={processing} className="mt-2">
                 <i className="fa-solid fa-save"></i>Guardar

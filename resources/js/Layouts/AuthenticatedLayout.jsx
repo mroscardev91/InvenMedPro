@@ -19,7 +19,6 @@ export default function AuthenticatedLayout({ user, header, children}) {
                 <div className=""> 
                     <Sidebar user={user} >
                         <SidebarItem icon={<LayoutDashboard size={20} />} text="Dashboard" route={"/dashboard"} active={location.pathname === "/dashboard"} />
-                        <SidebarItem icon={<StickyNote size={20} />} text="Pacientes" route={"/dashboard"} />
                         <SidebarItem icon={<FolderHeart  size={20} />} text="Gestión de Medicamentos" active={(location.pathname === "/dashboard/categories") || (location.pathname === "/dashboard/suppliers") || (location.pathname === "/dashboard/medicines") } >
                             <SidebarItem icon={<ClipboardPlus size={16} />} text="Categorías" route="/dashboard/categories" active={location.pathname === "/dashboard/categories"}/>
                             <SidebarItem icon={<Pill size={16} />} text="Medicamentos" route="/dashboard/medicines" active={location.pathname === "/dashboard/medicines"}/>
