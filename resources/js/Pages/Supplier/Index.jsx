@@ -6,30 +6,31 @@ import InputLabel from '@/Components/InputLabel';
 import { TextInput } from '@tremor/react';
 import PrimaryButton from '@/Components/PrimaryButton';
 import SecondaryButton from '@/Components/SecondaryButton';
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, usePage } from '@inertiajs/react';
 import { useForm } from '@inertiajs/react';
 import Modal from '@/Components/Modal';
 import Swal from 'sweetalert2';
 import MapPage from '@/Components/MapPage';
-import { mkConfig, generateCsv, download } from 'export-to-csv'
+import { mkConfig, generateCsv, download } from 'export-to-csv';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 
 const Index = ({ auth, suppliers }) => {
     const [modal, setModal] = useState(false);
-    const [mapModal, setMapModal] = useState(false); // Nuevo estado para el modal del mapa
+    const [mapModal, setMapModal] = useState(false); 
     const [title, setTitle] = useState('');
     const [operation, setOperation] = useState(1);
     const NameInput = useRef();
     const EmailInput = useRef();
     const PhoneInput = useRef();
     const AddressInput = useRef();
+    const LogoInput = useRef();
     const { data, setData, delete: destroy, post, put, processing, reset, errors } = useForm({
       id: '',
       name: '',
       email: '',
       phone: '',
       address: '',
-      logo: ''
+      logo: null
     });
 
     const [selectedAddress, setSelectedAddress] = useState('');
@@ -39,48 +40,42 @@ const Index = ({ auth, suppliers }) => {
       setMapModal(true); // Abre el modal del mapa
     };
   
-    // Función para abrir el modal
-    const openModal = (op, id, name, email, phone, address) => {
+    const openModal = (op, id, name, email, phone, address, logo) => {
       setModal(true);
       setOperation(op);
-      setData({ name: '', email: '', phone: '', address: '', logo: ''}); // Reinicia los datos al abrir el modal
+      setData({ id: '', name: '', email: '', phone: '', address: '', logo: null }); // Reinicia los datos al abrir el modal
       if (op === 1) {
         setTitle('Crear proveedor');
       } else {
         setTitle('Editar proveedor');
-        setData({ id: id, name: name, email: email, phone: phone, address: address, logo: ''});
+        setData({ id, name, email, phone, address, logo });
       }
     };
 
-    // Función para abrir el modal del mapa
-    const openMapModal = () => {
-      setMapModal(true);
-    };
-  
-    // Función para cerrar el modal
     const closeModal = () => {
       setModal(false);
       setMapModal(false); // Cierra el modal del mapa
     };
-  
-    // Función para guardar cambios
+
     const save = (e) => {
       e.preventDefault();
-      const formData = {
-        name: data.name,
-        email: data.email,
-        phone: data.phone,
-        address: data.address,
-        logo: data.logo
-      };
-  
-      // Lógica para determinar si es una operación de creación o edición
+      const formData = new FormData();
+      formData.append('name', data.name);
+      formData.append('email', data.email);
+      formData.append('phone', data.phone);
+      formData.append('address', data.address);
+      if (data.logo) {
+        formData.append('logo', data.logo);
+      }
+
       const endpoint = operation === 1 ? route('suppliers.store') : route('suppliers.update', data.id);
       const onSuccessMessage = operation === 1 ? 'Proveedor guardado' : 'Proveedor modificado';
-  
-      // Realiza la petición POST o PUT según la operación
+
       (operation === 1 ? post : put)(endpoint, {
         data: formData,
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        },
         onSuccess: () => {
           ok(onSuccessMessage);
         },
@@ -98,15 +93,18 @@ const Index = ({ auth, suppliers }) => {
             reset('phone');
             PhoneInput.current.focus();
           }
-          if (errors.adress) {
+          if (errors.address) {
             reset('address');
             AddressInput.current.focus();
+          }
+          if (errors.logo) {
+            reset('logo');
+            LogoInput.current.focus();
           }
         }
       });
     };
-  
-    // Función para eliminar usuario
+
     const eliminar = (id, name) => {
         Swal.fire({
             title: '¿Estás seguro?',
@@ -138,8 +136,7 @@ const Index = ({ auth, suppliers }) => {
             }
         });
     };
-  
-    // Define las columnas de la tabla
+
     const columns = React.useMemo(
       () => [
         {
@@ -188,8 +185,7 @@ const Index = ({ auth, suppliers }) => {
       ],
       []
     );
-  
-    // Configuración de la tabla
+
     const {
       getTableProps,
       getTableBodyProps,
@@ -213,16 +209,13 @@ const Index = ({ auth, suppliers }) => {
       useSortBy,
       usePagination
     );
-  
-    // Función para mostrar mensaje de éxito
+
     const ok = (mensaje) => {
       reset(); // Reinicia los datos del formulario
       closeModal(); // Cierra el modal
       Swal.fire({ title: mensaje, icon: 'success' }); // Muestra la alerta de éxito
     };
-    {console.log(data)}
-    
-    // Función para exportar la tabla como CSV
+
     const exportExcel = () => {
       const csvConfig = mkConfig({
           fieldSeparator: ',',
@@ -341,7 +334,7 @@ const Index = ({ auth, suppliers }) => {
             <h2 className="p-3 text-lg font-medium text-gray-900">{title}</h2>
             <form onSubmit={save} className="p-6">
               <div className="mt-6">
-                <InputLabel for="name" value="Nombre"></InputLabel>
+                <InputLabel for="name" value="Nombre" />
                 <TextInput
                   id="name"
                   name="name"
@@ -353,15 +346,15 @@ const Index = ({ auth, suppliers }) => {
                   onChange={(e) => setData('name', e.target.value)}
                   className="mt-1 flex w-3/4 justify-center"
                   isFocused
-                ></TextInput>
-                <InputError message={errors.name} className="mt-2"></InputError>
+                />
+                <InputError message={errors.name} className="mt-2" />
               </div>
               <div className="mt-6">
-                <InputLabel for="email" value="Correo Electrónico"></InputLabel>
+                <InputLabel for="email" value="Correo Electrónico" />
                 <TextInput
                   id="email"
                   name="email"
-                  placeholder='Escribe el correo electrónico del proveedor'
+                  placeholder="Escribe el correo electrónico del proveedor"
                   icon={Mail}
                   ref={EmailInput}
                   value={data.email}
@@ -369,15 +362,15 @@ const Index = ({ auth, suppliers }) => {
                   onChange={(e) => setData('email', e.target.value)}
                   className="mt-1 flex w-3/4 justify-center"
                   isFocused
-                ></TextInput>
-                <InputError message={errors.email} className="mt-2"></InputError>
+                />
+                <InputError message={errors.email} className="mt-2" />
               </div>
               <div className="mt-6">
-                <InputLabel for="phone" value="Teléfono"></InputLabel>
+                <InputLabel for="phone" value="Teléfono" />
                 <TextInput
                   id="phone"
                   name="phone"
-                  placeholder='Escribe el teléfono del proveedor'
+                  placeholder="Escribe el teléfono del proveedor"
                   icon={Phone}
                   ref={PhoneInput}
                   value={data.phone}
@@ -385,15 +378,15 @@ const Index = ({ auth, suppliers }) => {
                   onChange={(e) => setData('phone', e.target.value)}
                   className="mt-1 flex w-3/4 justify-center"
                   isFocused
-                ></TextInput>
-                <InputError message={errors.phone} className="mt-2"></InputError>
+                />
+                <InputError message={errors.phone} className="mt-2" />
               </div>
               <div className="mt-6">
-                <InputLabel for="address" value="Dirección"></InputLabel>
+                <InputLabel for="address" value="Dirección" />
                 <TextInput
                   id="address"
                   name="address"
-                  placeholder='Escribe la dirección del proveedor'
+                  placeholder="Escribe la dirección del proveedor"
                   icon={Mailbox}
                   ref={AddressInput}
                   value={data.address}
@@ -401,21 +394,22 @@ const Index = ({ auth, suppliers }) => {
                   onChange={(e) => setData('address', e.target.value)}
                   className="mt-1 flex w-3/4 justify-center"
                   isFocused
-                ></TextInput>
-                <InputError message={errors.address} className="mt-2"></InputError>
+                />
+                <InputError message={errors.address} className="mt-2" />
               </div>
               <div className="mt-6">
-                <InputLabel for="logo" value="Logo"></InputLabel>
+                <InputLabel for="logo" value="Logo" />
                 <input
-                    id="logo"
-                    name="logo"
-                    type="file"
-                    accept="image/*"
-                    onChange={(e) => setData('logo', e.target.files[0])}
-                    className="mt-1 block w-3/4"
+                  id="logo"
+                  name="logo"
+                  ref={LogoInput}
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => setData('logo', e.target.files[0])}
+                  className="mt-1 block w-3/4"
                 />
-                </div>
-            
+                <InputError message={errors.logo} className="mt-2" />
+              </div>
               <div className="mt-6">
                 <PrimaryButton processing={processing} className="mt-2">
                   <i className="fa-solid fa-save"></i>Guardar
@@ -438,7 +432,6 @@ const Index = ({ auth, suppliers }) => {
         </AuthenticatedLayout>
       </>
     );
-  };
+};
 
-  
-  export default Index;
+export default Index;

@@ -28,62 +28,55 @@ class SupplierController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required',
-            'email' => 'required|email',
-            'phone' => 'required',
-            'address' => 'required',
-        ]);
+    $request->validate([
+        'name' => 'required|string',
+        'email' => 'required|email',
+        'phone' => 'required|string',
+        'address' => 'required|string',
+        'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // validación del logo
+    ]);
 
-        $supplier = Supplier::create($request->all());  
+    $supplier = Supplier::create($request->except('logo')); // Crear sin logo inicialmente
 
-        if($request->file('logo')){
-            $pngName = strtolower($request->logo->getClientOriginalName());
-            $fechaHoraActual = Carbon::now()->format('ymdHi');
-            $request->logo->storeAS('/public/images/logos/'.$fechaHoraActual.$supplier->name.$pngName);
-            $path_foto = "/storage/images/logos/".$fechaHoraActual.$supplier->name.$pngName;
-            $supplier->logo=$path_foto;
-            $url = Storage::url($pngName);
-            $supplier->save();
-        }
-        
-        return redirect()->back()->with('success', 'Proveedor creado exitosamente.');
+    if ($request->hasFile('logo')) {
+        $filename = time() . '_' . $request->file('logo')->getClientOriginalName();
+        $path = $request->file('logo')->storeAs('public/images/logos', $filename);
+        $supplier->logo = Storage::url($path);
+        $supplier->save();
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
+    return redirect()->back()->with('success', 'Proveedor creado exitosamente.');
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        $request->validate([
-            'name' => 'required',
-            'email' => 'required|email',
-            'phone' => 'required',
-            'address' => 'required',
-        ]);
+    $request->validate([
+        'name' => 'required|string',
+        'email' => 'required|email',
+        'phone' => 'required|string',
+        'address' => 'required|string',
+        'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // validación del logo
+    ]);
 
-        $supplier = Supplier::findOrFail($id);
-        $supplier->update($request->all());
+    $supplier = Supplier::findOrFail($id);
+    $supplier->update($request->except('logo'));
 
-        // Actualizar la imagen del logotipo si se proporciona una nueva
-        if ($request->hasFile('logo')) {
-            $pngName = strtolower($request->logo->getClientOriginalName());
-            $fechaHoraActual = Carbon::now()->format('ymdHi');
-            $request->logo->storeAS('/public/images/logos/'.$fechaHoraActual.$supplier->name.$pngName);
-            $path_foto = "/storage/images/logos/".$fechaHoraActual.$supplier->name.$pngName;
-            $supplier->logo = $path_foto;
-            $supplier->save();
+    if ($request->hasFile('logo')) {
+        // Eliminar el logo anterior si existe
+        if ($supplier->logo) {
+            Storage::delete(str_replace('/storage/', 'public/', $supplier->logo));
         }
 
-        return redirect()->back()->with('success', 'Proveedor actualizado exitosamente.');
+        $filename = time() . '_' . $request->file('logo')->getClientOriginalName();
+        $path = $request->file('logo')->storeAs('public/images/logos', $filename);
+        $supplier->logo = Storage::url($path);
+        $supplier->save();
+    }
+
+    return redirect()->back()->with('success', 'Proveedor actualizado exitosamente.');
     }
 
     /**

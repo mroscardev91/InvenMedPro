@@ -21,7 +21,7 @@ class RolesSeeder extends Seeder
         $patient_manager = Role::create(['name' => 'Administrador de Pacientes']);
 
         //permissions
-        $permissions = ['users.index', 'categories.index'];
+        $permissions = ['users.index', 'categories.index',];
 
         //Crea el permiso en la base de datos mediante la lista anterior
         foreach ($permissions as $permission) {
