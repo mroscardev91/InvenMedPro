@@ -1,15 +1,14 @@
 import React, { useState, useRef } from 'react';
 import { useTable, usePagination, useSortBy, useGlobalFilter } from 'react-table';
-import { Pencil, Trash, ChevronRight, ChevronLeft, FileDown, Search, SquarePlus, PackageMinus } from 'lucide-react';
+import { Pencil, Trash, ChevronRight, ChevronLeft, ReceiptEuro, Search, SquarePlus, Printer } from 'lucide-react';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
 import SecondaryButton from '@/Components/SecondaryButton';
-import { Head, usePage } from '@inertiajs/react';
+import { Head } from '@inertiajs/react';
 import { useForm } from '@inertiajs/react';
 import Modal from '@/Components/Modal';
 import Swal from 'sweetalert2';
-import { mkConfig, generateCsv, download } from 'export-to-csv';
 import { TextInput } from '@tremor/react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 
@@ -91,6 +90,29 @@ const Index = ({ auth, sales, invoices, medicines }) => {
         });
     };
 
+    const imprimir = (row) => {
+        const printContent = `
+            <div>
+                <h3>Número de factura: ${row.original.invoice_number}</h3>
+                <p>Transacción: ${row.original.sale.transaction_code}</p>
+                <p>Medicamento: ${row.original.sale.medicine.name}</p>
+                <p>Cantidad: ${row.original.sale.quantity}</p>
+                <p>Fecha: ${row.original.sale.date}</p>
+                <p>Cliente: ${row.original.client_name}</p>
+                <p>Precio Total: ${row.original.total_amount}</p>
+            </div>
+        `;
+
+        const printWindow = window.open('', '', 'height=600,width=800');
+        printWindow.document.write('<html><head><title>Factura</title></head><body >');
+        printWindow.document.write(printContent);
+        printWindow.document.write('</body></html>');
+        printWindow.document.close();
+        printWindow.print();
+    };
+
+
+
     const columns = React.useMemo(
         () => [
             {
@@ -119,6 +141,11 @@ const Index = ({ auth, sales, invoices, medicines }) => {
                 Header: 'Cliente',
                 accessor: 'client_name'
             },
+
+            {
+                Header: 'Precio Total',
+                accessor: 'total_amount',
+            },
             {
                 Header: 'Acciones',
                 accessor: 'id',
@@ -131,6 +158,10 @@ const Index = ({ auth, sales, invoices, medicines }) => {
                         <Trash
                             className="inline-block h-6 w-6 text-red-500 cursor-pointer"
                             onClick={() => eliminar(row.original.id, row.original.invoice_number)}
+                        />
+                        <Printer
+                            className="inline-block h-6 w-6 text-green-500 cursor-pointer"
+                            onClick={() => imprimir(row)}
                         />
                     </>
                 )
@@ -163,27 +194,6 @@ const Index = ({ auth, sales, invoices, medicines }) => {
         usePagination
     );
 
-    // const processedInvoices = invoices.map((invoice) => ({
-    //     invoice_number: invoice.invoice_number,
-    //     medicine: invoice.sale.medicine,
-    //     category: invoice.sale.medicine.category.name,
-    //     quantity: invoice.sale.quantity,
-    //     date: invoice.sale.date,
-    //     client_name: invoice.client_name,
-    // }));
-
-    const exportExcel = () => {
-        const csvConfig = mkConfig({
-            fieldSeparator: ',',
-            filename: 'facturas',
-            decimalSeparator: '.',
-            useKeysAsHeaders: true,
-        });
-
-        const csvData = generateCsv(csvConfig)(processedInvoices);
-        download(csvConfig)(csvData);
-    };
-
     return (
         <>
             <AuthenticatedLayout
@@ -192,7 +202,7 @@ const Index = ({ auth, sales, invoices, medicines }) => {
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                         <div className="py-1 flex justify-between items-center">
                             <h2 className="font-semibold text-lg sm:text-xl text-white leading-tight flex items-center">
-                                <PackageMinus className="mr-2 text-sm sm:text-lg" /> Facturas
+                                <ReceiptEuro className="mr-2 text-sm sm:text-lg" /> Facturas
                             </h2>
                             <div className="flex">
                                 <button
@@ -201,13 +211,6 @@ const Index = ({ auth, sales, invoices, medicines }) => {
                                 >
                                     Crear Factura
                                 </button>
-                                <button
-                                    type="button"
-                                    onClick={exportExcel}
-                                    className="hidden sm:inline-block bg-[#2E3447] hover:bg-blue-900 text-white font-bold py-2 px-3 sm:px-4 rounded text-xs sm:text-base"
-                                >
-                                    <FileDown />
-                                </button>
                             </div>
                             <div className="sm:hidden">
                                 <button
@@ -215,13 +218,6 @@ const Index = ({ auth, sales, invoices, medicines }) => {
                                     onClick={() => openModal(1)}
                                 >
                                     +
-                                </button>
-                                <button
-                                    type="button"
-                                    onClick={exportExcel}
-                                    className="bg-[#2E3447] hover:bg-blue-900 text-white font-bold py-[9.3px] px-3 rounded text-xs mt-2"
-                                >
-                                    <FileDown size={13} />
                                 </button>
                             </div>
                         </div>
