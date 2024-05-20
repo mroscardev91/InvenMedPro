@@ -12,6 +12,7 @@ class Sale extends Model
     protected $fillable = [
         'medicine_id',
         'user_id',
+        'transaction_code',
         'quantity',
         'transaction_date',
     ];
@@ -25,5 +26,10 @@ class Sale extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function invoices()
+    {
+        return $this->hasMany(Invoice::class);
     }
 }

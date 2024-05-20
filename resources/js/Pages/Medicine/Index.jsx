@@ -25,6 +25,7 @@ const Index = ({ auth, medicines, categories }) => {
     const CategorySelect = useRef();
     const { data, setData, delete: destroy, post, put, processing, reset, errors } = useForm({
       id: '',
+      batch_number: '',
       name: '',
       details: '',
       purchase_price: '',
@@ -49,7 +50,7 @@ const Index = ({ auth, medicines, categories }) => {
         });
       } else {
         setTitle('Editar medicamento');
-        setData({ id: id, name: name, details: details, purchase_price: purchase_price, selling_price: selling_price, category: category.id});
+        setData({ id: id, batch_number: data.batch_number, name: name, details: details, purchase_price: purchase_price, selling_price: selling_price, category: category.id});
       }
     };
   
@@ -62,6 +63,7 @@ const Index = ({ auth, medicines, categories }) => {
     const save = (e) => {
       e.preventDefault();
       const formData = {
+        batch_number: operation === 1 ? `L${new Date().toISOString().split('T')[0].replace(/-/g, '')}${Math.random().toString(36).substring(2, 7).toUpperCase()}` : data.batch_number,
         name: data.name,
         details: data.details,
         purchase_price: data.purchase_price,
@@ -143,6 +145,12 @@ const Index = ({ auth, medicines, categories }) => {
     // Define las columnas de la tabla
     const columns = React.useMemo(
       () => [
+
+        {
+          Header: 'Número de lote',
+          accessor: 'batch_number',
+          Cell: ({ value }) => <span className="font-bold">{value}</span>
+        },
         {
           Header: 'Nombre',
           accessor: 'name'
@@ -221,6 +229,7 @@ const Index = ({ auth, medicines, categories }) => {
 
     // Extraer la información de las medicinas para que no sea un objeto
     const processedMedicines = medicines.map(medicine => ({
+      batch_number: medicine.batch_number,
       name: medicine.name,
       details: medicine.details,
       purchase_price: medicine.purchase_price,

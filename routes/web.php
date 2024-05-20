@@ -9,6 +9,10 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\MedicineController;
 use App\Http\Controllers\EntryController;
+use App\Http\Controllers\SaleController;
+use App\Http\Controllers\StockController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\InvoiceController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -24,10 +28,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::middleware(['role:Administrador del Sistema,Administrador del Inventario'])->group(function () {
             Route::resource('categories', CategoryController::class);
             Route::resource('suppliers', SupplierController::class);
+            Route::post('suppliers/update/{id}', [SupplierController::class, 'update'])->name('suppliers.update');
             Route::resource('medicines', MedicineController::class);
             Route::resource('entries', EntryController::class);
             Route::resource('sales', SaleController::class);
-
+            Route::resource('stock', StockController::class);
+            Route::resource('invoices', InvoiceController::class);
 
         });
         Route::middleware(['role:Administrador del Sistema'])->group(function () {
@@ -36,10 +42,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     });
 });
 
-
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'index'])
+    ->middleware(['auth', 'verified'])
+    ->name('dashboard');
 
 
 
@@ -49,13 +54,10 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-
 Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/unauthorized', [UserController::class, 'unauthorized'])->name('unauthorized');
 
 });
-
-
 
 require __DIR__.'/auth.php';

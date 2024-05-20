@@ -9,7 +9,7 @@ class Medicine extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'details', 'purchase_price', 'selling_price', 'category_id'];
+    protected $fillable = ['batch_number', 'name', 'details', 'stock', 'purchase_price', 'selling_price', 'category_id'];
 
 
     // Relación con la categoría del producto
@@ -17,5 +17,22 @@ class Medicine extends Model
      {
          return $this->belongsTo(Category::class);
      }
+
+     public function stocks()
+    {
+        return $this->hasMany(Stock::class);
+    }
+
+    public function entries()
+    {
+        return $this->hasMany(Entry::class);
+    }
+
+    public function sales()
+    {
+        return $this->hasMany(Sale::class);
+    }
+
+
  
 }

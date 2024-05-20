@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('medicines', function (Blueprint $table) {
             $table->id();
+            $table->string('batch_number')->unique()->nullable();
             $table->unsignedBigInteger('category_id');
             $table->string('name');
             $table->text('details');

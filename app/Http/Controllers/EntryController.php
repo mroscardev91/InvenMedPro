@@ -64,6 +64,11 @@ class EntryController extends Controller
             'date' => $request->date,
         ]);
 
+        // Actualizar el stock del medicamento correspondient
+        $medicine = Medicine::find($request->medicine);
+        $medicine->stock += $request->quantity;
+        $medicine->save();
+
         return redirect()->back()->with('success', 'Entrada creada exitosamente.');
     }
 
@@ -83,6 +88,8 @@ class EntryController extends Controller
         $userId = Auth::id();
 
         $entry = Entry::findOrFail($id);
+        $previousQuantity = $entry->quantity;
+
         $entry->update([
             'medicine_id' => $request->medicine,
             'supplier_id' => $request->supplier,
@@ -90,6 +97,11 @@ class EntryController extends Controller
             'quantity' => $request->quantity,
             'date' => $request->date,
         ]);
+
+        // Actualizar el stock del medicamento correspondiente
+        $medicine = Medicine::find($request->medicine);
+        $medicine->stock += ($request->quantity - $previousQuantity);
+        $medicine->save();
 
         return redirect()->back()->with('success', 'Entrada actualizada exitosamente.');
     }
@@ -99,8 +111,19 @@ class EntryController extends Controller
      */
     public function destroy(string $id)
     {
-        $entry = Entry::find($id);
+        // Buscar la entrada y obtener la cantidad y el ID del medicamento asociado
+        $entry = Entry::findOrFail($id);
+        $quantity = $entry->quantity;
+        $medicineId = $entry->medicine_id;
+
+        // Eliminar la entrada
         $entry->delete();
+
+        // Restar la cantidad eliminada del stock del medicamento correspondiente
+        $medicine = Medicine::find($medicineId);
+        $medicine->stock -= $quantity;
+        $medicine->save();
+        
         return redirect()->back()->with('success', 'Medicamento eliminado exitosamente.');
     }
 }
