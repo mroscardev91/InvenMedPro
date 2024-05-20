@@ -6,7 +6,7 @@ import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { Link } from '@inertiajs/react';
 import Sidebar, { SidebarItem } from '@/Components/Sidebar';
 import Footer from '@/Components/Footer';
-import { LayoutDashboard, StickyNote, LifeBuoy, Settings, UsersRound, Pill, Factory, FolderHeart, ClipboardPlus, FolderKanban, ClipboardPenLine, CircleUser, PackagePlus, PackageMinus, Package } from "lucide-react";
+import { LayoutDashboard, LifeBuoy, Settings, UsersRound, Pill, Factory, FolderHeart, ClipboardPlus, FolderKanban, ClipboardPenLine, CircleUser, PackagePlus, PackageMinus, Package, ReceiptEuro } from "lucide-react";
 
 
 export default function AuthenticatedLayout({ user, header, children}) {
@@ -32,7 +32,7 @@ export default function AuthenticatedLayout({ user, header, children}) {
                         </SidebarItem>
 
                         <SidebarItem icon={<UsersRound size={20} />} text="Usuarios" route={"/dashboard/users"} active={location.pathname === "/dashboard/users"} />
-                        <SidebarItem icon={<ClipboardPenLine size={20} />} text="Reportes" route={"/dashboard"} />
+                        <SidebarItem icon={<ReceiptEuro size={20} />} text="Facturas" route={"/dashboard"} />
                         <hr className="my-3" />
                         <SidebarItem icon={<Settings size={20} />} text="Configuración" />
                         <SidebarItem icon={<LifeBuoy size={20} />} text="Ayuda" />
