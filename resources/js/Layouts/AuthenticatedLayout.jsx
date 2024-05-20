@@ -6,7 +6,7 @@ import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { Link } from '@inertiajs/react';
 import Sidebar, { SidebarItem } from '@/Components/Sidebar';
 import Footer from '@/Components/Footer';
-import { LayoutDashboard, LifeBuoy, Settings, UsersRound, Pill, Factory, FolderHeart, ClipboardPlus, FolderKanban, ClipboardPenLine, CircleUser, PackagePlus, PackageMinus, Package, ReceiptEuro } from "lucide-react";
+import { LayoutDashboard, UsersRound, Pill, Factory, FolderHeart, ClipboardPlus, FolderKanban, CircleUser, PackagePlus, PackageMinus, Package, ReceiptEuro } from "lucide-react";
 
 
 export default function AuthenticatedLayout({ user, header, children}) {
@@ -34,9 +34,7 @@ export default function AuthenticatedLayout({ user, header, children}) {
                         <SidebarItem icon={<ReceiptEuro size={20} />} text="Facturas" route={"/dashboard/invoices"} active={location.pathname === "/dashboard/invoices"}/>
 
                         <hr className="my-3" />
-                        <SidebarItem icon={<UsersRound size={20} />} text="Usuarios" route={"/dashboard/users"} active={location.pathname === "/dashboard/users"} />
-                        {/* <SidebarItem icon={<Settings size={20} />} text="Configuración" />
-                        <SidebarItem icon={<LifeBuoy size={20} />} text="Ayuda" /> */}
+                        <SidebarItem icon={<UsersRound size={20} />} text="Gestionar Usuarios" route={"/dashboard/users"} active={location.pathname === "/dashboard/users"} />
                     </Sidebar>
                 </div>
                 <div className="flex-1 flex flex-col min-w-0">

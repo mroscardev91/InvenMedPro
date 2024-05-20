@@ -151,6 +151,7 @@ const Index = ({ auth, sales, invoices, medicines }) => {
                 accessor: 'id',
                 Cell: ({ row }) => (
                     <>
+                    <div className="flex">
                         <Pencil
                             className="inline-block h-6 w-6 text-blue-500 mr-2 cursor-pointer"
                             onClick={() => openModal(2, row.original.id, row.original.invoice_number, row.original.sale, row.original.client_name)}
@@ -163,6 +164,7 @@ const Index = ({ auth, sales, invoices, medicines }) => {
                             className="inline-block h-6 w-6 text-green-500 cursor-pointer"
                             onClick={() => imprimir(row)}
                         />
+                    </div>
                     </>
                 )
             }

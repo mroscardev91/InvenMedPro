@@ -1,10 +1,10 @@
 import React from 'react';
-import { ClipboardPlus, Pill, Factory, PackagePlus, PackageMinus, Package, UserCog, UserRoundPlus, Euro, Wallet, BadgeEuro, LayoutDashboard } from 'lucide-react';
+import { ClipboardPlus, Pill, Factory, PackagePlus, PackageMinus, Package, UserCog, UserRoundPlus, Euro, Wallet, BadgeEuro, LayoutDashboard, ReceiptEuro } from 'lucide-react';
 import { Head } from '@inertiajs/react';
 import { Card, DonutChart, Legend, BarChart } from '@tremor/react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 
-const Index = ({ auth, categoriesCount, medicinesCount, suppliersCount, entriesCount, salesCount, stockCount, systemAdminsCount, inventoryAdminsCount, totalSalesAmount, totalPurchasesAmount, benefit, topMedicines, topSuppliers }) => {
+const Index = ({ auth, categoriesCount, medicinesCount, suppliersCount, invoicesCount, entriesCount, salesCount, stockCount, systemAdminsCount, inventoryAdminsCount, totalSalesAmount, totalPurchasesAmount, benefit, topMedicines, topSuppliers }) => {
     
     
     const chartDataDonut = topMedicines.map(medicine => ({
@@ -84,6 +84,23 @@ const Index = ({ auth, categoriesCount, medicinesCount, suppliersCount, entriesC
                                 <p className="text-tremor-default font-medium text-tremor-content dark:text-dark-tremor-content">Proveedores</p>
                                 <div className="mt-2 flex items-baseline space-x-2.5">
                                     <p className="text-3xl text-tremor-content-strong dark:text-dark-tremor-content-strong font-semibold">{suppliersCount}</p>
+                                </div>
+                            </div>
+                        </Card>
+
+                        <Card
+                            className="max-w-xs flex items-center p-4"
+                            decoration="top"
+                            decorationColor="cyan"
+                            boxShadow="tremor-shadow-card"
+                        >
+                            <div className="flex items-center h-full bg-cyan-100 p-3 rounded mr-4">
+                                <ReceiptEuro className="text-cyan-500" size={48} />
+                            </div>
+                            <div className="flex flex-col justify-center">
+                                <p className="text-tremor-default font-medium text-tremor-content dark:text-dark-tremor-content">Facturas</p>
+                                <div className="mt-2 flex items-baseline space-x-2.5">
+                                    <p className="text-3xl text-tremor-content-strong dark:text-dark-tremor-content-strong font-semibold">{invoicesCount}</p>
                                 </div>
                             </div>
                         </Card>

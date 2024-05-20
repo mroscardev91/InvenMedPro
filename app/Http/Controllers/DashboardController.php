@@ -11,6 +11,7 @@ use App\Models\Medicine;
 use App\Models\Supplier;
 use App\Models\Category;
 use App\Models\User;
+use App\Models\Invoice;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -26,6 +27,7 @@ class DashboardController extends Controller
         $categoriesCount = Category::count();
         $medicinesCount = Medicine::count();
         $suppliersCount = Supplier::count();
+        $invoicesCount = Invoice::count();
         $entriesCount = Entry::sum('quantity');
         $salesCount = Sale::sum('quantity');
         $stockCount = Medicine::sum('stock');
@@ -76,6 +78,7 @@ class DashboardController extends Controller
             'categoriesCount' => $categoriesCount,
             'medicinesCount' => $medicinesCount,
             'suppliersCount' => $suppliersCount,
+            'invoicesCount' => $invoicesCount,
             'entriesCount' => $entriesCount,
             'salesCount' => $salesCount,
             'stockCount' => $stockCount,

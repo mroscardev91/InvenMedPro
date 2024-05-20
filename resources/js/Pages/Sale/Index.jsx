@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useTable, usePagination, useSortBy, useGlobalFilter } from 'react-table';
-import { Users, Pencil, Trash, ChevronRight, ChevronLeft, FileDown, Search, SquarePlus, CalendarDays, Minus, PackageMinus } from 'lucide-react';
+import { Pencil, Trash, ChevronRight, ChevronLeft, FileDown, Search, SquarePlus, PackageMinus, CalendarDays, Minus } from 'lucide-react';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
 import SecondaryButton from '@/Components/SecondaryButton';
-import { Head, Link, usePage } from '@inertiajs/react';
+import { Head, usePage } from '@inertiajs/react';
 import { useForm } from '@inertiajs/react';
 import Modal from '@/Components/Modal';
 import Swal from 'sweetalert2';
@@ -14,24 +14,21 @@ import { TextInput, NumberInput, Badge } from '@tremor/react';
 import { format } from 'date-fns';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 
-
 const Index = ({ auth, sales, medicines }) => {
   const { flash } = usePage().props; // Obtener los mensajes flash de Inertia
 
   const [modal, setModal] = useState(false);
   const [title, setTitle] = useState('');
-  const [operation, setOperation] = useState(1);  
+  const [operation, setOperation] = useState(1);
+  const [selectedMedicine, setSelectedMedicine] = useState(null);
   const MedicineSelect = useRef();
-  const CategoryInput = useRef();
   const QuantityInput = useRef();
   const DateInput = useRef();
-  const UserInput = useRef();
+
   const { data, setData, delete: destroy, post, put, processing, reset, errors } = useForm({
     id: '',
     transaction_code: '',
-    batch_number: '',
     medicine: '',
-    category: '',
     quantity: '',
     date: new Date().toLocaleDateString(),
     user: ''
@@ -46,24 +43,25 @@ const Index = ({ auth, sales, medicines }) => {
     }
   }, [flash]);
 
-  const openModal = (op, id, transaction_code, batch_number, medicine, category, quantity, date, user) => {
+  const openModal = (op, id, transaction_code, medicine, quantity, date, user) => {
     setModal(true);
     setOperation(op);
-    setData({ transaction_code: transaction_code, medicine: '', category: '', quantity: '', date: new Date().toLocaleDateString(), user: '' }); 
+    setData({ transaction_code: transaction_code, medicine: '', quantity: '', date: new Date().toLocaleDateString(), user: '' });
     if (op === 1) {
       setTitle('Crear salida');
       setData({
         transaction_code: '',
-        batch_number: '',
         medicine: medicines.length > 0 ? medicines[0].id : '',
-        category: '',
         quantity: '',
         date: new Date().toLocaleDateString(),
         user: ''
       });
+      setSelectedMedicine(medicines.length > 0 ? medicines[0] : null);
     } else {
       setTitle('Editar salida');
-      setData({ id: id, transaction_code: transaction_code, batch_number: batch_number, medicine: medicine.id, category: category, quantity: quantity, date: date, user: user });
+      setData({ id: id, transaction_code: transaction_code, medicine: medicine.id, quantity: quantity, date: date, user: user });
+      const selected = medicines.find((med) => med.id === medicine.id);
+      setSelectedMedicine(selected);
     }
   };
 
@@ -73,11 +71,13 @@ const Index = ({ auth, sales, medicines }) => {
 
   const save = (e) => {
     e.preventDefault();
+    if (selectedMedicine && data.quantity > selectedMedicine.stock) {
+      Swal.fire('Error', 'La cantidad de salida no puede ser mayor que el stock disponible.', 'error');
+      return;
+    }
     const formData = {
       transaction_code: data.transaction_code,
-      batch_number: data.batch_number,
       medicine: data.medicine,
-      category: data.category,
       quantity: data.quantity,
       date: data.date,
       user: data.user
@@ -89,28 +89,17 @@ const Index = ({ auth, sales, medicines }) => {
     (operation === 1 ? post : put)(endpoint, {
       data: formData,
       onSuccess: () => {
-        ok(onSuccessMessage);
+        closeModal();
+        Swal.fire('Éxito', onSuccessMessage, 'success');
       },
       onError: () => {
         if (errors.medicine) {
           reset('medicine');
           MedicineSelect.current.focus();
         }
-        if (errors.category) {
-          reset('category');
-          CategoryInput.current.focus();
-        }
         if (errors.quantity) {
           reset('quantity');
           QuantityInput.current.focus();
-        }
-        if (errors.date) {
-          reset('date');
-          DateInput.current.focus();
-        }
-        if (errors.user) {
-          reset('user');
-          UserInput.current.focus();
         }
       }
     });
@@ -130,22 +119,20 @@ const Index = ({ auth, sales, medicines }) => {
       if (result.isConfirmed) {
         destroy(route('sales.destroy', id), {
           onSuccess: () => {
-            Swal.fire(
-              'Eliminada!',
-              `La salida "${transaction_code}" ha sido eliminada.`,
-              'success'
-            );
+            Swal.fire('Eliminada!', `La salida "${transaction_code}" ha sido eliminada.`, 'success');
           },
           onError: () => {
-            Swal.fire(
-              'Error!',
-              'Hubo un problema al eliminar la salida.',
-              'error'
-            );
+            Swal.fire('Error!', 'Hubo un problema al eliminar la salida.', 'error');
           }
         });
       }
     });
+  };
+
+  const handleMedicineChange = (e) => {
+    const selected = medicines.find((med) => med.id === parseInt(e.target.value));
+    setSelectedMedicine(selected);
+    setData('medicine', e.target.value);
   };
 
   const columns = React.useMemo(
@@ -187,9 +174,12 @@ const Index = ({ auth, sales, medicines }) => {
           <>
             <Pencil
               className="inline-block h-6 w-6 text-blue-500 mr-2 cursor-pointer"
-              onClick={() => openModal(2, row.original.id, row.original.code_transaction, row.original.batch_number, row.original.medicine, row.original.category, row.original.quantity, row.original.date, row.original.user)}
+              onClick={() => openModal(2, row.original.id, row.original.transaction_code, row.original.medicine, row.original.quantity, row.original.date, row.original.user)}
             />
-            <Trash className="inline-block h-6 w-6 text-red-500 cursor-pointer" onClick={() => eliminar(row.original.id, row.original.transaction_code)} />
+            <Trash
+              className="inline-block h-6 w-6 text-red-500 cursor-pointer"
+              onClick={() => eliminar(row.original.id, row.original.transaction_code)}
+            />
           </>
         )
       }
@@ -208,7 +198,7 @@ const Index = ({ auth, sales, medicines }) => {
     nextPage,
     previousPage,
     pageOptions,
-    state: { pageIndex, pageSize, globalFilter },
+    state: { pageIndex, globalFilter },
     setGlobalFilter
   } = useTable(
     {
@@ -222,15 +212,13 @@ const Index = ({ auth, sales, medicines }) => {
   );
 
   const ok = (mensaje) => {
-    reset(); 
-    closeModal(); 
-    Swal.fire({ title: mensaje, icon: 'success' }); 
-
-    
+    reset();
+    closeModal();
+    Swal.fire({ title: mensaje, icon: 'success' });
   };
 
   const processedSales = sales.map((sale) => ({
-    code_transaction: sale.transaction_code,
+    transaction_code: sale.transaction_code,
     batch_number: sale.medicine.batch_number,
     medicine: sale.medicine.name,
     category: sale.medicine.category.name,
@@ -285,7 +273,7 @@ const Index = ({ auth, sales, medicines }) => {
         <div className="overflow-x-auto">
           <div className="flex flex-col sm:flex-row justify-between items-center mb-4">
             <div className="flex items-center mb-2 sm:mb-0">
-              <label htmlFor="search" className="text-gray-700  dark:text-gray-300 mr-2">
+              <label htmlFor="search" className="text-gray-700 dark:text-gray-300 mr-2">
                 Buscar:
               </label>
               <TextInput
@@ -299,7 +287,11 @@ const Index = ({ auth, sales, medicines }) => {
               />
             </div>
             <div className="pagination">
-              <button onClick={() => previousPage()} disabled={!canPreviousPage} className="px-2 py-1 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-300 mr-2">
+              <button
+                onClick={() => previousPage()}
+                disabled={!canPreviousPage}
+                className="px-2 py-1 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-300 mr-2"
+              >
                 <ChevronLeft size={16} className="inline-block" />
               </button>
               <span className="text-gray-700 dark:text-gray-300">
@@ -308,7 +300,11 @@ const Index = ({ auth, sales, medicines }) => {
                   {pageIndex + 1} de {pageOptions.length}
                 </strong>{' '}
               </span>
-              <button onClick={() => nextPage()} disabled={!canNextPage} className="px-2 py-1 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-300 ml-2">
+              <button
+                onClick={() => nextPage()}
+                disabled={!canNextPage}
+                className="px-2 py-1 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-300 ml-2"
+              >
                 <ChevronRight size={16} className="inline-block" />
               </button>
             </div>
@@ -348,42 +344,54 @@ const Index = ({ auth, sales, medicines }) => {
           <h2 className="p-3 text-lg font-medium text-gray-900">{title}</h2>
           <form onSubmit={save} className="p-6">
             <div className="mt-6">
-              <InputLabel for="medicine" value="Medicamento"></InputLabel>
+              <InputLabel for="medicine" value="Medicamento" />
               <select
                 id="medicine"
                 name="medicine"
                 ref={MedicineSelect}
                 value={data.medicine}
                 required="required"
-                onChange={(e) => setData('medicine', e.target.value)}
+                onChange={handleMedicineChange}
                 className="mt-1 block w-3/4 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-1 focus:outline-none focus:border-blue-500 dark:bg-gray-800 dark:text-gray-300"
               >
+                <option value="">Selecciona un medicamento</option>
                 {medicines.map((medicine) => (
                   <option key={medicine.id} value={medicine.id}>
                     {medicine.name}
                   </option>
                 ))}
               </select>
-              <InputError message={errors.medicines} className="mt-2"></InputError>
+              <InputError message={errors.medicine} className="mt-2" />
             </div>
+            {selectedMedicine && (
+              <div className="mt-6">
+                <InputLabel for="stock" value="Stock Disponible" />
+                <TextInput
+                  id="stock"
+                  name="stock"
+                  value={selectedMedicine.stock}
+                  readOnly
+                  className="mt-1 block w-3/4 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-1 focus:outline-none focus:border-blue-500 dark:bg-gray-800 dark:text-gray-300"
+                />
+              </div>
+            )}
             <div className="mt-6">
-              <InputLabel for="quantity" value="Cantidad"></InputLabel>
+              <InputLabel for="quantity" value="Cantidad" />
               <NumberInput
                 id="quantity"
                 name="quantity"
                 ref={QuantityInput}
                 value={data.quantity}
                 icon={SquarePlus}
-                placeholder="Cantidad de entrada"
+                placeholder="Cantidad de salida"
                 required="required"
                 onChange={(e) => setData('quantity', e.target.value)}
                 className="mt-1 flex w-3/4 justify-center"
-                isFocused
               />
-              <InputError message={errors.quantity} className="mt-2"></InputError>
+              <InputError message={errors.quantity} className="mt-2" />
             </div>
             <div className="mt-6">
-              <InputLabel for="date" value="Fecha"></InputLabel>
+              <InputLabel for="date" value="Fecha" />
               <TextInput
                 id="date"
                 name="date"
@@ -395,9 +403,8 @@ const Index = ({ auth, sales, medicines }) => {
                 required="required"
                 onChange={(e) => setData('date', e.target.value)}
                 className="mt-1 flex w-3/4 justify-center"
-                isFocused
               />
-              <InputError message={errors.date} className="mt-2"></InputError>
+              <InputError message={errors.date} className="mt-2" />
             </div>
             <div className="mt-6">
               <PrimaryButton processing={processing} className="mt-2">

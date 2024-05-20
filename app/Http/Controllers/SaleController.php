@@ -16,7 +16,7 @@ class SaleController extends Controller
      */
     public function index()
     {
-        $medicines = Medicine::all();
+        $medicines = Medicine::where('stock', '>', 0)->get();
         $sales = Sale::with('medicine', 'medicine.category', 'user',)->get();
         return Inertia::render('Sale/Index', [
             'sales' => $sales,
