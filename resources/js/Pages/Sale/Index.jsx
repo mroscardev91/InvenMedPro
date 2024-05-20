@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useTable, usePagination, useSortBy, useGlobalFilter } from 'react-table';
-import { Pencil, Trash, ChevronRight, ChevronLeft, FileDown, Search, SquarePlus, PackageMinus, CalendarDays, Minus } from 'lucide-react';
+import { Pencil, Trash, ChevronRight, ChevronLeft, FileDown, Search, SquarePlus, PackageMinus, CalendarDays, Minus, Package } from 'lucide-react';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
@@ -370,8 +370,9 @@ const Index = ({ auth, sales, medicines }) => {
                   id="stock"
                   name="stock"
                   value={selectedMedicine.stock}
-                  readOnly
-                  className="mt-1 block w-3/4 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-1 focus:outline-none focus:border-blue-500 dark:bg-gray-800 dark:text-gray-300"
+                  icon={Package}
+                  disabled={true}
+                  className="mt-1 flex w-3/4 justify-center"
                 />
               </div>
             )}

@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { useTable, usePagination, useSortBy, useGlobalFilter } from 'react-table';
-import { Pencil, Trash, ChevronRight, ChevronLeft, ReceiptEuro, Search, SquarePlus, Printer } from 'lucide-react';
+import { Pencil, Trash, ChevronRight, ChevronLeft, ReceiptEuro, Search, SquarePlus, Printer, UsersRound } from 'lucide-react';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
@@ -161,7 +161,7 @@ const Index = ({ auth, sales, invoices, medicines }) => {
                             onClick={() => eliminar(row.original.id, row.original.invoice_number)}
                         />
                         <Printer
-                            className="inline-block h-6 w-6 text-green-500 cursor-pointer"
+                            className="inline-block h-6 w-6 ml-2 text-green-500 cursor-pointer"
                             onClick={() => imprimir(row)}
                         />
                     </div>
@@ -327,7 +327,7 @@ const Index = ({ auth, sales, invoices, medicines }) => {
                                 name="client_name"
                                 ref={ClientNameInput}
                                 value={data.client_name}
-                                icon={SquarePlus}
+                                icon={UsersRound}
                                 placeholder="Nombre del cliente"
                                 required="required"
                                 onChange={(e) => setData('client_name', e.target.value)}
