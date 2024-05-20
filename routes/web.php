@@ -11,7 +11,7 @@ use App\Http\Controllers\MedicineController;
 use App\Http\Controllers\EntryController;
 use App\Http\Controllers\SaleController;
 use App\Http\Controllers\StockController;
-
+use App\Http\Controllers\DashboardController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -27,6 +27,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::middleware(['role:Administrador del Sistema,Administrador del Inventario'])->group(function () {
             Route::resource('categories', CategoryController::class);
             Route::resource('suppliers', SupplierController::class);
+            Route::post('suppliers/update/{id}', [SupplierController::class, 'update'])->name('suppliers.update');
             Route::resource('medicines', MedicineController::class);
             Route::resource('entries', EntryController::class);
             Route::resource('sales', SaleController::class);
@@ -39,9 +40,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     });
 });
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'index'])
+    ->middleware(['auth', 'verified'])
+    ->name('dashboard');
+
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

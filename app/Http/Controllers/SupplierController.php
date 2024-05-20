@@ -9,7 +9,6 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 
 
-
 class SupplierController extends Controller
 {
     /**
@@ -61,10 +60,12 @@ class SupplierController extends Controller
         'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // validación del logo
     ]);
 
+
     $supplier = Supplier::findOrFail($id);
     $supplier->update($request->except('logo'));
 
     if ($request->hasFile('logo')) {
+
         // Eliminar el logo anterior si existe
         if ($supplier->logo) {
             Storage::delete(str_replace('/storage/', 'public/', $supplier->logo));

@@ -30,7 +30,7 @@ const Index = ({ auth, suppliers }) => {
       email: '',
       phone: '',
       address: '',
-      logo: null
+      logo: null,
     });
 
     const [selectedAddress, setSelectedAddress] = useState('');
@@ -43,12 +43,12 @@ const Index = ({ auth, suppliers }) => {
     const openModal = (op, id, name, email, phone, address, logo) => {
       setModal(true);
       setOperation(op);
-      setData({ id: '', name: '', email: '', phone: '', address: '', logo: null }); // Reinicia los datos al abrir el modal
+      setData({name: '', email: '', phone: '', address: '', logo: null }); // Reinicia los datos al abrir el modal
       if (op === 1) {
         setTitle('Crear proveedor');
       } else {
         setTitle('Editar proveedor');
-        setData({ id, name, email, phone, address, logo });
+        setData({ id: id, name: name, email: email, phone: phone, address: address, logo: logo });
       }
     };
 
@@ -67,11 +67,17 @@ const Index = ({ auth, suppliers }) => {
       if (data.logo) {
         formData.append('logo', data.logo);
       }
-
+      if (operation === 1){
+        formData.append("_method", "PUT");
+      }
+      console.log("Contenido de FormData:");
+      for (const entry of formData.entries()) {
+          console.log(entry);
+      }
       const endpoint = operation === 1 ? route('suppliers.store') : route('suppliers.update', data.id);
       const onSuccessMessage = operation === 1 ? 'Proveedor guardado' : 'Proveedor modificado';
 
-      (operation === 1 ? post : put)(endpoint, {
+      (operation === 1 ? post : post)(endpoint, {
         data: formData,
         headers: {
           'Content-Type': 'multipart/form-data'
