@@ -12,6 +12,7 @@ use App\Http\Controllers\EntryController;
 use App\Http\Controllers\SaleController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\InvoiceController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -32,6 +33,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::resource('entries', EntryController::class);
             Route::resource('sales', SaleController::class);
             Route::resource('stock', StockController::class);
+            Route::resource('invoices', InvoiceController::class);
 
         });
         Route::middleware(['role:Administrador del Sistema'])->group(function () {

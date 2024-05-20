@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('sale_id')->constrained('sales')->onDelete('cascade');
             $table->string('client_name');
-            $table->string('invoice_number')->unique();
-            $table->decimal('total_amount', 10, 2);
+            $table->string('invoice_number')->unique()->nullable();
+            $table->decimal('total_amount', 10, 2)->nullable();
             $table->timestamps();
         });
     }

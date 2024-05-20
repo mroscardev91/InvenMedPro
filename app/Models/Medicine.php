@@ -23,5 +23,16 @@ class Medicine extends Model
         return $this->hasMany(Stock::class);
     }
 
+    public function entries()
+    {
+        return $this->hasMany(Entry::class);
+    }
+
+    public function sales()
+    {
+        return $this->hasMany(Sale::class);
+    }
+
+
  
 }
